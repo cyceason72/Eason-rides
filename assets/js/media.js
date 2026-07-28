@@ -53,6 +53,7 @@ function createMediaElement({ src, alt, label, className = '', type = 'image', c
       el.className = `media__img ${className}`.trim();
       el.alt = alt || '';
       el.decoding = 'async';
+      el.loading = 'lazy';
       el.onload = () => wrapper.classList.add('media--loaded');
       el.onerror = () => wrapper.classList.add('media--error');
     }
@@ -102,6 +103,7 @@ function createNaturalMediaElement({ src, alt, label }) {
     img.className = 'media-natural__img';
     img.alt = alt || '';
     img.decoding = 'async';
+    img.loading = 'lazy';
     img.onload = () => wrapper.classList.add('media--loaded');
     img.onerror = () => wrapper.classList.add('media--error');
     wrapper.appendChild(img);
