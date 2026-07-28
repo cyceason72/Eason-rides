@@ -10,7 +10,7 @@
  *       這時就會自動改用這裡的預設值，不會讓頁面空白）
  */
 
-let GALLERY_ITEMS = [];
+let GALLERY_ALBUMS = [];
 let PANNING_ITEMS = [];
 let JOURNAL_ENTRIES = [];
 let VIDEOS_ITEMS = [];
@@ -216,9 +216,59 @@ function renderMediaGrid(gridKey, moreSlotKey, items, emptyLabel) {
   }
 }
 
-function renderGallery() {
-  renderMediaGrid('gallery', 'gallery-more', GALLERY_ITEMS, '待補照片');
+/* ---------------- 04 旅行相簿 Albums ----------------
+   每一趟出門是一張相簿卡片：封面（第一張照片）＋日期＋張數。
+   點卡片才展開那一趟的完整相簿（Lightbox），不會把所有照片攤平在同一個列表裡。 */
+
+function buildAlbumCard(album) {
+  const card = document.createElement('button');
+  card.type = 'button';
+  card.className = 'album-card';
+  card.setAttribute('data-reveal', '');
+
+  const cover = album.media && album.media[0];
+  const media = createNaturalMediaElement({
+    src: cover ? cover.src : '',
+    alt: album.location || album.date,
+    label: '待補相簿封面',
+  });
+  card.appendChild(media);
+
+  const count = (album.media || []).length;
+  const badge = document.createElement('span');
+  badge.className = 'album-card__badge';
+  badge.textContent = `${count} 張`;
+  card.appendChild(badge);
+
+  const info = document.createElement('div');
+  info.className = 'album-card__info';
+  info.innerHTML = `
+    <time class="album-card__date">${album.date}</time>
+    ${album.location ? `<span class="album-card__location">${album.location}</span>` : ''}
+  `;
+  card.appendChild(info);
+
+  card.addEventListener('click', () => {
+    const lightboxItems = (album.media || []).map((m) => ({
+      type: m.type || 'image',
+      src: m.src,
+      alt: album.location || album.date,
+    }));
+    openLightbox(lightboxItems, 0, [album.date, album.location].filter(Boolean).join(' · '));
+  });
+
+  return card;
 }
+
+function renderGallery() {
+  const container = document.querySelector('[data-render="gallery"]');
+  if (!container) return;
+  container.innerHTML = '';
+  GALLERY_ALBUMS.forEach((album) => container.appendChild(buildAlbumCard(album)));
+}
+
+/* ---------------- 追焦紀錄 Panning ----------------
+   維持原本「一堆照片攤平」的呈現方式，跟旅行相簿是不同的體驗（動態瞬間 vs. 完整回顧）。 */
 
 function renderPanning() {
   renderMediaGrid('panning', 'panning-more', PANNING_ITEMS, '待補追焦照片');
@@ -516,7 +566,7 @@ async function initRender() {
     loadJSON('content/videos.json'),
   ]);
 
-  GALLERY_ITEMS = (galleryData && galleryData.items) || SITE_CONTENT.gallery;
+  GALLERY_ALBUMS = (galleryData && galleryData.albums) || SITE_CONTENT.galleryAlbums;
   PANNING_ITEMS = (panningData && panningData.items) || SITE_CONTENT.panning;
   JOURNAL_ENTRIES = (journalData && journalData.entries) || SITE_CONTENT.journal;
   VIDEOS_ITEMS = (videosData && videosData.items) || SITE_CONTENT.videos;
