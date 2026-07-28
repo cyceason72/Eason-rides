@@ -4,17 +4,24 @@
    ============================================================ */
 
 :root {
-  /* ---------- Color ---------- */
-  --color-bg: #050505;
-  --color-bg-secondary: #101010;
-  --color-card: #171717;
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.16);
-  --color-text: #ffffff;
-  --color-text-secondary: #b5b5b5;
-  --color-text-muted: #757575;
-  --color-accent: #ff3b30;
-  --color-accent-dim: rgba(255, 59, 48, 0.4);
+  /* ---------- Color ----------
+     性能車品牌質感的色彩系統（Aprilia Factory / Ducati / Akrapovič 那種調性）。
+     刻意不用純黑 #000000 / 純白 #FFFFFF —— 太扁平、沒有材質感。
+     比例原則：黑 80% / 紅 18% / 金 2%（金色只用在極少數 hover、分隔線等「高級配件」的細節時刻，
+     絕不能大面積使用，不然會變成精品網站而不是性能車品牌）。 */
+  --color-bg: #070707;            /* Background Primary */
+  --color-bg-secondary: #111111;  /* Background Secondary */
+  --color-card: #181818;          /* Surface */
+  --color-border: #2a2a2a;
+  --color-border-strong: #3a3a3a;
+  --color-text: #f5f5f5;          /* Text Primary（刻意不是純白）*/
+  --color-text-secondary: #a8a8a8;/* Text Secondary */
+  --color-text-muted: #6e6e6e;
+  --color-accent: #d2001c;        /* Primary Red —— 接近 Aprilia Factory Red，避免螢光/橘紅感 */
+  --color-accent-dim: rgba(210, 0, 28, 0.4);
+  --color-accent-deep: #8c0013;   /* 更深的紅，用於漸層/陰影，避免單一紅色顯得扁平 */
+  --color-gold: #c6a664;          /* Accent Gold —— 低飽和金屬金，只用在極少數細節（Öhlins/Brembo 那種質感） */
+  --color-gold-dim: rgba(198, 166, 100, 0.35);
 
   /* ---------- Typography ---------- */
   --font-display: "SF Pro Display", "Inter", "Noto Sans TC", -apple-system, sans-serif;
@@ -64,8 +71,9 @@
   --duration-slow: 1000ms;
 
   /* ---------- Elevation ---------- */
-  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.45);
-  --shadow-accent: 0 8px 30px rgba(255, 59, 48, 0.25);
+  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.55);
+  --shadow-accent: 0 8px 30px rgba(210, 0, 28, 0.25);
+  --shadow-gold: 0 0 0 1px rgba(198, 166, 100, 0.4);
 
   --radius-sm: 4px;
   --radius-md: 8px;
