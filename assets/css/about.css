@@ -73,6 +73,76 @@
   color: var(--color-text);
 }
 
+/* ---------- Instagram Profile Card ----------
+   不只是一個 icon：卡片式呈現，手把手勢的 hover 動畫，
+   邊框在 hover 時透出金色，Follow 按鈕跟著滑入填色，呼應品牌的「精工配件」語彙。 */
+
+.about__instagram {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  align-self: flex-start;
+  margin-top: var(--space-1);
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  color: var(--color-text);
+  overflow: hidden;
+  position: relative;
+  transition: border-color var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.about__instagram:hover,
+.about__instagram:focus-visible {
+  border-color: var(--color-gold);
+  transform: translateY(-1px);
+}
+
+.about__instagram-icon {
+  display: flex;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.about__instagram-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.about__instagram:hover .about__instagram-icon,
+.about__instagram:focus-visible .about__instagram-icon {
+  color: var(--color-gold);
+}
+
+.about__instagram-handle {
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-secondary);
+}
+
+.about__instagram-follow {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  transition: background var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+
+.about__instagram:hover .about__instagram-follow,
+.about__instagram:focus-visible .about__instagram-follow {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
 @media (max-width: 1024px) {
   .about__grid {
     grid-template-columns: 1fr;
