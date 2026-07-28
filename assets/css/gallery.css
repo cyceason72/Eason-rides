@@ -36,7 +36,7 @@
 .gallery-item:focus-visible {
   border-color: var(--color-border-strong);
   box-shadow: var(--shadow-card);
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
 
 /* ---------- 保留原始比例的媒體容器（Masonry 用） ----------
