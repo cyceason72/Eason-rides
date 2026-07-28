@@ -1,93 +1,59 @@
-# 部署教學：Vercel + DecapBridge
+# 部署教學（目前架構：Vercel + DecapBridge）
 
-> 這份文件記錄**目前實際在用**的架構。專案最早是用 Netlify（Identity + Git Gateway），
-> 後來因為 Netlify 免費額度用完、部署被卡住，改遷移到 **Vercel（部署）+ DecapBridge（後台登入）**。
+> 這份文件記錄「如果要從零重新部署一次」該怎麼做。
+> 網站目前已經在線上運作，正常使用不需要重看這份文件，
+> 只有在需要換帳號、重新部署、或想理解整體架構時才需要參考。
 
-完成這份教學後，你會有：
-- 一個真正的網址（`eason-rides.vercel.app`，之後可以換成自己的網域）
-- 一個只有你能登入的後台（`你的網址/admin/index.html`），可以用 Google／Microsoft 帳號登入，拖曳上傳照片影片、存檔後網站自動更新
-- 別人打開網站只能看，沒有帳號無法編輯
+## 整體架構
 
----
-
-## 第一步：把專案放上 GitHub
-
-1. 到 [github.com](https://github.com) 註冊帳號
-2. 建立新的 repository（例如 `Eason-rides`）
-3. 用網頁的「uploading an existing file」把整個專案資料夾內容上傳
-   （注意：要上傳資料夾**裡面的東西**，不要整個資料夾本身拖上去，避免多包一層路徑）
-
----
-
-## 第二步：部署到 Vercel
-
-1. 到 [vercel.com](https://vercel.com)，用 GitHub 帳號登入
-2. **Add New → Project**，選擇你的 repository，點 **Import**
-3. Choose a Plan 選 **「I'm working on personal projects」→ Hobby**（免費方案，不要選到 Pro）
-4. Framework Preset 選 **Other**，Build Command / Output Directory 都留空
-5. 按 **Deploy**
-
-部署完成後會拿到一個網址，例如 `eason-rides.vercel.app`（可以在 Project → Settings → Domains 改成想要的名字）。
-
----
-
-## 第三步：註冊 DecapBridge（後台登入用）
-
-1. 到 [decapbridge.com](https://decapbridge.com)，用 Google 帳號登入
-2. **Add Site**，填：
-   - **Github repository**：`你的帳號/repo名稱`
-   - **Github access token**：到 `github.com/settings/tokens` → Fine-grained tokens → Generate new token
-     - Repository access 選你的 repo
-     - Permissions 開 **Contents**（Read and write）+ **Pull requests**（Read and write）
-   - **Your Decap CMS login URL**：`https://你的vercel網址/admin/index.html`
-   - **Auth type**：選 **PKCE**（這樣才能用 Google/Microsoft 帳號登入，不用另外設密碼）
-3. 建立完成後，畫面會顯示一段 `config.yml` 程式碼片段，**複製起來**
-
----
-
-## 第四步：把設定接上專案
-
-把 DecapBridge 給的 `config.yml` 片段，取代掉 `admin/config.yml` 最上面的 `backend:` 區塊
-（保留下面 `collections:` 那些欄位設定不動），存檔、上傳回 GitHub。
-
-同時確認 `admin/index.html` **不需要**再載入 Netlify Identity 的 script，只需要：
-```html
-<script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+```
+GitHub（程式碼 + 資料存放）
+   │
+   ├──▶ Vercel（網站託管，自動部署，免費 Hobby 方案）
+   │
+   └──▶ DecapBridge（後台登入驗證，PKCE，Google/Microsoft 帳號登入）
+              │
+              └──▶ 後台頁面 /admin/index.html，編輯後直接 commit 回 GitHub
+                   → 觸發 Vercel 重新部署 → 網站自動更新
 ```
 
-存檔後，Vercel 會自動偵測到 GitHub 更新、重新部署，等 30 秒到 1 分鐘。
+## 如果要重新部署一次
 
----
+### 1. GitHub
 
-## 第五步：開始使用後台
+把整包專案上傳到一個 GitHub repository（網頁拖曳上傳即可，不用裝軟體）。
 
-打開：
-```
-https://你的vercel網址/admin/index.html
-```
-點 **Login**，選 Google 或 Microsoft 帳號登入，就會看到後台管理介面，可以直接拖曳上傳照片/影片、填文字，右上角 **Publish** 存檔，網站幾十秒後自動更新。
+### 2. Vercel
 
----
+1. [vercel.com](https://vercel.com) 用 GitHub 登入
+2. Add New → Project → 選擇 repo → Import
+3. Framework Preset 選 **Other**，Build Command / Output Directory 都留空
+4. **方案務必選 Hobby（個人/免費），不要選 Pro**，Pro 會開始收費試用
+5. Deploy
 
-## 之後要修改「About / 車輛規格 / 目標 / 聯絡方式」怎麼辦？
+### 3. DecapBridge（後台登入）
 
-這幾個區塊資料量小、不常變動，維持用 `assets/js/content.js`（或 `index.html` 的 Hero 區塊）手動編輯：
-1. 到 GitHub 網頁上，找到對應檔案，點鉛筆圖示編輯
-2. 改完直接在網頁上按 **Commit changes**
-3. Vercel 偵測到更新會自動重新部署
+1. [decapbridge.com](https://decapbridge.com) 用 Google 帳號登入
+2. Add Site：
+   - GitHub repository：`帳號/repo名稱`
+   - GitHub access token：到 GitHub Settings → Developer settings → Fine-grained tokens 產生一組，
+     權限開 **Contents**（Read and write）+ **Pull requests**（Read and write）
+   - CMS 網址：`https://你的網站.vercel.app/admin/index.html`
+   - Auth type 選 **PKCE**
+3. 建立後會拿到一段 `config.yml` 片段，貼進 `admin/config.yml` 最上面的 `backend:` 區塊
 
----
+### 4. 測試登入
+
+打開 `https://你的網站.vercel.app/admin/index.html`，用 Google/Microsoft 帳號登入，
+應該會看到後台管理介面（Static / Panning / Journal / Videos 四個分類）。
 
 ## 常見問題
 
-**Q：後台編輯後，網站多久會更新？**
-通常 30 秒到 1 分鐘內。可以到 Vercel 的 **Deployments** 分頁看部署進度跟有沒有失敗訊息。
+**Q：Vercel 部署額度會用完嗎？**
+Hobby 方案額度很大方（100GB 流量、100 萬次函式呼叫），一般個人網站幾乎不會碰到上限。
 
-**Q：忘記後台密碼怎麼辦？**
-PKCE 模式是用 Google/Microsoft 帳號登入，沒有另外設密碼這回事，忘記帳號的話用同一個 Google/Microsoft 帳號重新登入即可。
+**Q：換成自己的網域名稱可以嗎？**
+可以，Vercel 專案的 Settings → Domains 裡可以綁定自己買的網域。
 
-**Q：Vercel 免費額度會不會也用完？**
-Vercel 的免費額度比 Netlify 大方很多（100GB 流量、100 萬次函式呼叫），正常個人網站使用量幾乎不會碰到上限。
-
-**Q：可以換成自己的網域名稱嗎？**
-可以，Vercel 的 Project → Settings → Domains 裡可以綁定自己買的網域。
+**Q：忘記後台登入方式怎麼辦？**
+到 `decapbridge.com` 用當初註冊的 Google 帳號登入查看，或直接到後台頁面重新走一次 Login 流程。
