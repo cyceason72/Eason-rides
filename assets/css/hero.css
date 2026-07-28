@@ -62,6 +62,13 @@
   max-width: 38ch;
 }
 
+.hero__slogan {
+  font-style: italic;
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-gold);
+}
+
 .hero__actions {
   margin-top: var(--space-2);
 }
@@ -98,6 +105,7 @@
 .hero__mark-line,
 .hero__title,
 .hero__tagline,
+.hero__slogan,
 .hero__actions {
   opacity: 0;
   transform: translateY(24px);
@@ -130,10 +138,16 @@
   transition-delay: 460ms;
 }
 
+.hero--revealed .hero__slogan {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 560ms;
+}
+
 .hero--revealed .hero__actions {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 620ms;
+  transition-delay: 680ms;
 }
 
 .hero--revealed .hero__visual {
@@ -146,6 +160,7 @@
   .hero__mark-line,
   .hero__title,
   .hero__tagline,
+  .hero__slogan,
   .hero__actions,
   .hero__visual {
     opacity: 1;
