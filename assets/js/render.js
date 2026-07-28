@@ -164,23 +164,38 @@ function renderMediaGrid(gridKey, moreSlotKey, items, emptyLabel) {
 
   if (total > initialCount && moreSlot) {
     const remaining = total - initialCount;
+    let expanded = false;
+    let extraEls = [];
+
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'btn btn-ghost load-more-btn';
     btn.innerHTML = `查看更多 <span class="load-more-btn__count">還有 ${remaining} 張</span>`;
 
     btn.addEventListener('click', () => {
-      const newItems = [];
-      for (let i = initialCount; i < total; i += 1) {
-        const el = buildGridItem(items, items[i], i, emptyLabel);
-        container.appendChild(el);
-        newItems.push(el);
+      if (!expanded) {
+        // ---- 展開：把剩下的項目加進去 ----
+        extraEls = [];
+        for (let i = initialCount; i < total; i += 1) {
+          const el = buildGridItem(items, items[i], i, emptyLabel);
+          container.appendChild(el);
+          extraEls.push(el);
+        }
+        // 新加入的項目直接顯現（不用等捲動觸發），但保留淡入轉場，避免畫面瞬間跳動
+        requestAnimationFrame(() => {
+          extraEls.forEach((el) => el.classList.add('is-visible'));
+        });
+        btn.innerHTML = `收起 <span class="load-more-btn__count">Collapse</span>`;
+        expanded = true;
+      } else {
+        // ---- 收起：把剛剛加進去的項目移除 ----
+        extraEls.forEach((el) => el.remove());
+        extraEls = [];
+        btn.innerHTML = `查看更多 <span class="load-more-btn__count">還有 ${remaining} 張</span>`;
+        expanded = false;
+        // 收起後把畫面捲回按鈕位置，避免停在原本展開內容的空白處
+        moreSlot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
-      btn.remove();
-      // 新加入的項目直接顯現（不用等捲動觸發），但保留淡入轉場，避免畫面瞬間跳動
-      requestAnimationFrame(() => {
-        newItems.forEach((el) => el.classList.add('is-visible'));
-      });
     });
 
     moreSlot.appendChild(btn);
