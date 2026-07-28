@@ -35,6 +35,14 @@
   border: 1px solid var(--color-border);
 }
 
+.bike-card__visual .media__img {
+  transition: transform 900ms var(--ease-out);
+}
+
+.bike-card:hover .bike-card__visual .media__img {
+  transform: scale(1.035);
+}
+
 .bike-card__name {
   margin-block: var(--space-1) var(--space-4);
 }
@@ -50,7 +58,15 @@
   grid-template-columns: 9rem 1fr;
   gap: var(--space-2);
   padding-block: var(--space-2);
+  padding-inline: var(--space-1);
+  margin-inline: calc(var(--space-1) * -1);
   border-bottom: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.bike-card__spec:hover {
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .bike-card__spec dt {
