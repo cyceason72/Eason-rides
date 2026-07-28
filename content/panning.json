@@ -1,9 +1,44 @@
 {
   "items": [
     {
-      "image": "assets/images/panning-01.jpg",
-      "alt": "",
-      "caption": ""
+      "image": "assets/images/panning-2026-05-24.jpg",
+      "alt": "山路追焦照 2026.05.24",
+      "caption": "2026 · 05 · 24"
+    },
+    {
+      "image": "assets/images/panning-2026-02-22.jpg",
+      "alt": "山路追焦照 2026.02.22",
+      "caption": "2026 · 02 · 22"
+    },
+    {
+      "image": "assets/images/panning-2026-02-01.jpg",
+      "alt": "山路追焦照 2026.02.01",
+      "caption": "2026 · 02 · 01"
+    },
+    {
+      "image": "assets/images/panning-2026-01-24.jpg",
+      "alt": "山路追焦照 2026.01.24",
+      "caption": "2026 · 01 · 24"
+    },
+    {
+      "image": "assets/images/panning-2026-01-18.jpg",
+      "alt": "山路追焦照 2026.01.18",
+      "caption": "2026 · 01 · 18"
+    },
+    {
+      "image": "assets/images/panning-2026-01-17.jpg",
+      "alt": "山路追焦照 2026.01.17",
+      "caption": "2026 · 01 · 17"
+    },
+    {
+      "image": "assets/images/panning-2025-12-21.jpg",
+      "alt": "山路追焦照 2025.12.21",
+      "caption": "2025 · 12 · 21"
+    },
+    {
+      "image": "assets/images/panning-2025-12-06.jpg",
+      "alt": "山路追焦照 2025.12.06",
+      "caption": "2025 · 12 · 06"
     }
   ]
 }
