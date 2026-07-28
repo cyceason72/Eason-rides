@@ -30,18 +30,18 @@ content/videos.json
 
 ## 怎麼部署後台（讓你可以直接上傳照片影片，不用碰程式碼）
 
-完整步驟在 **`DEPLOY.md`**，大致流程：
+完整步驟在 **`DEPLOY.md`**，目前實際採用的架構：
 1. 把這個資料夾整包上傳到 GitHub
-2. 串接 Netlify，一鍵部署成真正的網址
-3. 開通 Netlify Identity + Git Gateway（後台登入功能）
-4. 邀請自己的 email 成為使用者，設定密碼
-5. 打開 `你的網址/admin` 登入，開始拖曳上傳照片影片
+2. 串接 **Vercel**，一鍵部署成真正的網址（免費、額度大方）
+3. 註冊 **DecapBridge**，取得後台登入設定（可用 Google/Microsoft 帳號登入）
+4. 打開 `你的網址/admin/index.html` 登入，開始拖曳上傳照片影片
+
+> 這個專案原本用 Netlify Identity + Git Gateway，後來因為 Netlify 免費額度用完卡住部署，
+> 改遷移到 Vercel（部署）+ DecapBridge（後台登入），細節記錄在 `DEPLOY.md`。
 
 ## 本機預覽（部署前先看效果）
 
-直接雙擊 `index.html`，或用單檔版 `eason-rides-single-file.html`。
-Gallery / Panning / Journal / Videos 會顯示 `content.js` 的預設值，
-About / Bike / Hero 會顯示目前設定的內容。
+直接雙擊 `index.html`。Gallery / Panning / Journal / Videos 會顯示 `content.js` 的預設值（因為離線狀態下抓不到 `content/*.json`），About / Bike / Hero 會顯示目前設定的內容。
 
 ## 設計 Token
 
@@ -60,7 +60,6 @@ About / Bike / Hero 會顯示目前設定的內容。
 ```
 project/
 ├── index.html
-├── netlify.toml          Netlify 部署設定
 ├── README.md
 ├── DEPLOY.md              部署與後台設定完整教學
 ├── admin/
