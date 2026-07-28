@@ -33,6 +33,7 @@ function renderAbout() {
   if (!visual || !body) return;
 
   const about = SITE_CONTENT.about;
+  visual.innerHTML = '';
 
   const media = createMediaElement({
     src: about.photo,
@@ -67,6 +68,7 @@ function renderAbout() {
 function renderBikes() {
   const container = document.querySelector('[data-render="bikes"]');
   if (!container) return;
+  container.innerHTML = '';
 
   SITE_CONTENT.bikes.forEach((bike, index) => {
     const card = document.createElement('article');
@@ -401,6 +403,7 @@ function renderVideos() {
 function renderGoals() {
   const container = document.querySelector('[data-render="goals"]');
   if (!container) return;
+  container.innerHTML = '';
 
   SITE_CONTENT.goals.forEach((goal) => {
     const card = document.createElement('article');
@@ -424,6 +427,7 @@ function renderGoals() {
 function renderContact() {
   const container = document.querySelector('[data-render="contact"]');
   if (!container) return;
+  container.innerHTML = '';
 
   const links = [
     { key: 'instagram', label: 'Instagram', icon: 'instagram' },
@@ -468,6 +472,7 @@ function socialIcon(name) {
 function renderStats() {
   const container = document.querySelector('[data-render="stats"]');
   if (!container) return;
+  container.innerHTML = '';
 
   SITE_CONTENT.stats.forEach((stat) => {
     const item = document.createElement('div');
