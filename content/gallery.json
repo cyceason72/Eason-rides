@@ -1,104 +1,140 @@
 {
-  "items": [
+  "albums": [
     {
-      "image": "assets/images/gallery-2026-01-31-d.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
+      "date": "2026 · 06 · 08",
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-06-08.jpg"
+        }
+      ],
+      "location": "",
+      "note": ""
     },
     {
-      "image": "assets/images/gallery-2026-01-31-c.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
+      "date": "2026 · 04 · 27",
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-04-27-a.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-04-27-b.jpg"
+        }
+      ],
+      "location": "",
+      "note": ""
     },
     {
-      "image": "assets/images/gallery-2026-01-31-e.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
+      "date": "2026 · 04 · 22",
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-04-22.jpg"
+        }
+      ],
+      "location": "",
+      "note": ""
     },
     {
-      "image": "assets/images/gallery-2026-01-31-f.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
+      "date": "2026 · 01 · 31",
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-d.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-c.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-e.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-f.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-g.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-i.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-j.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-a.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-h.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-31-b.jpg"
+        }
+      ],
+      "location": "",
+      "note": ""
     },
     {
-      "image": "assets/images/gallery-2026-01-31-g.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
+      "date": "2026 · 01 · 24",
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-24.jpg"
+        }
+      ],
+      "location": "",
+      "note": ""
     },
     {
-      "image": "assets/images/gallery-2026-01-31-i.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
+      "date": "2026 · 01 · 18",
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-18-b.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2026-01-18-a.jpg"
+        }
+      ],
+      "location": "",
+      "note": ""
     },
     {
-      "image": "assets/images/gallery-2026-01-31-j.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
+      "date": "2025 · 12 · 21",
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2025-12-21-b.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2025-12-21-a.jpg"
+        }
+      ],
+      "location": "",
+      "note": ""
     },
     {
-      "image": "assets/images/gallery-2025-12-21-b.jpg",
-      "alt": "靜態紀錄 2025 · 12 · 21",
-      "caption": "2025 · 12 · 21"
-    },
-    {
-      "image": "assets/images/gallery-2025-12-21-a.jpg",
-      "alt": "靜態紀錄 2025 · 12 · 21",
-      "caption": "2025 · 12 · 21"
-    },
-    {
-      "image": "assets/images/gallery-2026-01-31-a.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
-    },
-    {
-      "image": "assets/images/gallery-2026-01-31-h.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
-    },
-    {
-      "image": "assets/images/gallery-2026-01-31-b.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 31",
-      "caption": "2026 · 01 · 31"
-    },
-    {
-      "image": "assets/images/gallery-2026-04-27-a.jpg",
-      "alt": "靜態紀錄 2026 · 04 · 27",
-      "caption": "2026 · 04 · 27"
-    },
-    {
-      "image": "assets/images/gallery-2026-04-27-b.jpg",
-      "alt": "靜態紀錄 2026 · 04 · 27",
-      "caption": "2026 · 04 · 27"
-    },
-    {
-      "image": "assets/images/gallery-2026-04-22.jpg",
-      "alt": "靜態紀錄 2026 · 04 · 22",
-      "caption": "2026 · 04 · 22"
-    },
-    {
-      "image": "assets/images/gallery-2026-01-24.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 24",
-      "caption": "2026 · 01 · 24"
-    },
-    {
-      "image": "assets/images/gallery-2026-01-18-b.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 18",
-      "caption": "2026 · 01 · 18"
-    },
-    {
-      "image": "assets/images/gallery-2026-01-18-a.jpg",
-      "alt": "靜態紀錄 2026 · 01 · 18",
-      "caption": "2026 · 01 · 18"
-    },
-    {
-      "image": "assets/images/gallery-2025-12-06.jpg",
-      "alt": "靜態紀錄 2025 · 12 · 06",
-      "caption": "2025 · 12 · 06"
-    },
-    {
-      "image": "assets/images/gallery-2026-06-08.jpg",
-      "alt": "靜態紀錄 2026 · 06 · 08",
-      "caption": "2026 · 06 · 08"
+      "date": "2025 · 12 · 06",
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/gallery-2025-12-06.jpg"
+        }
+      ],
+      "location": "",
+      "note": ""
     }
   ]
 }
