@@ -2,46 +2,45 @@
 
 個人騎乘品牌網站。Vanilla HTML5 / CSS3 / ES6，無框架、無 UI Library。
 
-## 全部完成 ✅
+## 目前架構
 
-01 Hero · 02 About · 03 Featured Bike · 04 Gallery · 追焦紀錄 Panning ·
-05 Ride Journal（相簿模式，支援照片＋影片） · 06 Videos · 07 Statistics ·
-08 Future Goals · 09 Contact · 10 Footer
+- **網站託管**：Vercel（`eason-rides.vercel.app`）
+- **資料與程式碼**：GitHub（`cyceason72/Eason-rides`）
+- **後台登入**：DecapBridge（PKCE，Google/Microsoft 帳號登入）
+- **後台網址**：`https://eason-rides.vercel.app/admin/index.html`
 
 ## 兩種內容管理方式
 
-**① 常常更新的（Gallery / 追焦紀錄 / Journal / Videos）**
-部署後台之後（見 `DEPLOY.md`），直接在網頁後台拖曳照片影片上傳、填文字，
-存檔就自動更新，完全不用碰程式碼。資料實際存放在：
-```
-content/gallery.json
-content/panning.json
-content/journal.json
-content/videos.json
-```
+**① 常常更新的（靜態紀錄 / 追焦紀錄 / Journal / Videos）**
+到後台網址登入，拖曳照片影片上傳、填文字，按 Publish 就自動更新，完全不用碰程式碼。
+資料實際存放在 `content/*.json`。
 
 **② 不常更新的（About / Featured Bike / Statistics / Future Goals / Contact / Hero）**
-維持用 `assets/js/content.js`（About/Bike/Goals/Contact/Stats）或
-`index.html`（Hero 主視覺）手動編輯，跟之前一樣。
+到 GitHub 網頁上直接編輯：
+- `assets/js/content.js`（About/Bike/Goals/Contact/Stats）
+- `index.html`（Hero 主視覺）
 
-> 在還沒部署後台之前，直接雙擊 `index.html` 打開，
-> Gallery / Panning / Journal / Videos 會自動顯示 `content.js` 裡的預設值（離線預覽用），
-> 部署後台、開始用後台編輯之後，才會改讀 `content/*.json` 的正式資料。
+## ⚠️ 給之後維護程式碼的人（包含 Claude 自己）
 
-## 怎麼部署後台（讓你可以直接上傳照片影片，不用碰程式碼）
+網站實際載入的是**合併壓縮過的檔案**，不是逐一載入每個 CSS/JS：
+```
+assets/css/bundle.css   ← 由 15 個 CSS 檔案合併壓縮而成
+assets/js/bundle.js     ← 由 9 個 JS 檔案合併壓縮而成（不含 content.js）
+```
 
-完整步驟在 **`DEPLOY.md`**，目前實際採用的架構：
-1. 把這個資料夾整包上傳到 GitHub
-2. 串接 **Vercel**，一鍵部署成真正的網址（免費、額度大方）
-3. 註冊 **DecapBridge**，取得後台登入設定（可用 Google/Microsoft 帳號登入）
-4. 打開 `你的網址/admin/index.html` 登入，開始拖曳上傳照片影片
+**如果要修改樣式或功能邏輯**：
+1. 改對應的原始檔案（例如 `assets/css/gallery.css`、`assets/js/render.js`）
+2. 重新合併壓縮所有原始檔案，產生新的 `bundle.css` / `bundle.js`
+3. 兩個都要上傳更新，不要只改原始檔案卻忘記重新產生 bundle（不然改的東西不會生效，因為網頁讀的是 bundle）
 
-> 這個專案原本用 Netlify Identity + Git Gateway，後來因為 Netlify 免費額度用完卡住部署，
-> 改遷移到 Vercel（部署）+ DecapBridge（後台登入），細節記錄在 `DEPLOY.md`。
+原始檔案還是留著方便閱讀/編輯，只是**正式上線讀取的是 bundle 版本**。
+
+`content.js` 例外：因為使用者會直接在 GitHub 網頁上編輯這個檔案，所以它**沒有**被打包進 bundle，維持獨立載入。
 
 ## 本機預覽（部署前先看效果）
 
-直接雙擊 `index.html`。Gallery / Panning / Journal / Videos 會顯示 `content.js` 的預設值（因為離線狀態下抓不到 `content/*.json`），About / Bike / Hero 會顯示目前設定的內容。
+直接雙擊 `index.html`。常更新的區塊會顯示 `content.js` 的預設值（離線預覽用），
+部署後、開始用後台編輯之後，才會改讀 `content/*.json` 的正式資料。
 
 ## 設計 Token
 
@@ -55,6 +54,14 @@ content/videos.json
 | 次文字 | `#b5b5b5` |
 | 強調色 | `#ff3b30` |
 
+## 效能
+
+照片上傳後台前都應該先壓縮（後台 DecapBridge 上傳的圖片目前沒有自動壓縮，
+建議大檔案先手動壓縮過再上傳，避免網站變慢）。
+
+網站程式碼本身的 CSS/JS 已合併壓縮成 `bundle.css` / `bundle.js`，
+把 25 個檔案請求減少到 2 個，加快首次載入速度。
+
 ## 檔案結構
 
 ```
@@ -64,28 +71,20 @@ project/
 ├── DEPLOY.md              部署與後台設定完整教學
 ├── admin/
 │   ├── index.html         後台管理頁面入口
-│   └── config.yml         後台欄位設定（Gallery/Panning/Journal/Videos）
+│   └── config.yml         後台欄位設定（DecapBridge 登入 + Gallery/Panning/Journal/Videos）
 ├── content/                後台管理的正式資料（JSON）
 │   ├── gallery.json
 │   ├── panning.json
 │   ├── journal.json
 │   └── videos.json
 └── assets/
-    ├── css/    reset / variables / base / navigation / loader /
-    │           hero / about / bike / gallery（含 panning、lightbox）/
-    │           journal / videos / stats / goals / contact / footer
+    ├── css/
+    │   ├── bundle.css      ⭐ 網站實際載入的檔案
+    │   └── （其餘 15 個原始檔案，方便閱讀/編輯用）
     ├── js/
-    │   ├── content.js      About/Bike/Goals/Contact/Stats 的資料
-    │   │                   ＋ Gallery/Panning/Journal/Videos 的離線預覽預設值
-    │   ├── media.js        圖片／影片載入 + 佔位 fallback
-    │   ├── render.js       把資料變成畫面（含 fetch content/*.json 的邏輯）
-    │   ├── gallery.js      通用 Lightbox（Gallery/Panning/Journal 共用）
-    │   ├── counter.js      Statistics 數字動畫
-    │   ├── footer.js       Back to top
-    │   ├── navigation.js   導覽列
-    │   ├── animation.js    捲動進場動畫
-    │   ├── loader.js       進站 Loader
-    │   └── main.js         進入點
+    │   ├── content.js      ⭐ 網站實際載入，也是唯一常手動編輯的檔案
+    │   ├── bundle.js        ⭐ 網站實際載入的檔案（不含 content.js）
+    │   └── （其餘 9 個原始檔案，方便閱讀/編輯用）
     ├── images/
     ├── videos/
     ├── icons/
