@@ -407,6 +407,14 @@ function initJournalSearch() {
 
 /* ---------------- 06 Videos ---------------- */
 
+/* ---------------- 06 Videos ----------------
+   「影片也是作品」：改成電影海報式卡片，桌面 hover 有播放感的互動，
+   手機因為沒有 hover，改成「先點一下顯示資訊，再點播放鍵才跳轉」，
+   不是把桌面那套原封不動搬過去。 */
+
+const IS_TOUCH_DEVICE =
+  typeof window.matchMedia === 'function' && window.matchMedia('(hover: none)').matches;
+
 function renderVideos() {
   const container = document.querySelector('[data-render="videos"]');
   if (!container) return;
@@ -421,41 +429,62 @@ function renderVideos() {
     card.setAttribute('data-reveal', '');
     card.setAttribute('aria-label', `${video.title}（在新分頁開啟 ${video.platform}）`);
 
-    const visual = createMediaElement({
+    const media = createMediaElement({
       src: video.thumbnail,
       alt: video.title,
       label: '待補影片縮圖',
       className: 'video-card__image',
     });
-    visual.classList.add('video-card__visual');
+    media.classList.add('video-card__media');
+    card.appendChild(media);
 
-    const playIcon = document.createElement('span');
-    playIcon.className = 'video-card__play';
-    playIcon.innerHTML = `
+    const scrim = document.createElement('span');
+    scrim.className = 'video-card__scrim';
+    scrim.setAttribute('aria-hidden', 'true');
+    card.appendChild(scrim);
+
+    const playRing = document.createElement('span');
+    playRing.className = 'video-card__play-ring';
+    playRing.setAttribute('aria-hidden', 'true');
+    playRing.innerHTML = `
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.2" />
         <path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" />
       </svg>
     `;
-    visual.appendChild(playIcon);
+    card.appendChild(playRing);
 
     const badge = document.createElement('span');
     badge.className = 'video-card__badge';
     badge.textContent = video.platform;
-    visual.appendChild(badge);
+    card.appendChild(badge);
+
+    const duration = document.createElement('span');
+    duration.className = 'video-card__duration';
+    duration.textContent = video.duration;
+    card.appendChild(duration);
 
     const body = document.createElement('div');
     body.className = 'video-card__body';
     body.innerHTML = `
       <h3 class="video-card__title">${video.title}</h3>
-      <div class="video-card__meta">
-        <time datetime="${video.date}">${video.date}</time>
-        <span>${video.duration}</span>
-      </div>
+      <time class="video-card__date" datetime="${video.date}">${video.date}</time>
     `;
-
-    card.appendChild(visual);
     card.appendChild(body);
+
+    // 手機（沒有 hover）：第一次點擊只顯示資訊/播放鍵，不直接跳轉；
+    // 已經顯示過資訊後再點一次，才真的離開網站前往外部平台。
+    if (IS_TOUCH_DEVICE) {
+      card.addEventListener('click', (event) => {
+        if (!card.classList.contains('is-revealed')) {
+          event.preventDefault();
+          document.querySelectorAll('.video-card.is-revealed').forEach((el) => {
+            if (el !== card) el.classList.remove('is-revealed');
+          });
+          card.classList.add('is-revealed');
+        }
+      });
+    }
+
     container.appendChild(card);
   });
 }
