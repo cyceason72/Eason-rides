@@ -43,20 +43,6 @@
     rel="stylesheet"
   />
 
-  <!-- Netlify Identity：讓後台（/admin）的邀請信/重設密碼信，就算連到首頁也能正常導回登入流程 -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', (user) => {
-        if (!user) {
-          window.netlifyIdentity.on('login', () => {
-            document.location.href = '/admin/';
-          });
-        }
-      });
-    }
-  </script>
-
   <!-- Styles（順序即層疊順序：reset → tokens → base → 導覽/loader → 各區塊） -->
   <link rel="stylesheet" href="assets/css/reset.css" />
   <link rel="stylesheet" href="assets/css/variables.css" />
