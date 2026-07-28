@@ -13,10 +13,8 @@
   display: flex;
   align-items: center;
   background: transparent;
-  border-bottom: 1px solid transparent;
   transition: height var(--duration-fast) var(--ease-out),
               background var(--duration-fast) var(--ease-out),
-              border-color var(--duration-fast) var(--ease-out),
               backdrop-filter var(--duration-fast) var(--ease-out);
 }
 
@@ -25,7 +23,23 @@
   background: rgba(7, 7, 7, 0.78);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--color-border);
+}
+
+/* 髮絲線取代單調的實色邊框：中央微微透出金色，兩端淡出，呼應金屬拋光邊緣的精工感 */
+.nav::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border-strong) 20%, var(--color-gold-dim) 50%, var(--color-border-strong) 80%, transparent);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.nav.is-scrolled::after {
+  opacity: 1;
 }
 
 .nav__inner {
@@ -77,12 +91,14 @@
 }
 
 .nav__link:hover,
-.nav__link:focus-visible {
+.nav__link:focus-visible,
+.nav__link.is-active {
   color: var(--color-text);
 }
 
 .nav__link:hover::after,
-.nav__link:focus-visible::after {
+.nav__link:focus-visible::after,
+.nav__link.is-active::after {
   transform: scaleX(1);
   transform-origin: left;
 }
