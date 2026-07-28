@@ -105,89 +105,94 @@ function renderBikes() {
   });
 }
 
-/* ---------------- 04 Gallery ---------------- */
+/* ---------------- 04 靜態紀錄 Static + 追焦紀錄 Panning ----------------
+   兩個區塊排版/邏輯完全共用，差別只在資料來源跟容器。
+   為了避免照片一多，手機上要滑很久才滑得完，改成「先顯示一部分＋
+   查看更多」的漸進式呈現，維持畫面簡約，同時不犧牲內容完整性。 */
 
-function renderGallery() {
-  const container = document.querySelector('[data-render="gallery"]');
-  if (!container) return;
-  container.innerHTML = '';
+const GRID_INITIAL_COUNT = 9; // 一開始先顯示幾張，其餘收在「查看更多」後面
 
-  GALLERY_ITEMS.forEach((item, index) => {
-    const figure = document.createElement('button');
-    figure.type = 'button';
-    figure.className = 'gallery-item';
-    figure.setAttribute('data-reveal', '');
-    figure.setAttribute('data-index', String(index));
-    figure.setAttribute('aria-label', item.caption || `開啟第 ${index + 1} 張照片`);
+function buildGridItem(items, item, index, emptyLabel) {
+  const figure = document.createElement('button');
+  figure.type = 'button';
+  figure.className = 'gallery-item';
+  figure.setAttribute('data-reveal', '');
+  figure.setAttribute('data-index', String(index));
+  figure.setAttribute('aria-label', item.caption || `開啟第 ${index + 1} 張照片`);
 
-    const media = createNaturalMediaElement({
-      src: item.image,
-      alt: item.alt,
-      label: '待補照片',
-    });
-
-    figure.appendChild(media);
-
-    if (item.caption) {
-      const cap = document.createElement('span');
-      cap.className = 'gallery-item__caption';
-      cap.textContent = item.caption;
-      figure.appendChild(cap);
-    }
-
-    figure.addEventListener('click', () => {
-      const items = GALLERY_ITEMS.map((g) => ({
-        type: 'image',
-        src: g.image,
-        alt: g.alt,
-      }));
-      openLightbox(items, index, item.caption);
-    });
-    container.appendChild(figure);
+  const media = createNaturalMediaElement({
+    src: item.image,
+    alt: item.alt,
+    label: emptyLabel,
   });
+  figure.appendChild(media);
+
+  if (item.caption) {
+    const cap = document.createElement('span');
+    cap.className = 'gallery-item__caption';
+    cap.textContent = item.caption;
+    figure.appendChild(cap);
+  }
+
+  figure.addEventListener('click', () => {
+    const lightboxItems = items.map((g) => ({ type: 'image', src: g.image, alt: g.alt }));
+    openLightbox(lightboxItems, index, item.caption);
+  });
+
+  return figure;
 }
 
-/* ---------------- 追焦紀錄 Panning ----------------
-   用法跟 Gallery 完全一樣，共用同一套版面/樣式，只是資料來源與容器不同。 */
-
-function renderPanning() {
-  const container = document.querySelector('[data-render="panning"]');
+/**
+ * @param {string} gridKey       data-render 容器的值，例如 'gallery'
+ * @param {string} moreSlotKey   「查看更多」按鈕插入位置的 data-render 值
+ * @param {Array} items          該區塊的資料陣列
+ * @param {string} emptyLabel    佔位圖說明文字
+ */
+function renderMediaGrid(gridKey, moreSlotKey, items, emptyLabel) {
+  const container = document.querySelector(`[data-render="${gridKey}"]`);
+  const moreSlot = document.querySelector(`[data-render="${moreSlotKey}"]`);
   if (!container) return;
   container.innerHTML = '';
+  if (moreSlot) moreSlot.innerHTML = '';
 
-  PANNING_ITEMS.forEach((item, index) => {
-    const figure = document.createElement('button');
-    figure.type = 'button';
-    figure.className = 'gallery-item';
-    figure.setAttribute('data-reveal', '');
-    figure.setAttribute('data-index', String(index));
-    figure.setAttribute('aria-label', item.caption || `開啟第 ${index + 1} 張追焦照`);
+  const total = items.length;
+  const initialCount = Math.min(GRID_INITIAL_COUNT, total);
 
-    const media = createNaturalMediaElement({
-      src: item.image,
-      alt: item.alt,
-      label: '待補追焦照片',
+  for (let i = 0; i < initialCount; i += 1) {
+    container.appendChild(buildGridItem(items, items[i], i, emptyLabel));
+  }
+
+  if (total > initialCount && moreSlot) {
+    const remaining = total - initialCount;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-ghost load-more-btn';
+    btn.innerHTML = `查看更多 <span class="load-more-btn__count">還有 ${remaining} 張</span>`;
+
+    btn.addEventListener('click', () => {
+      const newItems = [];
+      for (let i = initialCount; i < total; i += 1) {
+        const el = buildGridItem(items, items[i], i, emptyLabel);
+        container.appendChild(el);
+        newItems.push(el);
+      }
+      btn.remove();
+      // 新加入的項目直接顯現（不用等捲動觸發），但保留淡入轉場，避免畫面瞬間跳動
+      requestAnimationFrame(() => {
+        newItems.forEach((el) => el.classList.add('is-visible'));
+      });
     });
 
-    figure.appendChild(media);
+    moreSlot.appendChild(btn);
+  }
+}
 
-    if (item.caption) {
-      const cap = document.createElement('span');
-      cap.className = 'gallery-item__caption';
-      cap.textContent = item.caption;
-      figure.appendChild(cap);
-    }
+function renderGallery() {
+  renderMediaGrid('gallery', 'gallery-more', GALLERY_ITEMS, '待補照片');
+}
 
-    figure.addEventListener('click', () => {
-      const items = PANNING_ITEMS.map((g) => ({
-        type: 'image',
-        src: g.image,
-        alt: g.alt,
-      }));
-      openLightbox(items, index, item.caption);
-    });
-    container.appendChild(figure);
-  });
+function renderPanning() {
+  renderMediaGrid('panning', 'panning-more', PANNING_ITEMS, '待補追焦照片');
 }
 
 /* ---------------- 05 Ride Journal ---------------- */
