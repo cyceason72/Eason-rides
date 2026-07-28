@@ -62,3 +62,51 @@ function createMediaElement({ src, alt, label, className = '', type = 'image', c
 
   return wrapper;
 }
+
+/**
+ * createNaturalMediaElement — 保留照片「原始比例」的版本。
+ * 用於 Gallery / 追焦紀錄 這種攝影集式排版：每張照片維持攝影師原本的構圖比例
+ * （橫的維持橫的、直的維持直的），不強制裁切成統一形狀。
+ *
+ * 跟 createMediaElement 的差異：
+ *   - createMediaElement：img 用 position:absolute 撐滿容器（cover），容器比例要先固定好
+ *   - createNaturalMediaElement：img 用一般文件流排版（width:100%; height:auto），
+ *     容器的高度直接由圖片的原始比例決定，適合 CSS columns 做的 Masonry 排版
+ *
+ * @param {Object} options
+ * @param {string} options.src
+ * @param {string} options.alt
+ * @param {string} options.label
+ * @returns {HTMLElement}
+ */
+function createNaturalMediaElement({ src, alt, label }) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'media-natural';
+
+  const placeholder = document.createElement('div');
+  placeholder.className = 'media-placeholder media-placeholder--natural';
+  placeholder.setAttribute('role', 'img');
+  placeholder.setAttribute('aria-label', label || alt || '尚未提供圖片');
+  placeholder.innerHTML = `
+    <svg class="media-placeholder__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="6" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.3" />
+      <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="1.3" />
+      <path d="M8 6l1.5-2h5L16 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    <span class="media-placeholder__label">${label || '待補圖片'}</span>
+  `;
+  wrapper.appendChild(placeholder);
+
+  if (src) {
+    const img = document.createElement('img');
+    img.className = 'media-natural__img';
+    img.alt = alt || '';
+    img.decoding = 'async';
+    img.onload = () => wrapper.classList.add('media--loaded');
+    img.onerror = () => wrapper.classList.add('media--error');
+    wrapper.appendChild(img);
+    img.src = src;
+  }
+
+  return wrapper;
+}
