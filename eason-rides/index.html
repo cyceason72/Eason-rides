@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eason Rides — 記錄每一段騎乘旅程</title>
+  <meta name="description" content="Eason Rides，一個關於騎乘、速度與旅程的個人品牌網站。以 Aprilia RS660 為起點，記錄每一次上路的瞬間。" />
+  <link rel="canonical" href="https://easonrides.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Eason Rides" />
+  <meta property="og:title" content="Eason Rides — 記錄每一段騎乘旅程" />
+  <meta property="og:description" content="以 Aprilia RS660 為起點，記錄每一次上路的瞬間。" />
+  <meta property="og:image" content="/assets/images/og-cover.jpg" />
+  <meta property="og:locale" content="zh_TW" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Eason Rides" />
+  <meta name="twitter:description" content="記錄每一段騎乘旅程。" />
+  <meta name="twitter:image" content="/assets/images/og-cover.jpg" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Eason",
+    "url": "https://easonrides.com/",
+    "sameAs": []
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Netlify Identity：讓後台（/admin）的邀請信/重設密碼信，就算連到首頁也能正常導回登入流程 -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', (user) => {
+        if (!user) {
+          window.netlifyIdentity.on('login', () => {
+            document.location.href = '/admin/';
+          });
+        }
+      });
+    }
+  </script>
+
+  <!-- Styles（順序即層疊順序：reset → tokens → base → 導覽/loader → 各區塊） -->
+  <link rel="stylesheet" href="assets/css/reset.css" />
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/navigation.css" />
+  <link rel="stylesheet" href="assets/css/loader.css" />
+  <link rel="stylesheet" href="assets/css/hero.css" />
+  <link rel="stylesheet" href="assets/css/about.css" />
+  <link rel="stylesheet" href="assets/css/bike.css" />
+  <link rel="stylesheet" href="assets/css/gallery.css" />
+  <link rel="stylesheet" href="assets/css/journal.css" />
+  <link rel="stylesheet" href="assets/css/videos.css" />
+  <link rel="stylesheet" href="assets/css/stats.css" />
+  <link rel="stylesheet" href="assets/css/goals.css" />
+  <link rel="stylesheet" href="assets/css/contact.css" />
+  <link rel="stylesheet" href="assets/css/footer.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">跳至主要內容</a>
+
+  <!-- ================= Loader ================= -->
+  <div class="loader" aria-hidden="true">
+    <p class="loader__mark">EASON <span>RIDES</span></p>
+  </div>
+
+  <!-- ================= Navbar ================= -->
+  <header class="nav">
+    <div class="nav__inner container">
+      <a class="nav__logo" href="#top">EASON <span>RIDES</span></a>
+
+      <nav class="nav__links" id="nav-links" aria-label="主要導覽">
+        <a class="nav__link" href="#about">About</a>
+        <a class="nav__link" href="#bike">Bike</a>
+        <a class="nav__link" href="#gallery">Gallery</a>
+        <a class="nav__link" href="#panning">Panning</a>
+        <a class="nav__link" href="#journal">Journal</a>
+        <a class="nav__link" href="#videos">Videos</a>
+        <a class="nav__link" href="#goals">Goals</a>
+        <a class="nav__link" href="#contact">Contact</a>
+      </nav>
+
+      <button
+        class="nav__toggle"
+        aria-label="開啟選單"
+        aria-expanded="false"
+        aria-controls="nav-links"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= 01 Hero ================= -->
+    <section class="hero" id="top" aria-label="Hero">
+      <div class="hero__content">
+        <p class="hero__mark">
+          <span class="hero__mark-line" aria-hidden="true"></span>
+          <span class="hero__eyebrow">Ride Journal &amp; Motorcycle Diary</span>
+        </p>
+
+        <h1 class="hero__title">用每一段旅程<br />定義騎乘的意義</h1>
+
+        <p class="hero__tagline">
+          不追求終點，只享受路上的每一次加速、每一個彎道、每一次停下拍照的瞬間。
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn btn-primary" href="#about">
+            Explore
+            <svg class="btn-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <img class="hero__image" src="assets/images/hero-bike.jpeg" alt="Eason 騎乘 Aprilia RS660 過彎" loading="eager" />
+      </div>
+
+      <a class="hero__scroll" href="#about" aria-label="往下捲動至 About">
+        <span class="hero__scroll-line" aria-hidden="true"></span>
+        Scroll
+      </a>
+    </section>
+
+    <!-- ================= 02 About ================= -->
+    <section class="section about" id="about" aria-label="About">
+      <div class="container about__grid">
+        <!-- 換照片：改 assets/js/content.js 裡 about.photo 的路徑即可 -->
+        <div class="about__visual" data-reveal="scale" data-render="about-visual"></div>
+        <div class="about__body" data-reveal data-render="about-body"></div>
+      </div>
+    </section>
+
+    <!-- ================= 03 Featured Bike ================= -->
+    <section class="section bike" id="bike" aria-label="Featured Bike">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Garage</p>
+          <h2>Featured Bike</h2>
+        </div>
+        <div class="bikes" data-render="bikes"></div>
+      </div>
+    </section>
+
+    <!-- ================= 04 Gallery ================= -->
+    <section class="section gallery" id="gallery" aria-label="Gallery">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Gallery</p>
+          <h2>視角記錄</h2>
+        </div>
+        <div class="gallery-grid" data-render="gallery"></div>
+      </div>
+    </section>
+
+    <!-- ================= 追焦紀錄 Panning ================= -->
+    <section class="section panning" id="panning" aria-label="Panning">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Panning</p>
+          <h2>追焦紀錄</h2>
+        </div>
+        <div class="gallery-grid" data-render="panning"></div>
+      </div>
+    </section>
+
+    <!-- ================= 05 Ride Journal ================= -->
+    <section class="section journal" id="journal" aria-label="Ride Journal">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Journal</p>
+          <h2>Ride Journal</h2>
+        </div>
+
+        <div class="journal__controls">
+          <div class="journal__filters" data-journal-filters>
+            <button type="button" class="filter-chip" data-year="all">全部</button>
+          </div>
+          <label class="journal__search">
+            <span class="sr-only">搜尋旅程</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.3"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <input type="search" placeholder="搜尋地點、心得或標籤" data-journal-search />
+          </label>
+        </div>
+
+        <div class="journal-grid" data-render="journal"></div>
+      </div>
+    </section>
+
+    <!-- ================= 06 Videos ================= -->
+    <section class="section videos" id="videos" aria-label="Videos">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Videos</p>
+          <h2>影片紀錄</h2>
+        </div>
+        <div class="video-grid" data-render="videos"></div>
+      </div>
+    </section>
+
+    <!-- ================= 07 Statistics ================= -->
+    <section class="section stats" id="stats" aria-label="Statistics">
+      <div class="container">
+        <div class="stats-grid" data-render="stats"></div>
+      </div>
+    </section>
+
+    <!-- ================= 08 Future Goals ================= -->
+    <section class="section goals" id="goals" aria-label="Future Goals">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Wishlist</p>
+          <h2>Future Goals</h2>
+        </div>
+        <div class="goals-grid" data-render="goals"></div>
+      </div>
+    </section>
+
+    <!-- ================= 09 Contact ================= -->
+    <section class="section contact" id="contact" aria-label="Contact">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Contact</p>
+          <h2>保持聯絡</h2>
+        </div>
+        <div class="contact-links" data-render="contact"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= 10 Footer ================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <a class="footer__logo" href="#top">EASON <span>RIDES</span></a>
+        <nav class="footer__nav" aria-label="Footer 導覽">
+          <a href="#about">About</a>
+          <a href="#bike">Bike</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#panning">Panning</a>
+          <a href="#journal">Journal</a>
+          <a href="#videos">Videos</a>
+          <a href="#goals">Goals</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; <span id="footer-year"></span> Eason Rides. All rights reserved.</span>
+        <button type="button" class="back-to-top" data-back-to-top>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to top
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= Scripts ================= -->
+  <!-- 先載入資料與工具，最後才載入依賴它們的 main.js（一般 script，非 module，file:// 可直接開） -->
+  <script src="assets/js/content.js"></script>
+  <script src="assets/js/media.js"></script>
+  <script src="assets/js/render.js"></script>
+  <script src="assets/js/gallery.js"></script>
+  <script src="assets/js/counter.js"></script>
+  <script src="assets/js/footer.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/animation.js"></script>
+  <script src="assets/js/loader.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

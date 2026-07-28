@@ -1,0 +1,54 @@
+/* ============================================================
+   Eason Rides — First-visit Loader
+   黑底、Logo 淡入，約 1 秒後淡出交給 Hero
+   ============================================================ */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loader);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  transition: opacity var(--duration-base) var(--ease-out),
+              visibility var(--duration-base) var(--ease-out);
+}
+
+.loader__mark {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: loaderFadeIn 900ms var(--ease-out) forwards;
+}
+
+.loader__mark span {
+  color: var(--color-accent);
+}
+
+.loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes loaderFadeIn {
+  from {
+    opacity: 0;
+    letter-spacing: 0.4em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: var(--tracking-wider);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader__mark {
+    animation: none;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "thumbnail": "assets/images/video-01.jpg",
+      "title": "陽金公路一日騎",
+      "date": "2026-03-14",
+      "duration": "08:24",
+      "platform": "YouTube",
+      "url": "#"
+    },
+    {
+      "thumbnail": "assets/images/video-02.jpg",
+      "title": "台三線長途紀錄",
+      "date": "2026-01-05",
+      "duration": "00:42",
+      "platform": "Reels",
+      "url": "#"
+    }
+  ]
+}

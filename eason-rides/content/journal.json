@@ -1,0 +1,38 @@
+{
+  "entries": [
+    {
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/journal-01.jpg"
+        }
+      ],
+      "date": "2026-03-14",
+      "year": 2026,
+      "location": "陽金公路",
+      "km": 128,
+      "note": "第一次騎上陽金，天氣很好，山上風有點大，但視野極好。",
+      "tags": [
+        "山道",
+        "一日遊"
+      ]
+    },
+    {
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/journal-02.jpg"
+        }
+      ],
+      "date": "2026-01-05",
+      "year": 2026,
+      "location": "台三線",
+      "km": 210,
+      "note": "沿著台三線一路往南，中途在一間老街咖啡廳休息。",
+      "tags": [
+        "公路",
+        "長途"
+      ]
+    }
+  ]
+}
