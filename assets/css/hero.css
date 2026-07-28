@@ -34,7 +34,7 @@
 .hero__mark-line {
   width: 64px;
   height: 1px;
-  background: var(--color-accent);
+  background: var(--color-gold);
   transform-origin: left;
   transform: scaleX(0);
 }
@@ -51,14 +51,15 @@
   font-size: var(--fs-hero);
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-tight);
-  font-weight: 700;
+  font-weight: 600;
   max-width: 14ch;
 }
 
 .hero__tagline {
   font-size: var(--fs-body-lg);
+  line-height: 1.6;
   color: var(--color-text-secondary);
-  max-width: 42ch;
+  max-width: 38ch;
 }
 
 .hero__actions {
