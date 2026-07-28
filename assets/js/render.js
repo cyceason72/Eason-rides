@@ -120,11 +120,10 @@ function renderGallery() {
     figure.setAttribute('data-index', String(index));
     figure.setAttribute('aria-label', item.caption || `開啟第 ${index + 1} 張照片`);
 
-    const media = createMediaElement({
+    const media = createNaturalMediaElement({
       src: item.image,
       alt: item.alt,
       label: '待補照片',
-      className: 'gallery-item__image',
     });
 
     figure.appendChild(media);
@@ -164,11 +163,10 @@ function renderPanning() {
     figure.setAttribute('data-index', String(index));
     figure.setAttribute('aria-label', item.caption || `開啟第 ${index + 1} 張追焦照`);
 
-    const media = createMediaElement({
+    const media = createNaturalMediaElement({
       src: item.image,
       alt: item.alt,
       label: '待補追焦照片',
-      className: 'gallery-item__image',
     });
 
     figure.appendChild(media);
