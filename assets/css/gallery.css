@@ -102,6 +102,27 @@
   }
 }
 
+/* ---------- 查看更多 ---------- */
+
+.load-more-slot {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-5);
+}
+
+.load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.load-more-btn__count {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 /* ---------- Lightbox ---------- */
 
 .lightbox {
