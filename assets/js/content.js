@@ -25,6 +25,10 @@ const SITE_CONTENT = {
       '騎車對我來說不是交通方式，是一種重新校準自己的方式。這個網站記錄我和 Aprilia RS660 一起經歷的每一段路——短的通勤、長的環島、還有那些臨時起意的深夜山道。',
     philosophy: '安全是底線，但享受過程比抵達更重要。',
     motto: 'Ride slow, feel more.',
+    instagram: {
+      handle: '@chiiiuu2_',
+      url: 'https://www.instagram.com/chiiiuu2_',
+    },
   },
 
   /* ---------------- 03 Featured Bike ----------------
@@ -149,7 +153,7 @@ const SITE_CONTENT = {
   /* ---------------- 09 Contact ----------------
      沒有的欄位可以把值留空字串 ''，該按鈕會自動隱藏。 */
   contact: {
-    instagram: '',
+    instagram: 'https://www.instagram.com/chiiiuu2_',
     youtube: '',
     facebook: '',
     email: '',
