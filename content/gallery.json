@@ -1,26 +1,6 @@
 {
   "items": [
     {
-      "image": "assets/images/gallery-2026-06-08.jpg",
-      "alt": "靜態紀錄 2026 · 06 · 08",
-      "caption": "2026 · 06 · 08"
-    },
-    {
-      "image": "assets/images/gallery-2026-04-27-a.jpg",
-      "alt": "靜態紀錄 2026 · 04 · 27",
-      "caption": "2026 · 04 · 27"
-    },
-    {
-      "image": "assets/images/gallery-2026-04-27-b.jpg",
-      "alt": "靜態紀錄 2026 · 04 · 27",
-      "caption": "2026 · 04 · 27"
-    },
-    {
-      "image": "assets/images/gallery-2026-04-22.jpg",
-      "alt": "靜態紀錄 2026 · 04 · 22",
-      "caption": "2026 · 04 · 22"
-    },
-    {
       "image": "assets/images/gallery-2026-01-31-d.jpg",
       "alt": "靜態紀錄 2026 · 01 · 31",
       "caption": "2026 · 01 · 31"
@@ -71,6 +51,36 @@
       "caption": "2026 · 01 · 31"
     },
     {
+      "image": "assets/images/gallery-2025-12-21-b.jpg",
+      "alt": "靜態紀錄 2025 · 12 · 21",
+      "caption": "2025 · 12 · 21"
+    },
+    {
+      "image": "assets/images/gallery-2025-12-21-a.jpg",
+      "alt": "靜態紀錄 2025 · 12 · 21",
+      "caption": "2025 · 12 · 21"
+    },
+    {
+      "image": "assets/images/gallery-2026-06-08.jpg",
+      "alt": "靜態紀錄 2026 · 06 · 08",
+      "caption": "2026 · 06 · 08"
+    },
+    {
+      "image": "assets/images/gallery-2026-04-27-a.jpg",
+      "alt": "靜態紀錄 2026 · 04 · 27",
+      "caption": "2026 · 04 · 27"
+    },
+    {
+      "image": "assets/images/gallery-2026-04-27-b.jpg",
+      "alt": "靜態紀錄 2026 · 04 · 27",
+      "caption": "2026 · 04 · 27"
+    },
+    {
+      "image": "assets/images/gallery-2026-04-22.jpg",
+      "alt": "靜態紀錄 2026 · 04 · 22",
+      "caption": "2026 · 04 · 22"
+    },
+    {
       "image": "assets/images/gallery-2026-01-24.jpg",
       "alt": "靜態紀錄 2026 · 01 · 24",
       "caption": "2026 · 01 · 24"
@@ -84,16 +94,6 @@
       "image": "assets/images/gallery-2026-01-18-a.jpg",
       "alt": "靜態紀錄 2026 · 01 · 18",
       "caption": "2026 · 01 · 18"
-    },
-    {
-      "image": "assets/images/gallery-2025-12-21-b.jpg",
-      "alt": "靜態紀錄 2025 · 12 · 21",
-      "caption": "2025 · 12 · 21"
-    },
-    {
-      "image": "assets/images/gallery-2025-12-21-a.jpg",
-      "alt": "靜態紀錄 2025 · 12 · 21",
-      "caption": "2025 · 12 · 21"
     },
     {
       "image": "assets/images/gallery-2025-12-06.jpg",
