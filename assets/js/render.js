@@ -42,6 +42,17 @@ function renderAbout() {
   });
   visual.appendChild(media);
 
+  const instagramHTML = about.instagram && about.instagram.handle
+    ? `
+    <a class="about__instagram" href="${about.instagram.url}" target="_blank" rel="noopener noreferrer" aria-label="在 Instagram 上追蹤 ${about.instagram.handle}">
+      <span class="about__instagram-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.3"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      </span>
+      <span class="about__instagram-handle">${about.instagram.handle}</span>
+      <span class="about__instagram-follow">Follow</span>
+    </a>`
+    : '';
+
   body.innerHTML = `
     <p class="eyebrow">About</p>
     <h2 class="about__name">${about.name}</h2>
@@ -60,6 +71,7 @@ function renderAbout() {
         <p class="about__fact-value">${about.motto}</p>
       </div>
     </div>
+    ${instagramHTML}
   `;
 }
 
