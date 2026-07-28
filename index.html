@@ -5,24 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eason Rides — 記錄每一段騎乘旅程</title>
   <meta name="description" content="Eason Rides，一個關於騎乘、速度與旅程的個人品牌網站。以 Aprilia RS660 為起點，記錄每一次上路的瞬間。" />
-  <link rel="canonical" href="https://easonrides.com/" />
+  <link rel="canonical" href="https://eason-rides.vercel.app/" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Eason Rides" />
   <meta property="og:title" content="Eason Rides — 記錄每一段騎乘旅程" />
   <meta property="og:description" content="以 Aprilia RS660 為起點，記錄每一次上路的瞬間。" />
-  <meta property="og:image" content="/assets/images/og-cover.jpg" />
+  <meta property="og:image" content="https://eason-rides.vercel.app/assets/images/hero-bike.jpeg" />
   <meta property="og:locale" content="zh_TW" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Eason Rides" />
   <meta name="twitter:description" content="記錄每一段騎乘旅程。" />
-  <meta name="twitter:image" content="/assets/images/og-cover.jpg" />
+  <meta name="twitter:image" content="https://eason-rides.vercel.app/assets/images/hero-bike.jpeg" />
 
   <!-- Favicon -->
   <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
+
+  <!-- 提早開始下載 Hero 主視覺（LCP 元素），改善首屏載入速度 -->
+  <link rel="preload" as="image" href="assets/images/hero-bike.jpeg" />
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
@@ -30,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Eason",
-    "url": "https://easonrides.com/",
+    "url": "https://eason-rides.vercel.app/",
     "sameAs": []
   }
   </script>
@@ -123,7 +126,7 @@
       </div>
 
       <div class="hero__visual">
-        <img class="hero__image" src="assets/images/hero-bike.jpeg" alt="Eason 騎乘 Aprilia RS660 過彎" loading="eager" />
+        <img class="hero__image" src="assets/images/hero-bike.jpeg" alt="Eason 騎乘 Aprilia RS660 過彎" loading="eager" fetchpriority="high" />
       </div>
 
       <a class="hero__scroll" href="#about" aria-label="往下捲動至 About">
