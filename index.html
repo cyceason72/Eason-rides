@@ -89,6 +89,13 @@
   <main id="main">
     <!-- ================= 01 Hero ================= -->
     <section class="hero" id="top" aria-label="Hero">
+      <!-- 全螢幕背景媒體。之後有影片素材時，把 <img> 換成 <video autoplay muted loop playsinline>
+           即可直接升級成電影感動態 Hero，其餘結構／樣式不用動。 -->
+      <div class="hero__media">
+        <img class="hero__image" src="assets/images/hero-bike.jpeg" alt="Eason 騎乘 Aprilia RS660 過彎" loading="eager" fetchpriority="high" />
+        <div class="hero__scrim" aria-hidden="true"></div>
+      </div>
+
       <div class="hero__content">
         <p class="hero__mark">
           <span class="hero__mark-line" aria-hidden="true"></span>
@@ -104,17 +111,15 @@
         <p class="hero__slogan">Every Ride Tells a Story.</p>
 
         <div class="hero__actions">
-          <a class="btn btn-primary" href="#about">
-            Explore
-            <svg class="btn-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+          <a class="hero__cta" href="#about" aria-label="探索 Eason Rides">
+            <span class="hero__cta-ring" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 5v14M12 19l-6-6M12 19l6-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span class="hero__cta-label">Explore</span>
           </a>
         </div>
-      </div>
-
-      <div class="hero__visual">
-        <img class="hero__image" src="assets/images/hero-bike.jpeg" alt="Eason 騎乘 Aprilia RS660 過彎" loading="eager" fetchpriority="high" />
       </div>
 
       <a class="hero__scroll" href="#about" aria-label="往下捲動至 About">
