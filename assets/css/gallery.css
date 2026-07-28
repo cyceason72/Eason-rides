@@ -23,27 +23,49 @@
   margin-bottom: var(--space-3);
   border-radius: var(--radius-md);
   overflow: hidden;
-  aspect-ratio: 4 / 5;
   border: 1px solid var(--color-border);
   text-align: left;
+  background: var(--color-bg-secondary);
 }
 
-.gallery-item:nth-child(3n+2) {
-  aspect-ratio: 3 / 4;
+/* ---------- 保留原始比例的媒體容器（Masonry 用） ----------
+   跟 .media 不同：.media 是絕對定位撐滿容器（cover，需要固定比例的容器），
+   .media-natural 讓圖片用自身原始比例撐開容器高度，
+   照片橫的維持橫的、直的維持直的，不強制裁切構圖。 */
+
+.media-natural {
+  position: relative;
+  display: block;
+  width: 100%;
+  line-height: 0; /* 消除 inline 元素下方的空隙 */
 }
 
-.gallery-item:nth-child(5n) {
-  aspect-ratio: 1 / 1;
-}
-
-.gallery-item .media__img {
-  transition: transform var(--duration-base) var(--ease-out),
+.media-natural__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out),
               filter var(--duration-base) var(--ease-out);
 }
 
-.gallery-item:hover .media__img,
-.gallery-item:focus-visible .media__img {
-  transform: scale(1.06);
+.media-natural.media--loaded .media-natural__img {
+  opacity: 1;
+}
+
+.media-placeholder--natural {
+  position: relative;
+  aspect-ratio: 4 / 3; /* 圖片載入前的預設比例，載入後會被隱藏、由圖片決定高度 */
+}
+
+.media-natural.media--loaded .media-placeholder--natural {
+  display: none;
+}
+
+.gallery-item:hover .media-natural__img,
+.gallery-item:focus-visible .media-natural__img {
+  transform: scale(1.03);
   filter: brightness(1.05);
 }
 
@@ -107,6 +129,12 @@
 .lightbox__stage .media,
 .lightbox__stage .media-placeholder {
   border-radius: var(--radius-md);
+}
+
+/* Lightbox 是「完整檢視」情境，跟縮圖不同：不裁切，完整顯示攝影師的原始構圖 */
+.lightbox__stage .media__img {
+  object-fit: contain;
+  background: #000;
 }
 
 .lightbox__close,
