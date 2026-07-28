@@ -1,0 +1,87 @@
+/* ============================================================
+   Eason Rides — Design Tokens
+   單一事實來源：所有顏色、字體、間距、動畫時間都從這裡取用
+   ============================================================ */
+
+:root {
+  /* ---------- Color ---------- */
+  --color-bg: #050505;
+  --color-bg-secondary: #101010;
+  --color-card: #171717;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.16);
+  --color-text: #ffffff;
+  --color-text-secondary: #b5b5b5;
+  --color-text-muted: #757575;
+  --color-accent: #ff3b30;
+  --color-accent-dim: rgba(255, 59, 48, 0.4);
+
+  /* ---------- Typography ---------- */
+  --font-display: "SF Pro Display", "Inter", "Noto Sans TC", -apple-system, sans-serif;
+  --font-body: "Inter", "Noto Sans TC", -apple-system, sans-serif;
+
+  /* Type scale — clamp() 讓字級隨視窗寬度連續縮放，而非用斷點跳階 */
+  --fs-hero: clamp(2.75rem, 6vw + 1rem, 6.5rem);
+  --fs-h1: clamp(2.25rem, 4vw + 1rem, 4rem);
+  --fs-h2: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+  --fs-h3: clamp(1.25rem, 1.2vw + 1rem, 1.75rem);
+  --fs-body-lg: clamp(1.05rem, 0.6vw + 0.9rem, 1.25rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-caption: 0.75rem;
+
+  --lh-tight: 1.05;
+  --lh-heading: 1.2;
+  --lh-body: 1.65;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.18em;
+
+  /* ---------- Spacing (8px 基準) ---------- */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+  --space-8: 8rem;
+  --space-9: 12rem;
+
+  /* ---------- Layout ---------- */
+  --container-max: 1440px;
+  --container-padding: clamp(1.5rem, 5vw, 6rem);
+  --nav-height: 88px;
+  --nav-height-scrolled: 72px;
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 250ms;
+  --duration-base: 700ms;
+  --duration-slow: 1000ms;
+
+  /* ---------- Elevation ---------- */
+  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.45);
+  --shadow-accent: 0 8px 30px rgba(255, 59, 48, 0.25);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  /* ---------- Z-index scale ---------- */
+  --z-nav: 100;
+  --z-lightbox: 200;
+  --z-loader: 300;
+}
+
+/* 尊重使用者的減少動態偏好設定 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 1ms;
+    --duration-base: 1ms;
+    --duration-slow: 1ms;
+  }
+}

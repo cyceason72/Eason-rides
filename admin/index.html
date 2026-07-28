@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eason Rides — 後台管理</title>
+  <!-- Netlify Identity：處理登入/邀請信/重設密碼 -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <!-- Decap CMS（前身 Netlify CMS），會讀取同資料夾下的 config.yml -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // 邀請信/重設密碼信的連結會帶一個 token 導到這裡，
+    // 這段負責接住 token、完成登入流程，再導回這個後台頁面。
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", (user) => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>
