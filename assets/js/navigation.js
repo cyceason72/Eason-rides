@@ -50,7 +50,44 @@ function initMobileNavToggle() {
   });
 }
 
+/**
+ * initActiveSectionSpy
+ * 職責：捲動時偵測目前畫面中央帶落在哪個區塊，
+ *       自動幫對應的 nav 連結加上 .is-active，讓使用者捲動時不會失去方向感。
+ *       用 rootMargin 在視窗中央切一條窄帶當作判斷基準，
+ *       不管每個區塊實際高度差多少都能穩定判斷「目前在看哪一段」。
+ */
+function initActiveSectionSpy() {
+  const links = Array.from(document.querySelectorAll('.nav__link[href^="#"]'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+
+  const sectionToLink = new Map();
+  links.forEach((link) => {
+    const id = link.getAttribute('href').slice(1);
+    const section = document.getElementById(id);
+    if (section) sectionToLink.set(section, link);
+  });
+  if (!sectionToLink.size) return;
+
+  const setActive = (activeLink) => {
+    links.forEach((link) => link.classList.toggle('is-active', link === activeLink));
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting);
+      if (!visible.length) return;
+      const top = visible.reduce((a, b) => (a.intersectionRatio > b.intersectionRatio ? a : b));
+      setActive(sectionToLink.get(top.target));
+    },
+    { rootMargin: '-45% 0px -50% 0px', threshold: [0, 0.01, 0.25, 0.5, 0.75, 1] }
+  );
+
+  sectionToLink.forEach((_, section) => observer.observe(section));
+}
+
 function initNavigation() {
   initNavScrollState();
   initMobileNavToggle();
+  initActiveSectionSpy();
 }
