@@ -47,21 +47,7 @@
   />
 
   <!-- Styles（順序即層疊順序：reset → tokens → base → 導覽/loader → 各區塊） -->
-  <link rel="stylesheet" href="assets/css/reset.css" />
-  <link rel="stylesheet" href="assets/css/variables.css" />
-  <link rel="stylesheet" href="assets/css/base.css" />
-  <link rel="stylesheet" href="assets/css/navigation.css" />
-  <link rel="stylesheet" href="assets/css/loader.css" />
-  <link rel="stylesheet" href="assets/css/hero.css" />
-  <link rel="stylesheet" href="assets/css/about.css" />
-  <link rel="stylesheet" href="assets/css/bike.css" />
-  <link rel="stylesheet" href="assets/css/gallery.css" />
-  <link rel="stylesheet" href="assets/css/journal.css" />
-  <link rel="stylesheet" href="assets/css/videos.css" />
-  <link rel="stylesheet" href="assets/css/stats.css" />
-  <link rel="stylesheet" href="assets/css/goals.css" />
-  <link rel="stylesheet" href="assets/css/contact.css" />
-  <link rel="stylesheet" href="assets/css/footer.css" />
+  <link rel="stylesheet" href="assets/css/bundle.css" />
 </head>
 <body>
   <a class="skip-link" href="#main">跳至主要內容</a>
@@ -272,15 +258,7 @@
   <!-- ================= Scripts ================= -->
   <!-- 先載入資料與工具，最後才載入依賴它們的 main.js（一般 script，非 module，file:// 可直接開） -->
   <script src="assets/js/content.js"></script>
-  <script src="assets/js/media.js"></script>
-  <script src="assets/js/render.js"></script>
-  <script src="assets/js/gallery.js"></script>
-  <script src="assets/js/counter.js"></script>
-  <script src="assets/js/footer.js"></script>
-  <script src="assets/js/navigation.js"></script>
-  <script src="assets/js/animation.js"></script>
-  <script src="assets/js/loader.js"></script>
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/bundle.js"></script>
   <script>
     document.getElementById('footer-year').textContent = new Date().getFullYear();
   </script>
