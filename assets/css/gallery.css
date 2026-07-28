@@ -12,7 +12,7 @@
 
 .gallery-grid {
   columns: 3 280px;
-  column-gap: var(--space-3);
+  column-gap: var(--space-4);
 }
 
 .gallery-item {
@@ -20,12 +20,23 @@
   display: block;
   width: 100%;
   break-inside: avoid;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--color-border);
   text-align: left;
   background: var(--color-bg-secondary);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transition: border-color var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+}
+
+.gallery-item:hover,
+.gallery-item:focus-visible {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-3px);
 }
 
 /* ---------- 保留原始比例的媒體容器（Masonry 用） ----------
@@ -46,7 +57,7 @@
   height: auto;
   opacity: 0;
   transition: opacity var(--duration-base) var(--ease-out),
-              transform var(--duration-base) var(--ease-out),
+              transform 900ms var(--ease-out),
               filter var(--duration-base) var(--ease-out);
 }
 
@@ -65,21 +76,29 @@
 
 .gallery-item:hover .media-natural__img,
 .gallery-item:focus-visible .media-natural__img {
-  transform: scale(1.03);
-  filter: brightness(1.05);
+  transform: scale(1.035);
+  filter: brightness(1.03);
 }
+
+/* ---------- 照片標籤 ----------
+   改成左下角低調的小標籤（像展覽牆上的作品說明牌），
+   而不是整條漸層覆蓋——更克制、更有畫廊感。 */
 
 .gallery-item__caption {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: var(--space-3);
-  font-size: var(--fs-small);
+  left: var(--space-2);
+  bottom: var(--space-2);
+  padding: 0.4rem 0.75rem;
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wide);
   color: var(--color-text);
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), transparent 70%);
+  background: rgba(5, 5, 5, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(6px);
   transition: opacity var(--duration-fast) var(--ease-out),
               transform var(--duration-fast) var(--ease-out);
 }
@@ -93,6 +112,11 @@
 @media (max-width: 768px) {
   .gallery-grid {
     columns: 2 200px;
+    column-gap: var(--space-3);
+  }
+
+  .gallery-item {
+    margin-bottom: var(--space-3);
   }
 }
 
@@ -102,18 +126,38 @@
   }
 }
 
-/* ---------- 查看更多 ---------- */
+/* ---------- 查看更多 ----------
+   兩側加細線，走比較有編輯排版感的極簡風格，
+   而不是單純一顆按鈕孤零零浮在畫面中間。 */
 
 .load-more-slot {
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-top: var(--space-5);
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.load-more-slot:empty {
+  display: none;
+}
+
+.load-more-slot::before,
+.load-more-slot::after {
+  content: '';
+  flex: 1;
+  max-width: 120px;
+  height: 1px;
+  background: var(--color-border);
 }
 
 .load-more-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 0.75rem 1.5rem;
 }
 
 .load-more-btn__count {
