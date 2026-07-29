@@ -4,6 +4,538 @@
       "media": [
         {
           "type": "image",
+          "src": "assets/images/journal-2026-05-11-01.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-02.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-03.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-04.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-05.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-06.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-07.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-08.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-09.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-10.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-11.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-12.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-11-13.jpg"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-05-11-v01.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-05-11-v02.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-05-11-v03.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-05-11-v04.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-05-11-v05.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-05-11-v06.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-05-11-v07.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-05-11-v08.mp4"
+        }
+      ],
+      "date": "2026-05-11",
+      "year": 2026,
+      "location": "屏東",
+      "km": null,
+      "note": "",
+      "tags": [
+        "祐祐",
+        "出遊"
+      ]
+    },
+    {
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-27-01.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-27-02.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-27-03.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-27-04.jpg"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v01.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v02.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v03.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v04.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v05.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v06.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v07.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v08.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v09.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v10.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v11.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v12.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v13.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v14.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-27-v15.mp4"
+        }
+      ],
+      "date": "2026-04-27",
+      "year": 2026,
+      "location": "台南",
+      "km": null,
+      "note": "",
+      "tags": [
+        "菁菁",
+        "出遊"
+      ]
+    },
+    {
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-18-01.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-18-02.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-18-03.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-18-04.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-18-05.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-18-06.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-18-07.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-18-08.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-18-09.jpg"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v01.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v02.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v03.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v04.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v05.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v06.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v07.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v08.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v09.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v10.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v11.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v12.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v13.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v14.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-18-v15.mp4"
+        }
+      ],
+      "date": "2026-04-18",
+      "year": 2026,
+      "location": "旭海",
+      "km": null,
+      "note": "",
+      "tags": [
+        "小琳",
+        "旭海",
+        "帶隊"
+      ]
+    },
+    {
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-01.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-02.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-03.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-04.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-05.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-06.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-07.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-08.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-09.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-10.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-11.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-05-03-12.jpg"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-05-03-v01.mp4"
+        }
+      ],
+      "date": "2026-05-03",
+      "year": 2026,
+      "location": "K1 賽道",
+      "km": null,
+      "note": "",
+      "tags": [
+        "賽道",
+        "Track Day"
+      ]
+    },
+    {
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-03-01.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-03-02.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-03-03.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-03-04.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-03-05.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-03-06.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-04-03-07.jpg"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-03-v01.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-03-v02.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-04-03-v03.mp4"
+        }
+      ],
+      "date": "2026-04-03",
+      "year": 2026,
+      "location": "旭海",
+      "km": null,
+      "note": "",
+      "tags": [
+        "皓哲",
+        "旭海"
+      ]
+    },
+    {
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-03-16-01.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-03-16-02.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-03-16-03.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-03-16-04.jpg"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v01.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v02.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v03.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v04.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v05.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v06.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v07.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v08.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v09.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v10.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v11.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v12.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v13.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-16-v14.mp4"
+        }
+      ],
+      "date": "2026-03-16",
+      "year": 2026,
+      "location": "武嶺",
+      "km": null,
+      "note": "",
+      "tags": [
+        "小琳",
+        "武嶺"
+      ]
+    },
+    {
+      "media": [
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-03-27-01.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-03-27-02.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-03-27-03.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2026-03-27-04.jpg"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2026-03-27-v01.mp4"
+        }
+      ],
+      "date": "2026-03-27",
+      "year": 2026,
+      "location": "高雄",
+      "km": null,
+      "note": "",
+      "tags": [
+        "淵博",
+        "出遊"
+      ]
+    },
+    {
+      "media": [
+        {
+          "type": "image",
           "src": "assets/images/journal-02.jpg"
         }
       ],
