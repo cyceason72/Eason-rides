@@ -29,11 +29,64 @@
 }
 
 .loader__content {
+  position: relative;
   text-align: center;
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 950ms var(--ease-out),
               transform 950ms var(--ease-out);
+}
+
+/* 背光暈開：像儀表板通電時背光緩緩亮起，很淡、只在 Logo 出現那一刻浮現 */
+.loader__content::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 360px;
+  height: 200px;
+  transform: translate(-50%, -50%) scale(0.85);
+  background: radial-gradient(ellipse at center, rgba(198, 166, 100, 0.16) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 800ms var(--ease-out), transform 1000ms var(--ease-out);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.loader__content.is-visible::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* 指針歸零測試感的掃描線：先掃過頭一點點再彈回定位，呼應儀表通電自檢的瞬間 */
+.loader__sweep {
+  display: block;
+  width: 64px;
+  height: 1px;
+  margin: 0 auto var(--space-2);
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: center;
+  opacity: 0;
+}
+
+.loader__content.is-visible .loader__sweep {
+  animation: loaderSweep 750ms var(--ease-out) forwards;
+}
+
+@keyframes loaderSweep {
+  0% { transform: scaleX(0); opacity: 0.3; }
+  55% { transform: scaleX(1.15); opacity: 1; }
+  78% { transform: scaleX(0.92); }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader__content.is-visible .loader__sweep {
+    animation: none;
+    transform: scaleX(1);
+    opacity: 1;
+  }
 }
 
 .loader__content.is-visible {
