@@ -31,12 +31,40 @@ const OPENING_TIMING = {
 function playOpeningSfx(elementId) {
   const el = document.getElementById(elementId);
   if (!el) return;
+  el.volume = 1;
   const playPromise = el.play();
   if (playPromise && typeof playPromise.catch === 'function') {
     playPromise.catch(() => {
       /* 極少數情況下仍可能被擋下，靜默略過，視覺節奏照常進行 */
     });
   }
+}
+
+/**
+ * fadeOutAudio
+ * 職責：讓聲音跟著開場動畫一起「收尾」，而不是動畫都結束了聲音還孤零零地繼續播。
+ * 用 rAF 把音量從目前值線性降到 0，結束後暫停並重置播放位置。
+ */
+function fadeOutAudio(elementId, durationMs) {
+  const el = document.getElementById(elementId);
+  if (!el || el.paused) return;
+
+  const startVolume = el.volume;
+  const startTime = performance.now();
+
+  function step(now) {
+    const progress = Math.min((now - startTime) / durationMs, 1);
+    el.volume = Math.max(0, startVolume * (1 - progress));
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.pause();
+      el.currentTime = 0;
+      el.volume = 1; // 還原，下次播放才不會是無聲
+    }
+  }
+
+  requestAnimationFrame(step);
 }
 
 function hasOpeningPlayedThisSession() {
@@ -104,11 +132,15 @@ function initLoader() {
       content.classList.add('is-hiding');
       loader.classList.add('is-fading'); // Loader 背景透明化＝與 Hero 的 Crossfade
       revealSiteChrome(); // Hero／Navbar 同時開始淡入
+
+      const heroVisual = document.querySelector('.hero__visual');
+      if (heroVisual) heroVisual.classList.add('is-igniting'); // 跟發動聲同步的輕微悸動感
     }, OPENING_TIMING.logoHoldUntil);
 
     window.setTimeout(() => {
       loader.classList.add('is-done');
       loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+      if (withSound) fadeOutAudio('sfx-engine', 450); // 動畫收尾，聲音也跟著淡出，不會孤零零地繼續播
     }, OPENING_TIMING.loaderDoneAt);
   }
 
