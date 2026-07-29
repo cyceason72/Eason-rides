@@ -74,6 +74,7 @@ function renderLightboxStage() {
     controls: true,
   });
   stage.appendChild(media);
+  stage.appendChild(buildLikeButton(item.src, 'like-btn--stage'));
   const mediaEl = media.querySelector('.lightbox__image');
   const stopLoading = () => stage.classList.remove('is-loading');
   if (mediaEl) {

@@ -128,12 +128,13 @@ function renderBikes() {
 const GRID_INITIAL_COUNT = 9; // 一開始先顯示幾張，其餘收在「查看更多」後面
 
 function buildGridItem(items, item, index, emptyLabel) {
-  const figure = document.createElement('button');
-  figure.type = 'button';
+  const figure = document.createElement('div');
   figure.className = 'gallery-item';
   figure.setAttribute('data-reveal', '');
   figure.setAttribute('data-index', String(index));
   figure.setAttribute('data-sfx-hover', '');
+  figure.setAttribute('role', 'button');
+  figure.setAttribute('tabindex', '0');
   figure.setAttribute('aria-label', item.caption || `開啟第 ${index + 1} 張照片`);
 
   const media = createNaturalMediaElement({
@@ -142,6 +143,7 @@ function buildGridItem(items, item, index, emptyLabel) {
     label: emptyLabel,
   });
   figure.appendChild(media);
+  figure.appendChild(buildLikeButton(item.image));
 
   if (item.caption) {
     const cap = document.createElement('span');
@@ -150,9 +152,16 @@ function buildGridItem(items, item, index, emptyLabel) {
     figure.appendChild(cap);
   }
 
-  figure.addEventListener('click', () => {
+  const openThis = () => {
     const lightboxItems = items.map((g) => ({ type: 'image', src: g.image, alt: g.alt }));
     openLightbox(lightboxItems, index, item.caption);
+  };
+  figure.addEventListener('click', openThis);
+  figure.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openThis();
+    }
   });
 
   return figure;
@@ -257,7 +266,9 @@ function renderJournal() {
   }
 
   entries.forEach((entry) => {
-    const cover = entry.media && entry.media[0];
+    const cover = entry.cover
+      ? { src: entry.cover, type: 'image' }
+      : entry.media && entry.media[0];
 
     const card = document.createElement('button');
     card.type = 'button';
@@ -379,13 +390,55 @@ let REELS = []; // { video, card, player, ensureLoaded }
 
 function renderVideos() {
   const container = document.querySelector('[data-render="videos"]');
+  const moreSlot = document.querySelector('[data-render="videos-more"]');
   if (!container) return;
   container.innerHTML = '';
+  if (moreSlot) moreSlot.innerHTML = '';
   REELS = [];
 
-  VIDEOS_ITEMS.forEach((video) => {
-    if (video.videoSrc) container.appendChild(buildReelCard(video));
-  });
+  const items = VIDEOS_ITEMS.filter((v) => v.videoSrc);
+  const total = items.length;
+  const initialCount = Math.min(GRID_INITIAL_COUNT, total);
+
+  for (let i = 0; i < initialCount; i += 1) {
+    container.appendChild(buildReelCard(items[i]));
+  }
+
+  if (total > initialCount && moreSlot) {
+    const remaining = total - initialCount;
+    let expanded = false;
+    let extraEls = [];
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-ghost load-more-btn';
+    btn.setAttribute('data-sfx-tap', '');
+    btn.innerHTML = `查看更多 <span class="load-more-btn__count">還有 ${remaining} 支</span>`;
+
+    btn.addEventListener('click', () => {
+      if (!expanded) {
+        extraEls = [];
+        for (let i = initialCount; i < total; i += 1) {
+          const el = buildReelCard(items[i]);
+          container.appendChild(el);
+          extraEls.push(el);
+        }
+        requestAnimationFrame(() => {
+          extraEls.forEach((el) => el.classList.add('is-visible'));
+        });
+        btn.innerHTML = `收起 <span class="load-more-btn__count">Collapse</span>`;
+        expanded = true;
+      } else {
+        extraEls.forEach((el) => el.remove());
+        extraEls = [];
+        btn.innerHTML = `查看更多 <span class="load-more-btn__count">還有 ${remaining} 支</span>`;
+        expanded = false;
+        moreSlot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+
+    moreSlot.appendChild(btn);
+  }
 }
 
 /**
@@ -467,6 +520,8 @@ function buildReelCard(video) {
   });
   card.appendChild(expandBtn);
 
+  card.appendChild(buildLikeButton(video.videoSrc));
+
   const body = document.createElement('div');
   body.className = 'video-card__body';
   body.innerHTML = `
@@ -475,8 +530,8 @@ function buildReelCard(video) {
   `;
   card.appendChild(body);
 
-  // 懶載入：卡片快要橫向捲進畫面（左右各提前約 500px）才真的開始下載影片，
-  // 一次 17 支影片也不會同時搶頻寬拖慢首次載入。
+  // 懶載入：卡片快要捲進畫面（提前約 600px）才真的開始下載影片，
+  // 一次十幾支影片也不會同時搶頻寬拖慢首次載入。
   if ('IntersectionObserver' in window) {
     const lazyLoadObserver = new IntersectionObserver(
       (entries) => {
@@ -487,7 +542,7 @@ function buildReelCard(video) {
           }
         });
       },
-      { rootMargin: '0px 500px' }
+      { rootMargin: '600px 0px' }
     );
     lazyLoadObserver.observe(card);
   } else {
@@ -655,6 +710,7 @@ function renderReelsStage() {
   entry.player.loop = true;
   entry.player.classList.add('reels-viewer__player');
   stage.appendChild(entry.player);
+  stage.appendChild(buildLikeButton(entry.video.videoSrc, 'like-btn--stage'));
   entry.player.play().catch(() => {});
   entry.card.classList.add('is-playing');
 

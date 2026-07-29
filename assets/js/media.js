@@ -64,6 +64,99 @@ function createMediaElement({ src, alt, label, className = '', type = 'image', c
   return wrapper;
 }
 
+/* ============================================================
+ * 按讚系統（Like）
+ * ------------------------------------------------------------
+ * 這是純前端功能：這個網站是靜態網站（沒有後端資料庫），
+ * 所以「按過」這件事只會記在按讚那個人自己的瀏覽器裡（localStorage），
+ * 不是真的跨裝置、跨訪客加總的全站數字。
+ * 畫面上的基礎數字是用照片／影片網址算出來的固定值（同一張照片每次都一樣），
+ * 讓畫面看起來有「已經有人按過」的感覺；自己按下去會在那個基礎上 +1，
+ * 下次自己回來看還是會記得「我按過」。
+ * ============================================================ */
+
+const LIKES_STORAGE_KEY = 'eason-rides-likes-v1';
+
+function getLikesStore() {
+  try {
+    return JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function setLikesStore(store) {
+  try {
+    localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(store));
+  } catch (e) {
+    /* 忽略，不影響其他功能 */
+  }
+}
+
+function isLikedByMe(key) {
+  return !!getLikesStore()[key];
+}
+
+function toggleLikedByMe(key) {
+  const store = getLikesStore();
+  store[key] = !store[key];
+  setLikesStore(store);
+  return store[key];
+}
+
+function baseLikeCount(key) {
+  let hash = 0;
+  for (let i = 0; i < key.length; i += 1) {
+    hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  }
+  return 3 + (hash % 35); // 每張固定落在 3~37 之間，不會每次重整就跳來跳去
+}
+
+function likeCountFor(key) {
+  return baseLikeCount(key) + (isLikedByMe(key) ? 1 : 0);
+}
+
+/**
+ * buildLikeButton
+ * 產生一顆可以獨立掛在任何照片／影片卡片上的按讚按鈕（含數字）。
+ * @param {string} key 要能唯一代表這張照片／這支影片，直接用它的 src 網址就好
+ * @param {string} [extraClass] 額外 class，方便針對不同情境（卡片上 / 全螢幕舞台上）分別定位
+ */
+function buildLikeButton(key, extraClass = '') {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = `like-btn ${extraClass}`.trim();
+  btn.innerHTML = `
+    <svg class="like-btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 20.5s-7.5-4.6-9.8-9.2C.6 7.8 2.2 4.5 5.6 4c2-.3 3.9.7 5 2.3C11.7 4.7 13.6 3.7 15.6 4c3.4.5 5 3.8 3.4 7.3-2.3 4.6-9.8 9.2-9.8 9.2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    </svg>
+    <span class="like-btn__count"></span>
+  `;
+
+  const syncUI = () => {
+    const liked = isLikedByMe(key);
+    btn.classList.toggle('is-liked', liked);
+    btn.setAttribute('aria-pressed', String(liked));
+    btn.setAttribute('aria-label', liked ? '取消按讚' : '按讚');
+    btn.querySelector('.like-btn__count').textContent = String(likeCountFor(key));
+  };
+  syncUI();
+
+  btn.addEventListener('click', (event) => {
+    event.stopPropagation(); // 不要連帶觸發卡片本身「開啟」的行為
+    event.preventDefault();
+    toggleLikedByMe(key);
+    syncUI();
+    if (btn.classList.contains('is-liked')) {
+      btn.classList.add('like-btn--pulse');
+      window.setTimeout(() => btn.classList.remove('like-btn--pulse'), 260);
+      if (typeof playAmbientSfx === 'function') playAmbientSfx('sfx-tap', { volume: 0.4 });
+    }
+  });
+
+  return btn;
+}
+
 /**
  * createNaturalMediaElement — 保留照片「原始比例」的版本。
  * 用於 Gallery / 追焦紀錄 這種攝影集式排版：每張照片維持攝影師原本的構圖比例

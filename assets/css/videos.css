@@ -8,42 +8,17 @@
   background: var(--color-bg);
 }
 
-.videos .container {
-  position: relative;
-}
-
-.videos .container::after {
-  content: '';
-  position: absolute;
-  top: var(--space-2);
-  right: 0;
-  bottom: var(--space-2);
-  width: 64px;
-  background: linear-gradient(90deg, transparent, var(--color-bg) 88%);
-  pointer-events: none;
-}
-
 .video-grid {
-  display: flex;
-  gap: var(--space-5);
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding-bottom: 2px; /* 避免卡片陰影被裁到 */
-}
-
-.video-grid::-webkit-scrollbar {
-  display: none;
+  columns: 3 280px;
+  column-gap: var(--space-4);
 }
 
 .video-card {
   position: relative;
   display: block;
-  flex: 0 0 auto;
-  width: min(340px, 72vw);
-  scroll-snap-align: start;
+  width: 100%;
+  break-inside: avoid;
+  margin-bottom: var(--space-4);
   aspect-ratio: 9 / 14;
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -232,18 +207,25 @@
   color: var(--color-text-secondary);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .video-grid {
-    gap: var(--space-4);
+    columns: 2 200px;
+    column-gap: var(--space-3);
   }
 
   .video-card {
-    width: 78vw;
+    margin-bottom: var(--space-3);
   }
 
   .video-card__play-ring {
     width: 52px;
     height: 52px;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-grid {
+    columns: 1;
   }
 }
 

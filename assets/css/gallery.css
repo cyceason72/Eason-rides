@@ -27,9 +27,77 @@
   text-align: left;
   background: var(--color-bg-secondary);
   box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  cursor: pointer;
   transition: border-color var(--duration-base) var(--ease-out),
               box-shadow var(--duration-base) var(--ease-out),
               transform var(--duration-base) var(--ease-out);
+}
+
+.gallery-item:focus-visible {
+  outline: 2px solid var(--color-gold-dim);
+  outline-offset: 2px;
+}
+
+/* ---------- 按讚按鈕 ---------- */
+
+.like-btn {
+  position: absolute;
+  z-index: 4;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(10, 10, 10, 0.5);
+  backdrop-filter: blur(4px);
+  color: var(--color-text-secondary);
+  font-size: var(--fs-caption);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  transition: background var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              transform 160ms var(--ease-out);
+}
+
+.like-btn__icon {
+  width: 14px;
+  height: 14px;
+}
+
+.like-btn:hover {
+  background: rgba(10, 10, 10, 0.7);
+  color: var(--color-text);
+}
+
+.like-btn.is-liked {
+  color: #ff6b7d;
+  border-color: rgba(255, 107, 125, 0.45);
+}
+
+.like-btn.is-liked .like-btn__icon {
+  fill: #ff6b7d;
+}
+
+.like-btn--pulse {
+  transform: scale(1.18);
+}
+
+/* 全螢幕舞台上（Lightbox / Reels viewer）：位置改到左上角，避開右上角的關閉鈕，尺寸稍微大一點 */
+.like-btn--stage {
+  top: var(--space-3);
+  left: var(--space-3);
+  right: auto;
+  font-size: var(--fs-small);
+  padding: 7px 12px;
+}
+
+.like-btn--stage .like-btn__icon {
+  width: 16px;
+  height: 16px;
 }
 
 .gallery-item:hover,
