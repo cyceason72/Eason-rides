@@ -536,23 +536,6 @@
       "media": [
         {
           "type": "image",
-          "src": "assets/images/journal-02.jpg"
-        }
-      ],
-      "date": "2026-01-05",
-      "year": 2026,
-      "location": "台三線",
-      "km": 210,
-      "note": "沿著台三線一路往南，中途在一間老街咖啡廳休息。",
-      "tags": [
-        "公路",
-        "長途"
-      ]
-    },
-    {
-      "media": [
-        {
-          "type": "image",
           "src": "assets/images/img_0075.jpg"
         },
         {
