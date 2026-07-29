@@ -52,10 +52,18 @@
 <body>
   <a class="skip-link" href="#main">跳至主要內容</a>
 
-  <!-- ================= Loader ================= -->
+  <!-- ================= Loader（開場動畫） ================= -->
   <div class="loader" aria-hidden="true">
-    <p class="loader__mark">EASON <span>RIDES</span></p>
+    <div class="loader__content">
+      <p class="loader__logo">EASON <span>RIDES</span></p>
+      <p class="loader__tagline">Every Ride Tells a Story.</p>
+    </div>
   </div>
+
+  <!-- 開場音效：電門聲＋發動聲。瀏覽器自動播放政策可能會擋掉（使用者還沒跟頁面互動前），
+       loader.js 會 best-effort 播放並靜默處理失敗，不影響視覺流程。 -->
+  <audio id="sfx-click" preload="auto" src="assets/audio/rs660-click.mp3"></audio>
+  <audio id="sfx-engine" preload="auto" src="assets/audio/rs660-engine-start.mp3"></audio>
 
   <!-- ================= Navbar ================= -->
   <header class="nav">
