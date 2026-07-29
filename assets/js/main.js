@@ -16,6 +16,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   initBackToTop();        // footer.js
   initImmersiveToggle();  // sound.js：右下角 Immersive Mode 開關
   initTapSfxDelegation(); // sound.js：按鈕的柔和 UI Tap 音效
-  initHoverSfxDelegation(); // sound.js：照片／影片卡片的輕微 Hover 音效（含節流）
   initLoader();           // loader.js（放最後，確保上面內容都已就緒再開始進場動畫）
 });
