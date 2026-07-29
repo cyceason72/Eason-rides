@@ -175,6 +175,16 @@
   text-align: right;
 }
 
+@media (max-width: 480px) {
+  .goal-card__progress {
+    gap: 2px;
+  }
+
+  .goal-card__tick {
+    min-width: 1.5px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .goal-card__tick {
     transition: none;

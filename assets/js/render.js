@@ -375,10 +375,13 @@ function formatDuration(totalSeconds) {
   return `${m}:${String(s).padStart(2, '0')}`;
 }
 
+let REELS = []; // { video, card, player, ensureLoaded }
+
 function renderVideos() {
   const container = document.querySelector('[data-render="videos"]');
   if (!container) return;
   container.innerHTML = '';
+  REELS = [];
 
   VIDEOS_ITEMS.forEach((video) => {
     if (video.videoSrc) container.appendChild(buildReelCard(video));
@@ -412,6 +415,9 @@ function buildReelCard(video) {
     player.preload = 'auto';
     player.src = video.videoSrc;
   }
+
+  const reelIndex = REELS.length;
+  REELS.push({ video, card, player, ensureLoaded: ensureVideoSrcLoaded });
 
   // 沒有手動上傳縮圖時，自動抓影片播放到 25% 的畫面當封面（通常比開頭第一幀更有內容，
   // 不會是還沒騎出去、鏡頭還沒對好的那種畫面）。抓到那一幀之後就定格在那，直到真正開始播放。
@@ -455,11 +461,9 @@ function buildReelCard(video) {
     </svg>
   `;
   expandBtn.addEventListener('click', (event) => {
-    event.stopPropagation(); // 不要連帶觸發卡片本身的暫停/繼續
-    player.pause();
-    card.classList.remove('is-playing');
+    event.stopPropagation(); // 不要連帶觸發卡片本身的其他行為
     playAmbientSfx('sfx-shutter', { volume: 0.6 });
-    openLightbox([{ type: 'video', src: video.videoSrc, alt: video.title }], 0, video.title);
+    openVideoReels(reelIndex);
   });
   card.appendChild(expandBtn);
 
@@ -471,7 +475,7 @@ function buildReelCard(video) {
   `;
   card.appendChild(body);
 
-  // 懶載入：卡片快要進入畫面（提前 800px）才真的開始下載影片，
+  // 懶載入：卡片快要橫向捲進畫面（左右各提前約 500px）才真的開始下載影片，
   // 一次 17 支影片也不會同時搶頻寬拖慢首次載入。
   if ('IntersectionObserver' in window) {
     const lazyLoadObserver = new IntersectionObserver(
@@ -483,7 +487,7 @@ function buildReelCard(video) {
           }
         });
       },
-      { rootMargin: '800px 0px' }
+      { rootMargin: '0px 500px' }
     );
     lazyLoadObserver.observe(card);
   } else {
@@ -518,10 +522,8 @@ function buildReelCard(video) {
       suppressNextClick = false;
       return;
     }
-    player.pause();
-    card.classList.remove('is-playing');
     playAmbientSfx('sfx-shutter', { volume: 0.6 });
-    openLightbox([{ type: 'video', src: video.videoSrc, alt: video.title }], 0, video.title);
+    openVideoReels(reelIndex);
   });
 
   // 長按：按著的時候暫停，放開繼續播放（跟 Reels 一樣的手勢）
@@ -560,6 +562,143 @@ function buildReelCard(video) {
   card.addEventListener('pointercancel', endPress);
 
   return card;
+}
+
+/**
+ * Reels Viewer —— 影片紀錄專用的全螢幕瀏覽器（跟一般 Lightbox 分開）。
+ * 桌機：左右滑動／方向鍵／箭頭按鈕切換上一支下一支。
+ * 手機：上下滑動切換（跟 Reels/Instagram 一樣的手勢）。
+ *
+ * 「立刻打開」的關鍵：不是重新建立一個新的 <video> 再重新下載一次，
+ * 而是直接把畫面上那支卡片本來就在用的 <video> DOM 元素搬進全螢幕舞台。
+ * 如果那支卡片剛好已經捲到附近、懶載入已經觸發過，資料已經在緩衝了，
+ * 搬過去馬上就能播，不用重新要一次網路資源。
+ * 關閉／切換時再把元素搬回原本的卡片位置——反正全螢幕舞台蓋在最上層，
+ * 中途卡片格子「暫時沒有影片」使用者也看不到。
+ */
+let reelsIndex = 0;
+let reelsEl = null;
+
+function parkReelPlayer(entry) {
+  if (!entry) return;
+  entry.player.pause();
+  entry.player.controls = false;
+  entry.player.muted = true;
+  entry.card.prepend(entry.player);
+  entry.card.classList.remove('is-playing');
+}
+
+function ensureReelsViewer() {
+  if (reelsEl) return reelsEl;
+
+  reelsEl = document.createElement('div');
+  reelsEl.className = 'reels-viewer';
+  reelsEl.setAttribute('role', 'dialog');
+  reelsEl.setAttribute('aria-modal', 'true');
+  reelsEl.setAttribute('aria-label', '影片瀏覽器');
+  reelsEl.innerHTML = `
+    <button class="reels-viewer__close" type="button" aria-label="關閉">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <button class="reels-viewer__nav reels-viewer__nav--prev" type="button" aria-label="上一支">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="reels-viewer__stage"></div>
+    <button class="reels-viewer__nav reels-viewer__nav--next" type="button" aria-label="下一支">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="reels-viewer__meta">
+      <h3 class="reels-viewer__title"></h3>
+      <time class="reels-viewer__date"></time>
+    </div>
+  `;
+  document.body.appendChild(reelsEl);
+
+  reelsEl.querySelector('.reels-viewer__close').addEventListener('click', closeReels);
+  reelsEl.querySelector('.reels-viewer__nav--prev').addEventListener('click', () => stepReels(-1));
+  reelsEl.querySelector('.reels-viewer__nav--next').addEventListener('click', () => stepReels(1));
+  reelsEl.addEventListener('click', (event) => {
+    if (event.target === reelsEl) closeReels();
+  });
+
+  // 手勢：直向滑動（手機直覺）跟橫向滑動（桌機觸控板／滑鼠拖曳）都支援，
+  // 用滑動距離較大的那個軸向決定要切上一支還下一支。
+  let startX = 0;
+  let startY = 0;
+  reelsEl.addEventListener('touchstart', (event) => {
+    startX = event.changedTouches[0].clientX;
+    startY = event.changedTouches[0].clientY;
+  }, { passive: true });
+  reelsEl.addEventListener('touchend', (event) => {
+    const dx = event.changedTouches[0].clientX - startX;
+    const dy = event.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) < 40 && Math.abs(dy) < 40) return; // 太小的移動當作點擊，不是滑動
+    if (Math.abs(dy) >= Math.abs(dx)) {
+      stepReels(dy > 0 ? -1 : 1); // 上滑看下一支，下滑看上一支
+    } else {
+      stepReels(dx > 0 ? -1 : 1); // 右滑看上一支，左滑看下一支
+    }
+  }, { passive: true });
+
+  return reelsEl;
+}
+
+function renderReelsStage() {
+  const entry = REELS[reelsIndex];
+  if (!entry) return;
+  const stage = reelsEl.querySelector('.reels-viewer__stage');
+  stage.innerHTML = '';
+
+  entry.ensureLoaded();
+  entry.player.controls = true;
+  entry.player.muted = false;
+  entry.player.loop = true;
+  entry.player.classList.add('reels-viewer__player');
+  stage.appendChild(entry.player);
+  entry.player.play().catch(() => {});
+  entry.card.classList.add('is-playing');
+
+  reelsEl.querySelector('.reels-viewer__title').textContent = entry.video.title || '';
+  const dateEl = reelsEl.querySelector('.reels-viewer__date');
+  dateEl.textContent = entry.video.date || '';
+  dateEl.setAttribute('datetime', entry.video.date || '');
+
+  const multiple = REELS.length > 1;
+  reelsEl.querySelector('.reels-viewer__nav--prev').style.display = multiple ? '' : 'none';
+  reelsEl.querySelector('.reels-viewer__nav--next').style.display = multiple ? '' : 'none';
+}
+
+function openVideoReels(index) {
+  ensureReelsViewer();
+  reelsIndex = index;
+  renderReelsStage();
+  reelsEl.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  reelsEl.querySelector('.reels-viewer__close').focus();
+}
+
+function closeReels() {
+  if (!reelsEl || !reelsEl.classList.contains('is-open')) return;
+  parkReelPlayer(REELS[reelsIndex]);
+  reelsEl.classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+
+function stepReels(direction) {
+  const total = REELS.length;
+  if (total <= 1) return;
+  parkReelPlayer(REELS[reelsIndex]);
+  reelsIndex = (reelsIndex + direction + total) % total;
+  renderReelsStage();
+}
+
+function initReelsKeyboard() {
+  document.addEventListener('keydown', (event) => {
+    if (!reelsEl || !reelsEl.classList.contains('is-open')) return;
+    if (event.key === 'Escape') closeReels();
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') stepReels(-1);
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') stepReels(1);
+  });
 }
 
 /* ---------------- 08 Future Goals ---------------- */

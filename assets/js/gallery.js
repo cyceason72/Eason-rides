@@ -31,6 +31,7 @@ function ensureLightbox() {
     </button>
     <p class="lightbox__caption"></p>
     <p class="lightbox__counter"></p>
+    <div class="lightbox__thumbs"></div>
   `;
   document.body.appendChild(lightboxEl);
 
@@ -63,22 +64,75 @@ function renderLightboxStage() {
   const nextBtn = lightboxEl.querySelector('.lightbox__nav--next');
 
   stage.innerHTML = '';
-  stage.appendChild(
-    createMediaElement({
-      src: item.src,
-      alt: item.alt,
-      label: item.type === 'video' ? '待補影片' : '待補照片',
-      className: 'lightbox__image',
-      type: item.type || 'image',
-      controls: true,
-    })
-  );
+  stage.classList.add('is-loading');
+  const media = createMediaElement({
+    src: item.src,
+    alt: item.alt,
+    label: item.type === 'video' ? '待補影片' : '待補照片',
+    className: 'lightbox__image',
+    type: item.type || 'image',
+    controls: true,
+  });
+  stage.appendChild(media);
+  const mediaEl = media.querySelector('.lightbox__image');
+  const stopLoading = () => stage.classList.remove('is-loading');
+  if (mediaEl) {
+    const readyEvent = item.type === 'video' ? 'loadeddata' : 'load';
+    mediaEl.addEventListener(readyEvent, stopLoading, { once: true });
+    mediaEl.addEventListener('error', stopLoading, { once: true });
+  } else {
+    stopLoading();
+  }
   caption.textContent = lightboxCaption || '';
 
   const multiple = lightboxItems.length > 1;
   prevBtn.style.display = multiple ? '' : 'none';
   nextBtn.style.display = multiple ? '' : 'none';
   counter.textContent = multiple ? `${lightboxIndex + 1} / ${lightboxItems.length}` : '';
+
+  renderLightboxThumbs();
+}
+
+/**
+ * 縮圖列——多張照片／影片的相簿（目前是 Ride Journal 在用），
+ * 想看哪一張就直接點，不用一張一張滑過去。
+ */
+function renderLightboxThumbs() {
+  const thumbs = lightboxEl.querySelector('.lightbox__thumbs');
+  if (!thumbs) return;
+  thumbs.innerHTML = '';
+
+  if (lightboxItems.length <= 1) {
+    thumbs.classList.remove('is-visible');
+    return;
+  }
+  thumbs.classList.add('is-visible');
+
+  lightboxItems.forEach((item, index) => {
+    const thumb = document.createElement('button');
+    thumb.type = 'button';
+    thumb.className = 'lightbox__thumb';
+    thumb.classList.toggle('is-active', index === lightboxIndex);
+    thumb.setAttribute('aria-label', `第 ${index + 1} 項`);
+    if (item.type === 'video') thumb.classList.add('lightbox__thumb--video');
+
+    const img = document.createElement('img');
+    img.src = item.type === 'video' ? (item.thumbnail || '') : item.src;
+    img.alt = '';
+    img.loading = 'lazy';
+    if (img.src) thumb.appendChild(img);
+
+    thumb.addEventListener('click', () => {
+      lightboxIndex = index;
+      renderLightboxStage();
+    });
+    thumbs.appendChild(thumb);
+  });
+
+  const activeThumb = thumbs.querySelector('.lightbox__thumb.is-active');
+  if (activeThumb && typeof activeThumb.scrollIntoView === 'function') {
+    activeThumb.scrollIntoView({ block: 'nearest', inline: 'center' });
+  }
 }
 
 /**

@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initNavigation();       // navigation.js
   initJournalSearch();    // journal 搜尋
   initLightboxKeyboard(); // gallery.js
+  initReelsKeyboard();    // render.js：Videos Reels viewer 的 Esc / 方向鍵
   initCounters();         // counter.js
   initScrollReveal();     // animation.js（要在 render 完成、DOM 都存在之後才監看）
   initSubtleParallax();   // animation.js：Ride Statistics 的輕微視差

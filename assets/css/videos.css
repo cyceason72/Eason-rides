@@ -8,16 +8,43 @@
   background: var(--color-bg);
 }
 
+.videos .container {
+  position: relative;
+}
+
+.videos .container::after {
+  content: '';
+  position: absolute;
+  top: var(--space-2);
+  right: 0;
+  bottom: var(--space-2);
+  width: 64px;
+  background: linear-gradient(90deg, transparent, var(--color-bg) 88%);
+  pointer-events: none;
+}
+
 .video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  display: flex;
   gap: var(--space-5);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px; /* 避免卡片陰影被裁到 */
+}
+
+.video-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .video-card {
   position: relative;
   display: block;
-  aspect-ratio: 16 / 10;
+  flex: 0 0 auto;
+  width: min(340px, 72vw);
+  scroll-snap-align: start;
+  aspect-ratio: 9 / 14;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -207,12 +234,141 @@
 
 @media (max-width: 640px) {
   .video-grid {
-    grid-template-columns: 1fr;
     gap: var(--space-4);
+  }
+
+  .video-card {
+    width: 78vw;
   }
 
   .video-card__play-ring {
     width: 52px;
     height: 52px;
+  }
+}
+
+/* ============================================================
+   Reels Viewer —— 影片紀錄專用的全螢幕瀏覽器
+   ============================================================ */
+
+.reels-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-lightbox);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.reels-viewer.is-open {
+  display: flex;
+}
+
+.reels-viewer__stage {
+  position: relative;
+  width: min(480px, 92vw);
+  height: min(88vh, 900px);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #000;
+}
+
+/* 影片元素是從卡片直接搬過來的，原本的 position:absolute／object-fit:cover
+   要在這裡覆寫掉，改成撐滿舞台、完整顯示（不裁切）。 */
+.reels-viewer__stage .reels-viewer__player {
+  position: static;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: default;
+}
+
+.reels-viewer__close,
+.reels-viewer__nav {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.06);
+  z-index: 2;
+  transition: background var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.reels-viewer__close svg,
+.reels-viewer__nav svg {
+  width: 20px;
+  height: 20px;
+}
+
+.reels-viewer__close:hover,
+.reels-viewer__nav:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.reels-viewer__close {
+  top: var(--space-3);
+  right: var(--space-3);
+}
+
+.reels-viewer__nav--prev {
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.reels-viewer__nav--next {
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.reels-viewer__meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.reels-viewer__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.reels-viewer__date {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 640px) {
+  .reels-viewer__stage {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .reels-viewer__nav--prev,
+  .reels-viewer__nav--next {
+    display: none; /* 手機用上下滑動就好，不需要箭頭按鈕擠畫面 */
+  }
+
+  .reels-viewer__close {
+    top: max(var(--space-3), env(safe-area-inset-top));
   }
 }

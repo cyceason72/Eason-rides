@@ -36,6 +36,14 @@ function initMobileNavToggle() {
     document.body.style.overflow = 'hidden';
   };
 
+  // iOS Safari 有時候光靠 body overflow:hidden 鎖不住背景捲動，
+  // 額外擋掉選單開啟時、選單本身以外的 touchmove，才能真的鎖住。
+  document.addEventListener('touchmove', (event) => {
+    if (toggle.getAttribute('aria-expanded') !== 'true') return;
+    if (links.contains(event.target)) return; // 選單本身允許捲動（如果內容超過一屏）
+    event.preventDefault();
+  }, { passive: false });
+
   toggle.addEventListener('click', () => {
     const isOpen = toggle.getAttribute('aria-expanded') === 'true';
     isOpen ? closeMenu() : openMenu();
