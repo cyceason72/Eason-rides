@@ -70,6 +70,12 @@
   <audio id="sfx-click" preload="auto" src="assets/audio/rs660-click.mp3"></audio>
   <audio id="sfx-engine" preload="auto" src="assets/audio/rs660-engine-start.mp3"></audio>
 
+  <!-- 以下三個是 Immersive Mode 底下的互動音效，目前還沒有真實錄音素材，先不放 <audio> 標籤。
+       之後補檔案時，只要照這個格式加回來就會自動生效，不用改任何 JS：
+       <audio id="sfx-shutter" preload="auto" src="assets/audio/camera-shutter.mp3"></audio>
+       <audio id="sfx-tap"     preload="auto" src="assets/audio/ui-soft-tap.mp3"></audio>
+       <audio id="sfx-whoosh"  preload="auto" src="assets/audio/scroll-whoosh.mp3"></audio> -->
+
   <!-- ================= Navbar ================= -->
   <header class="nav">
     <div class="nav__inner container">
@@ -117,7 +123,7 @@
         <p class="hero__slogan">Every Ride Tells a Story.</p>
 
         <div class="hero__actions">
-          <a class="btn btn-primary" href="#about">
+          <a class="btn btn-primary" href="#about" data-sfx-tap>
             Explore
             <svg class="btn-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
@@ -267,13 +273,25 @@
       </div>
       <div class="footer__bottom">
         <span>&copy; <span id="footer-year"></span> Eason Rides. All rights reserved.</span>
-        <button type="button" class="back-to-top" data-back-to-top>
+        <button type="button" class="back-to-top" data-back-to-top data-sfx-tap>
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Back to top
         </button>
       </div>
     </div>
   </footer>
+
+  <!-- ================= Immersive Mode 開關 ================= -->
+  <button
+    type="button"
+    class="immersive-toggle"
+    data-immersive-toggle
+    aria-pressed="false"
+    aria-label="Immersive Mode：開啟後網站互動才會有聲音"
+  >
+    <span class="immersive-toggle__dot" aria-hidden="true"></span>
+    <span class="immersive-toggle__label">Immersive Mode</span>
+  </button>
 
   <!-- ================= Scripts ================= -->
   <!-- 先載入資料與工具，最後才載入依賴它們的 main.js（一般 script，非 module，file:// 可直接開） -->
