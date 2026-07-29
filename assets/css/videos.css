@@ -43,6 +43,11 @@
   height: 100%;
 }
 
+.video-card__player {
+  object-fit: cover;
+  cursor: pointer;
+}
+
 .video-card__media .media__img {
   transition: transform 1200ms var(--ease-out),
               filter var(--duration-base) var(--ease-out);
@@ -53,6 +58,11 @@
 .video-card.is-revealed .video-card__media .media__img {
   transform: scale(1.06);
   filter: brightness(0.6);
+}
+
+/* Reel 卡片：長按時畫面稍微變暗一點點，給「按住了」的手感回饋 */
+.video-card--reel.is-long-pressed .video-card__player {
+  filter: brightness(0.75);
 }
 
 /* Scrim：常駐一層底部漸層維持文字可讀，hover 時加深，更有「準備播放」的沉浸感 */
@@ -111,6 +121,59 @@
 .video-card:focus-visible .video-card__play-ring {
   border-color: var(--color-accent);
   background: var(--color-accent);
+}
+
+/* Reel 卡片：播放中的時候把播放環收起來，暫停／長按時才浮現，行為更接近真正的 Reels */
+.video-card--reel .video-card__play-ring {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(0.85);
+}
+
+.video-card--reel.is-playing .video-card__play-ring {
+  opacity: 0;
+}
+
+.video-card--reel.is-long-pressed .video-card__play-ring,
+.video-card--reel:not(.is-playing) .video-card__play-ring {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  border-color: var(--color-gold-dim);
+  background: rgba(7, 7, 7, 0.35);
+}
+
+.video-card__outlink {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(7, 7, 7, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
+}
+
+.video-card__outlink:hover {
+  color: var(--color-text);
+  border-color: var(--color-gold-dim);
+}
+
+.video-card__outlink svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Reel 有外部連結按鈕時，時長標籤讓位置給它，改放在左上角旁邊 */
+.video-card--reel .video-card__duration {
+  right: calc(var(--space-3) + 38px);
 }
 
 .video-card__badge {
