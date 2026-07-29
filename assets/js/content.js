@@ -132,12 +132,52 @@ const SITE_CONTENT = {
 
   /* ---------------- 07 Statistics ----------------
      數字進入畫面時會從 0 動畫跑到這裡設定的值。 */
+  /* ---------------- 07 Ride Statistics ----------------
+     type: 'number' → 進入畫面時從 0 數到 value，unit 顯示在數字下方（例如 KM / M）
+     type: 'days'   → 自動依 startDate 計算至今天數，完全不用手動改數字，隔天自動 +1
+     type: 'text'   → 不是數字，直接顯示文字（例如路線名稱），視覺份量跟數字卡一致 */
   stats: [
-    { label: 'Total KM', value: 4820, suffix: '' },
-    { label: 'Trips', value: 32, suffix: '' },
-    { label: 'Countries', value: 2, suffix: '' },
-    { label: 'Photos', value: 186, suffix: '' },
-    { label: 'Videos', value: 14, suffix: '' },
+    {
+      type: 'number',
+      value: 17520,
+      unit: 'KM',
+      titleEn: 'Total Distance',
+      titleZh: '總里程',
+      desc: '每一公里，都是故事的累積。',
+    },
+    {
+      type: 'number',
+      value: 636,
+      unit: 'KM',
+      location: '旭海',
+      titleEn: 'Longest Ride',
+      titleZh: '單日最遠',
+      desc: '從日出騎到日落，只為了看見最美的風景。',
+    },
+    {
+      type: 'number',
+      value: 3275,
+      unit: 'M',
+      location: '武嶺',
+      titleEn: 'Highest Altitude',
+      titleZh: '最高海拔',
+      desc: '台灣公路最高點，每一次抵達都是新的成就。',
+    },
+    {
+      type: 'days',
+      startDate: '2025-11-30',
+      unit: 'Days',
+      titleEn: 'Days Riding',
+      titleZh: '騎乘天數',
+      desc: 'Since Nov. 30, 2025',
+    },
+    {
+      type: 'text',
+      value: '台三線',
+      titleEn: 'Favorite Route',
+      titleZh: '最喜歡的路線',
+      desc: '一條怎麼騎都不會膩的山路，每一次經過，都有不同的風景，也有不同的心情。',
+    },
   ],
 
   /* ---------------- 08 Future Goals ----------------
