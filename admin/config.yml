@@ -98,7 +98,7 @@ collections:
                 required: false
 
   - name: "videos"
-    label: "Videos 影片紀錄"
+    label: "攝影紀錄 Videos"
     files:
       - name: "videos"
         label: "影片列表"
@@ -110,11 +110,16 @@ collections:
             summary: "{{fields.title}}"
             fields:
               - { label: "縮圖", name: "thumbnail", widget: "image" }
+              - label: "影片檔案（選填：上傳這個之後，畫面會自動變成可以點擊/長按互動的 Reel 樣式；不上傳就維持縮圖連到外部平台的樣式）"
+                name: "videoSrc"
+                widget: "file"
+                required: false
+                default: ""
               - { label: "標題", name: "title", widget: "string" }
               - { label: "日期", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
               - { label: "長度（例如 08:24）", name: "duration", widget: "string" }
               - { label: "平台", name: "platform", widget: "select", options: ["YouTube", "Reels"], default: "YouTube" }
-              - { label: "連結網址", name: "url", widget: "string" }
+              - { label: "原始平台連結網址（選填）", name: "url", widget: "string", required: false, default: "" }
 
   - name: "goals"
     label: "下一段旅程 The Road Ahead"
