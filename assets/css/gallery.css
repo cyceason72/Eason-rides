@@ -138,6 +138,12 @@
   margin-top: var(--space-6);
 }
 
+/* 置頂版本：按鈕放在格線上方，隨時可以收起，不用捲到最下面 */
+.load-more-slot--top {
+  margin-top: 0;
+  margin-bottom: var(--space-5);
+}
+
 .load-more-slot:empty {
   display: none;
 }
