@@ -87,6 +87,7 @@ function renderLightboxStage() {
  * @param {string} [caption] 顯示在下方的說明文字
  */
 function openLightbox(items, index, caption) {
+  playAmbientSfx('sfx-shutter', { volume: 0.6 }); // 點擊照片：非常細微的相機快門聲（尚待補真實素材）
   lightboxItems = items;
   lightboxIndex = index || 0;
   lightboxCaption = caption || '';
