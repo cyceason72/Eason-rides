@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initLightboxKeyboard(); // gallery.js
   initCounters();         // counter.js
   initScrollReveal();     // animation.js（要在 render 完成、DOM 都存在之後才監看）
+  initSubtleParallax();   // animation.js：Ride Statistics 的輕微視差
   initBackToTop();        // footer.js
   initLoader();           // loader.js（放最後，確保上面內容都已就緒再開始進場動畫）
 });
