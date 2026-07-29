@@ -13,9 +13,16 @@
   display: flex;
   align-items: center;
   background: transparent;
+  opacity: 0;
   transition: height var(--duration-fast) var(--ease-out),
               background var(--duration-fast) var(--ease-out),
-              backdrop-filter var(--duration-fast) var(--ease-out);
+              backdrop-filter var(--duration-fast) var(--ease-out),
+              opacity 600ms var(--ease-out);
+}
+
+/* 開場動畫結束後才淡入，避免在開場序列播放時分散注意力（見 loader.js） */
+.nav.is-revealed {
+  opacity: 1;
 }
 
 .nav.is-scrolled {
