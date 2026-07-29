@@ -184,6 +184,7 @@ function renderMediaGrid(gridKey, moreSlotKey, items, emptyLabel) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'btn btn-ghost load-more-btn';
+    btn.setAttribute('data-sfx-tap', '');
     btn.innerHTML = `查看更多 <span class="load-more-btn__count">還有 ${remaining} 張</span>`;
 
     btn.addEventListener('click', () => {
