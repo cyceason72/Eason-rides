@@ -115,3 +115,22 @@ collections:
               - { label: "長度（例如 08:24）", name: "duration", widget: "string" }
               - { label: "平台", name: "platform", widget: "select", options: ["YouTube", "Reels"], default: "YouTube" }
               - { label: "連結網址", name: "url", widget: "string" }
+
+  - name: "goals"
+    label: "下一段旅程 The Road Ahead"
+    files:
+      - name: "goals"
+        label: "旅程目標列表"
+        file: "content/goals.json"
+        fields:
+          - label: "目標"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.titleZh}} — {{fields.progress}}%"
+            fields:
+              - { label: "Icon（emoji）", name: "icon", widget: "string" }
+              - { label: "英文標題", name: "titleEn", widget: "string" }
+              - { label: "中文標題", name: "titleZh", widget: "string" }
+              - { label: "描述", name: "desc", widget: "text" }
+              - { label: "進度（0～100）", name: "progress", widget: "number", min: 0, max: 100, value_type: "int", default: 0 }
+              - { label: "完成年份（選填，例如 2027；填了就會顯示 Achieved · 2027，不填就不顯示）", name: "achievedLabel", widget: "string", required: false, default: "" }
