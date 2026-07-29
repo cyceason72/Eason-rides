@@ -88,6 +88,24 @@
   object-position: center;
 }
 
+/* 發動聲響起那一刻，畫面給一個非常輕微的悸動感（不是彈跳，是儀表指針那種瞬間反應），
+   聲音跟畫面才會感覺是同一件事，而不是聲音獨立飄在那。由 loader.js 在對的時間點加上這個 class。 */
+.hero__visual.is-igniting .hero__image {
+  animation: heroIgnite 550ms var(--ease-out);
+}
+
+@keyframes heroIgnite {
+  0% { transform: scale(1); filter: brightness(1); }
+  35% { transform: scale(1.018); filter: brightness(1.06); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__visual.is-igniting .hero__image {
+    animation: none;
+  }
+}
+
 .hero__visual::before {
   /* 影像左緣到內容區的漸層銜接，避免生硬切線 */
   content: "";
