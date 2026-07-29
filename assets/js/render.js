@@ -512,19 +512,50 @@ function socialIcon(name) {
 
 /* ---------------- 07 Statistics ---------------- */
 
+function daysSince(startDateStr) {
+  const start = new Date(`${startDateStr}T00:00:00`);
+  const now = new Date();
+  const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diffDays = Math.round((nowMidnight - startMidnight) / 86400000);
+  return diffDays + 1; // 起始日當天算第 1 天，之後每天自動 +1，不用手動改
+}
+
 function renderStats() {
   const container = document.querySelector('[data-render="stats"]');
   if (!container) return;
   container.innerHTML = '';
 
-  SITE_CONTENT.stats.forEach((stat) => {
-    const item = document.createElement('div');
-    item.className = 'stat';
-    item.innerHTML = `
-      <span class="stat__number" data-target="${stat.value}">0${stat.suffix || ''}</span>
-      <span class="stat__label">${stat.label}</span>
+  SITE_CONTENT.stats.forEach((stat, index) => {
+    const card = document.createElement('div');
+    card.className = 'stat-card';
+    card.setAttribute('data-reveal', '');
+    card.style.setProperty('--stagger', index);
+
+    let valueHTML;
+    if (stat.type === 'text') {
+      valueHTML = `<span class="stat-card__value stat-card__value--text">${stat.value}</span>`;
+    } else if (stat.type === 'days') {
+      const value = daysSince(stat.startDate);
+      valueHTML = `<span class="stat-card__value stat__number" data-target="${value}">0</span>`;
+    } else {
+      valueHTML = `<span class="stat-card__value stat__number" data-target="${stat.value}">0</span>`;
+    }
+
+    card.innerHTML = `
+      <div class="stat-card__top">
+        ${valueHTML}
+        ${stat.unit ? `<span class="stat-card__unit">${stat.unit}</span>` : ''}
+      </div>
+      <span class="stat-card__rule" aria-hidden="true"></span>
+      <p class="stat-card__title-en">${stat.titleEn}</p>
+      <p class="stat-card__title-zh">
+        ${stat.titleZh}${stat.location ? `<span class="stat-card__location"> · ${stat.location}</span>` : ''}
+      </p>
+      <p class="stat-card__desc">${stat.desc}</p>
     `;
-    container.appendChild(item);
+
+    container.appendChild(card);
   });
 }
 
