@@ -14,6 +14,7 @@ let GALLERY_ITEMS = [];
 let PANNING_ITEMS = [];
 let JOURNAL_ENTRIES = [];
 let VIDEOS_ITEMS = [];
+let GOALS_ITEMS = [];
 
 async function loadJSON(path) {
   try {
@@ -446,23 +447,38 @@ function renderVideos() {
 
 /* ---------------- 08 Future Goals ---------------- */
 
+/* ---------------- 08 The Road Ahead ----------------
+   不是 Checklist：沒有打勾圖示，沒有「已完成」徽章。
+   只有一條細細的 Progress Line，完成時卡片底部低調顯示「Achieved · 年份」。 */
+
 function renderGoals() {
   const container = document.querySelector('[data-render="goals"]');
   if (!container) return;
   container.innerHTML = '';
 
-  SITE_CONTENT.goals.forEach((goal) => {
+  GOALS_ITEMS.forEach((goal) => {
     const card = document.createElement('article');
     card.className = 'goal-card';
     card.setAttribute('data-reveal', '');
+
+    const achievedHTML = goal.achievedLabel
+      ? `<p class="goal-card__achieved">Achieved · ${goal.achievedLabel}</p>`
+      : '';
+
     card.innerHTML = `
       <span class="goal-card__icon" aria-hidden="true">${goal.icon}</span>
-      <h3 class="goal-card__title">${goal.title}</h3>
-      <p class="goal-card__desc">${goal.description}</p>
-      <div class="goal-card__progress" role="progressbar" aria-valuenow="${goal.progress}" aria-valuemin="0" aria-valuemax="100" aria-label="${goal.title} 完成度">
-        <span class="goal-card__progress-fill" style="--progress: ${goal.progress}%"></span>
+      <div class="goal-card__body">
+        <div class="goal-card__heading">
+          <p class="goal-card__title-en">${goal.titleEn}</p>
+          <h3 class="goal-card__title-zh">${goal.titleZh}</h3>
+        </div>
+        <p class="goal-card__desc">${goal.desc}</p>
+        <div class="goal-card__progress" role="progressbar" aria-valuenow="${goal.progress}" aria-valuemin="0" aria-valuemax="100" aria-label="${goal.titleZh} 進度">
+          <span class="goal-card__progress-fill" style="--progress: ${goal.progress}%"></span>
+          <span class="goal-card__progress-marker" style="--progress: ${goal.progress}%" aria-hidden="true"></span>
+        </div>
+        ${achievedHTML}
       </div>
-      <span class="goal-card__percent">${goal.progress}%</span>
     `;
     container.appendChild(card);
   });
@@ -569,26 +585,28 @@ async function initRender() {
   renderAbout();
   renderBikes();
   renderStats();
-  renderGoals();
   renderContact();
 
-  // 這 4 個區塊改成非同步：優先讀 content/*.json（後台管理寫入的正式資料），
+  // 這 5 個區塊改成非同步：優先讀 content/*.json（後台管理寫入的正式資料），
   // 抓不到（例如離線用 file:// 打開）才 fallback 回 content.js 的預設值。
-  const [galleryData, panningData, journalData, videosData] = await Promise.all([
+  const [galleryData, panningData, journalData, videosData, goalsData] = await Promise.all([
     loadJSON('content/gallery.json'),
     loadJSON('content/panning.json'),
     loadJSON('content/journal.json'),
     loadJSON('content/videos.json'),
+    loadJSON('content/goals.json'),
   ]);
 
   GALLERY_ITEMS = (galleryData && galleryData.items) || SITE_CONTENT.gallery;
   PANNING_ITEMS = (panningData && panningData.items) || SITE_CONTENT.panning;
   JOURNAL_ENTRIES = (journalData && journalData.entries) || SITE_CONTENT.journal;
   VIDEOS_ITEMS = (videosData && videosData.items) || SITE_CONTENT.videos;
+  GOALS_ITEMS = (goalsData && goalsData.items) || SITE_CONTENT.goals;
 
   renderGallery();
   renderPanning();
   initJournalFilters();
   renderJournal(); // 初始渲染（year: 'all'）
   renderVideos();
+  renderGoals();
 }
