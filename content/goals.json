@@ -1,0 +1,36 @@
+{
+  "items": [
+    {
+      "icon": "🏁",
+      "titleEn": "Track Day",
+      "titleZh": "大鵬灣國際賽道",
+      "desc": "第一次正式踏上賽道，挑戰自己的極限。",
+      "progress": 20,
+      "achievedLabel": ""
+    },
+    {
+      "icon": "🇯🇵",
+      "titleEn": "Japan Ride",
+      "titleZh": "日本騎車旅行",
+      "desc": "騎著夢想中的車，探索日本最美的道路與風景。",
+      "progress": 10,
+      "achievedLabel": ""
+    },
+    {
+      "icon": "🏍",
+      "titleEn": "Dream Bike",
+      "titleZh": "BMW S1000RR",
+      "desc": "努力一步步靠近自己的下一台夢想車。",
+      "progress": 15,
+      "achievedLabel": ""
+    },
+    {
+      "icon": "🗺",
+      "titleEn": "Taiwan Loop",
+      "titleZh": "環島旅行",
+      "desc": "用兩個輪子，重新認識這座島嶼。",
+      "progress": 35,
+      "achievedLabel": ""
+    }
+  ]
+}
