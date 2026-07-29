@@ -1,73 +1,191 @@
 /* ============================================================
-   Eason Rides — 07 Statistics
-   數字進入畫面才開始跑（counter.js）
+   Eason Rides — 07 Ride Statistics
+   品牌展示區塊，不是單純的數字清單。
+   卡片＝大數字 + 單位 + 英文標題 + 中文標題 + 一句話描述。
+   Hover：數字微放大、紅色細線亮起、邊框淡淡發光、極輕微玻璃反射感。
    ============================================================ */
 
 .stats {
+  position: relative;
   background: var(--color-bg-secondary);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
+  overflow: hidden; /* 讓視差位移不會撐出區塊邊界 */
+}
+
+.stats__head {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.stats__head h2 {
+  margin-top: var(--space-1);
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: var(--space-4);
-  text-align: center;
+  gap: 1px; /* 用 gap 當作卡片間的細髮絲分隔線 */
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
-.stat {
+.stat-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
-  padding-block: var(--space-3);
-  border-right: 1px solid var(--color-border);
+  gap: 0.6rem;
+  padding: var(--space-5) var(--space-4);
+  background: var(--color-bg-secondary);
+  text-align: left;
+  overflow: hidden;
+  transition: background var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
 }
 
-.stat:last-child {
-  border-right: none;
+/* 極輕微的玻璃反射感：一道很淡的高光貼在卡片左上角，hover 時才淡入，不是常駐裝飾 */
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 35%);
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-out);
+  pointer-events: none;
 }
 
-.stat__number {
+.stat-card:hover,
+.stat-card:focus-within {
+  background: var(--color-card);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.stat-card:hover::before,
+.stat-card:focus-within::before {
+  opacity: 1;
+}
+
+.stat-card__top {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.stat-card__value {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.5vw, 3.25rem);
-  font-weight: 700;
+  font-size: clamp(2.25rem, 3.2vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1;
   color: var(--color-text);
   font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-tight);
+  transition: transform var(--duration-fast) var(--ease-out);
+  transform-origin: left bottom;
 }
 
-.stat__label {
+.stat-card__value--text {
+  font-size: clamp(1.75rem, 2.4vw, 2.5rem);
+}
+
+.stat-card:hover .stat-card__value,
+.stat-card:focus-within .stat-card__value {
+  transform: scale(1.045);
+}
+
+.stat-card__unit {
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-secondary);
+  padding-bottom: 0.2em;
+}
+
+/* Hover 亮起的紅色細線，呼應全站「機械精工」的互動語彙 */
+.stat-card__rule {
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0.35);
+  transform-origin: left;
+  opacity: 0.5;
+  transition: transform var(--duration-base) var(--ease-out),
+              opacity var(--duration-base) var(--ease-out);
+}
+
+.stat-card:hover .stat-card__rule,
+.stat-card:focus-within .stat-card__rule {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.stat-card__title-en {
   font-size: var(--fs-caption);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
 }
+
+.stat-card__title-zh {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.stat-card__location {
+  font-weight: 400;
+  color: var(--color-gold);
+}
+
+.stat-card__desc {
+  font-size: var(--fs-small);
+  line-height: var(--lh-body);
+  color: var(--color-text-secondary);
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+/* ---------- 進場：依卡片順序小幅錯開淡入 ---------- */
+
+.stat-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out),
+              background var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
+  transition-delay: calc(var(--stagger, 0) * 90ms);
+}
+
+.stat-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- Responsive ----------
+   手機不要五張塞在一起：改成單欄上下排列，維持舒服留白。 */
 
 @media (max-width: 900px) {
   .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: var(--space-5);
-  }
-
-  .stat:nth-child(2n) {
-    border-right: none;
-  }
-
-  .stat {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .stat:nth-last-child(-n+2) {
-    border-bottom: none;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 560px) {
   .stats-grid {
     grid-template-columns: 1fr;
   }
 
-  .stat {
-    border-right: none;
+  .stat-card {
+    padding: var(--space-4);
   }
 }
