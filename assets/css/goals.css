@@ -1,5 +1,8 @@
 /* ============================================================
-   Eason Rides — 08 Future Goals
+   Eason Rides — 08 The Road Ahead
+   不是 Checklist，是 Premium Journey Tracker。
+   不對稱格線＋錯落的排版層次，做出精品型錄（Editorial）的感覺，
+   而不是四張長得一模一樣的資訊卡。
    ============================================================ */
 
 .goals {
@@ -8,57 +11,184 @@
 
 .goals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(12, 1fr);
   gap: var(--space-4);
 }
 
+/* ---------- 不對稱格線：四張卡片各有各的比例與呼吸空間 ---------- */
+
+.goal-card:nth-child(1) { grid-column: span 7; }
+.goal-card:nth-child(2) { grid-column: span 5; }
+.goal-card:nth-child(3) { grid-column: span 5; }
+.goal-card:nth-child(4) { grid-column: span 7; }
+
+/* 第二張稍微往下錯開一點，打破「兩排整齊對齊」的制式感 */
+.goal-card:nth-child(2) {
+  margin-top: var(--space-5);
+}
+
+@media (max-width: 900px) {
+  .goal-card:nth-child(1),
+  .goal-card:nth-child(2),
+  .goal-card:nth-child(3),
+  .goal-card:nth-child(4) {
+    grid-column: span 12;
+    margin-top: 0;
+  }
+}
+
 .goal-card {
-  padding: var(--space-4);
+  position: relative;
+  padding: var(--space-5);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-card);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  transition: transform var(--duration-fast) var(--ease-out),
-              border-color var(--duration-fast) var(--ease-out),
-              box-shadow var(--duration-fast) var(--ease-out);
+  overflow: hidden;
+  transition: transform var(--duration-base) var(--ease-out),
+              border-color var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
 }
 
-.goal-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-card);
+/* 第一張（Track Day）當作這區的視覺焦點，字級跟留白都拉大一些 */
+.goal-card:nth-child(1) {
+  padding: var(--space-6) var(--space-5);
+}
+
+.goal-card:nth-child(1) .goal-card__title-zh {
+  font-size: var(--fs-h2);
+}
+
+.goal-card:nth-child(1) .goal-card__icon {
+  font-size: 2.5rem;
+}
+
+.goal-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* 第三張（Dream Bike）改成橫向的比例配置，圖示跟文字並排，跟其他直式卡片做出區隔 */
+.goal-card:nth-child(3) {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.goal-card:nth-child(3) .goal-card__icon {
+  margin-bottom: 0;
+}
+
+/* ---------- Hover：卡片微升、邊框透出淡淡的紅色光暈 ---------- */
+
+.goal-card:hover,
+.goal-card:focus-within {
+  transform: translateY(-5px);
+  border-color: rgba(210, 0, 28, 0.4);
+  box-shadow: 0 20px 50px rgba(210, 0, 28, 0.08), var(--shadow-card);
 }
 
 .goal-card__icon {
   font-size: 1.75rem;
+  margin-bottom: var(--space-3);
+  line-height: 1;
+}
+
+.goal-card__heading {
+  margin-bottom: var(--space-2);
+}
+
+.goal-card__title-en {
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.goal-card__title-zh {
+  margin-top: 0.2rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  color: var(--color-text);
 }
 
 .goal-card__desc {
   font-size: var(--fs-small);
+  line-height: var(--lh-body);
   color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+  max-width: 42ch;
 }
 
+/* ---------- Progress Line ----------
+   不是 Loading Bar：非常細（1.5px）、直角不用圓潤的膠囊造型，
+   已完成部分是 Aprilia 紅，其餘是深灰，中間一個小小的位置標記點。 */
+
 .goal-card__progress {
-  height: 4px;
-  border-radius: 999px;
-  background: var(--color-border);
-  overflow: hidden;
-  margin-top: var(--space-1);
+  position: relative;
+  margin-top: auto;
+  padding-top: var(--space-3);
+  height: 1.5px;
+  background: var(--color-border-strong);
 }
 
 .goal-card__progress-fill {
   display: block;
-  height: 100%;
+  position: absolute;
+  top: var(--space-3);
+  left: 0;
+  height: 1.5px;
   width: var(--progress, 0%);
   background: var(--color-accent);
-  border-radius: 999px;
-  transition: width 900ms var(--ease-out);
+  background-image: linear-gradient(
+    90deg,
+    var(--color-accent) 0%,
+    rgba(210, 0, 28, 0.7) 50%,
+    var(--color-accent) 100%
+  );
+  background-size: 200% 100%;
+  transition: width 1200ms var(--ease-out);
 }
 
-.goal-card__percent {
-  align-self: flex-end;
+.goal-card__progress-marker {
+  position: absolute;
+  top: calc(var(--space-3) - 2px);
+  left: var(--progress, 0%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  transform: translateX(-50%);
+  transition: left 1200ms var(--ease-out);
+}
+
+/* Hover 時 Progress Line 出現非常細微的流動感（漸層位移），不是誇張的跑馬燈 */
+.goal-card:hover .goal-card__progress-fill,
+.goal-card:focus-within .goal-card__progress-fill {
+  animation: goalProgressFlow 2200ms linear infinite;
+}
+
+@keyframes goalProgressFlow {
+  from { background-position: 0% 0; }
+  to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goal-card:hover .goal-card__progress-fill,
+  .goal-card:focus-within .goal-card__progress-fill {
+    animation: none;
+  }
+}
+
+/* ---------- Achieved ----------
+   沒有打勾、沒有徽章。只是一行很低調的文字，讓完成本身自然地被看見。 */
+
+.goal-card__achieved {
+  margin-top: var(--space-2);
   font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wide);
   color: var(--color-text-muted);
 }
