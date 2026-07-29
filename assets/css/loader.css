@@ -1,6 +1,8 @@
 /* ============================================================
-   Eason Rides — First-visit Loader
-   黑底、Logo 淡入，約 1 秒後淡出交給 Hero
+   Eason Rides — Opening Sequence
+   Premium / Minimal / Cinematic / Timeless。
+   全黑 → Logo 淡入淡出 → 與 Hero Crossfade 融合，全程約 2.5～2.8 秒。
+   只做 Fade，不縮放、不旋轉、不用粒子或光效。
    ============================================================ */
 
 .loader {
@@ -10,45 +12,63 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg);
-  transition: opacity var(--duration-base) var(--ease-out),
-              visibility var(--duration-base) var(--ease-out);
+  /* 一開始就不是純黑：留一點透光度，讓底下 Hero 的第一幀非常隱約地透出來 */
+  background-color: rgba(7, 7, 7, 0.96);
+  transition: background-color 700ms var(--ease-in-out);
 }
 
-.loader__mark {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  opacity: 0;
-  animation: loaderFadeIn 900ms var(--ease-out) forwards;
+/* 淡出階段：背景转為全透明，露出底下真正的 Hero —— 這就是 Crossfade 本身，
+   不需要在 Loader 裡面另外放一張重複的照片。 */
+.loader.is-fading {
+  background-color: rgba(7, 7, 7, 0);
 }
 
-.loader__mark span {
-  color: var(--color-accent);
-}
-
-.loader.is-hidden {
-  opacity: 0;
+.loader.is-done {
   visibility: hidden;
   pointer-events: none;
 }
 
-@keyframes loaderFadeIn {
-  from {
-    opacity: 0;
-    letter-spacing: 0.4em;
-  }
-  to {
-    opacity: 1;
-    letter-spacing: var(--tracking-wider);
-  }
+.loader__content {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 950ms var(--ease-out),
+              transform 950ms var(--ease-out);
+}
+
+.loader__content.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.loader__content.is-hiding {
+  opacity: 0;
+  transform: translateY(0);
+  transition: opacity 420ms var(--ease-in-out);
+}
+
+.loader__logo {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text);
+}
+
+.loader__logo span {
+  color: var(--color-accent);
+}
+
+.loader__tagline {
+  margin-top: var(--space-2);
+  font-style: italic;
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-gold);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .loader__mark {
-    animation: none;
-    opacity: 1;
+  .loader {
+    display: none;
   }
 }
