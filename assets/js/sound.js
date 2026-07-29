@@ -84,3 +84,31 @@ function initTapSfxDelegation() {
     if (trigger) playAmbientSfx('sfx-tap', { volume: 0.5 });
   });
 }
+
+/**
+ * initHoverSfxDelegation
+ * 職責：滑鼠移到照片／影片卡片上時，播放非常輕的音效。
+ * 只框在「照片類」項目（[data-sfx-hover]），一般導覽列文字／按鈕不加，
+ * 維持「按鈕只用動畫回饋」的原則。
+ *
+ * 節流：滑鼠快速掃過一整排照片時，mouseover 事件會密集觸發，
+ * 如果每個都出聲，會變成一連串很吵的聲音，跟「質感」的目標相反。
+ * 這裡限制「同一段時間內最多觸發一次」，並且用 relatedTarget 排除
+ * 「在同一張卡片內部移動」造成的重複觸發。
+ */
+function initHoverSfxDelegation() {
+  const HOVER_COOLDOWN_MS = 160;
+  let lastPlayedAt = 0;
+
+  document.addEventListener('mouseover', (event) => {
+    const target = event.target.closest('[data-sfx-hover]');
+    if (!target) return;
+    if (target.contains(event.relatedTarget)) return; // 卡片內部移動，不是真正「換一張」
+
+    const now = performance.now();
+    if (now - lastPlayedAt < HOVER_COOLDOWN_MS) return;
+    lastPlayedAt = now;
+
+    playAmbientSfx('sfx-tap', { volume: 0.22 }); // 音量刻意壓得比點擊還低，只是一個很輕的存在感
+  });
+}
