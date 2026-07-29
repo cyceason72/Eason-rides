@@ -5,7 +5,7 @@
 
 function animateCounter(el) {
   const target = Number(el.getAttribute('data-target')) || 0;
-  const duration = 1400;
+  const duration = 1500;
   const start = performance.now();
 
   function tick(now) {
