@@ -105,7 +105,11 @@ function initLoader() {
 
     if (enterBtn) enterBtn.classList.add('is-hidden');
 
-    if (withSound) playOpeningSfx('sfx-click'); // t = 0s
+    if (withSound) {
+      setImmersiveMode(true); // 點 Enter 這個手勢，直接連同開啟全站互動音效，不用再多點一次
+      syncImmersiveToggleUI();
+      playOpeningSfx('sfx-click'); // t = 0s
+    }
 
     window.setTimeout(() => {
       content.classList.add('is-visible');
