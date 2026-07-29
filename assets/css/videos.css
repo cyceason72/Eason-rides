@@ -1,8 +1,7 @@
 /* ============================================================
    Eason Rides — 06 Videos
-   「影片也是作品」：電影海報式卡片，不是縮圖+外部連結的附件感。
-   桌面：hover 出現播放感的互動（scrim 加深、播放環浮現、標題上移）。
-   手機：沒有 hover，改成「先點顯示資訊，再點播放鍵才跳轉」（.is-revealed）。
+   單純的影片，捲到畫面內自動播放（靜音、循環），
+   點一下暫停/繼續，長按按著暫停、放開繼續播放。
    ============================================================ */
 
 .videos {
@@ -29,8 +28,7 @@
 }
 
 .video-card:hover,
-.video-card:focus-visible,
-.video-card.is-revealed {
+.video-card:focus-visible {
   border-color: var(--color-border-strong);
   box-shadow: var(--shadow-card);
   transform: translateY(-4px);
@@ -46,26 +44,15 @@
 .video-card__player {
   object-fit: cover;
   cursor: pointer;
+  background: var(--color-bg-secondary); /* 影片還在讀取、也沒有縮圖時，至少是深色底而不是純黑 */
 }
 
-.video-card__media .media__img {
-  transition: transform 1200ms var(--ease-out),
-              filter var(--duration-base) var(--ease-out);
-}
-
-.video-card:hover .video-card__media .media__img,
-.video-card:focus-visible .video-card__media .media__img,
-.video-card.is-revealed .video-card__media .media__img {
-  transform: scale(1.06);
-  filter: brightness(0.6);
-}
-
-/* Reel 卡片：長按時畫面稍微變暗一點點，給「按住了」的手感回饋 */
-.video-card--reel.is-long-pressed .video-card__player {
+/* 長按時畫面稍微變暗一點點，給「按住了」的手感回饋 */
+.video-card.is-long-pressed .video-card__player {
   filter: brightness(0.75);
 }
 
-/* Scrim：常駐一層底部漸層維持文字可讀，hover 時加深，更有「準備播放」的沉浸感 */
+/* Scrim：常駐一層底部漸層維持文字可讀，hover 時加深 */
 .video-card__scrim {
   position: absolute;
   inset: 0;
@@ -75,17 +62,17 @@
 }
 
 .video-card:hover .video-card__scrim,
-.video-card:focus-visible .video-card__scrim,
-.video-card.is-revealed .video-card__scrim {
+.video-card:focus-visible .video-card__scrim {
   background: linear-gradient(0deg, rgba(7, 7, 7, 0.92) 0%, rgba(7, 7, 7, 0.4) 55%, rgba(7, 7, 7, 0.15) 100%);
 }
 
-/* 播放環：延續 Hero CTA 的視覺語彙（圓環＋箭頭），全站維持一致的「機械精工」互動語言 */
+/* 播放環：延續 Hero CTA 的視覺語彙（圓環＋箭頭），全站維持一致的「機械精工」互動語言。
+   播放中收起來，暫停／長按時才浮現，行為更接近真正的 Reels。 */
 .video-card__play-ring {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
+  transform: translate(-50%, -50%) scale(0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,7 +84,7 @@
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   color: var(--color-text);
-  opacity: 0;
+  opacity: 1;
   transition: opacity var(--duration-base) var(--ease-out),
               transform var(--duration-base) var(--ease-out),
               border-color var(--duration-fast) var(--ease-out),
@@ -110,87 +97,14 @@
   margin-left: 3px; /* 三角形視覺置中微調 */
 }
 
-.video-card:hover .video-card__play-ring,
-.video-card:focus-visible .video-card__play-ring,
-.video-card.is-revealed .video-card__play-ring {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.video-card:hover .video-card__play-ring,
-.video-card:focus-visible .video-card__play-ring {
-  border-color: var(--color-accent);
-  background: var(--color-accent);
-}
-
-/* Reel 卡片：播放中的時候把播放環收起來，暫停／長按時才浮現，行為更接近真正的 Reels */
-.video-card--reel .video-card__play-ring {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(0.85);
-}
-
-.video-card--reel.is-playing .video-card__play-ring {
+.video-card.is-playing .video-card__play-ring {
   opacity: 0;
 }
 
-.video-card--reel.is-long-pressed .video-card__play-ring,
-.video-card--reel:not(.is-playing) .video-card__play-ring {
+.video-card.is-long-pressed .video-card__play-ring,
+.video-card:not(.is-playing) .video-card__play-ring {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
-  border-color: var(--color-gold-dim);
-  background: rgba(7, 7, 7, 0.35);
-}
-
-.video-card__outlink {
-  position: absolute;
-  top: var(--space-3);
-  right: var(--space-3);
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: rgba(7, 7, 7, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--color-text-secondary);
-  transition: color var(--duration-fast) var(--ease-out),
-              border-color var(--duration-fast) var(--ease-out);
-}
-
-.video-card__outlink:hover {
-  color: var(--color-text);
-  border-color: var(--color-gold-dim);
-}
-
-.video-card__outlink svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* Reel 有外部連結按鈕時，時長標籤讓位置給它，改放在左上角旁邊 */
-.video-card--reel .video-card__duration {
-  right: calc(var(--space-3) + 38px);
-}
-
-.video-card__badge {
-  position: absolute;
-  top: var(--space-3);
-  left: var(--space-3);
-  z-index: 2;
-  font-size: var(--fs-caption);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  background: rgba(7, 7, 7, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--color-text);
 }
 
 .video-card__duration {
@@ -207,6 +121,10 @@
   color: var(--color-text-secondary);
 }
 
+.video-card__duration:empty {
+  display: none; /* 影片長度還沒讀取出來之前，不要顯示空的膠囊 */
+}
+
 .video-card__body {
   position: absolute;
   left: var(--space-3);
@@ -218,8 +136,7 @@
 }
 
 .video-card:hover .video-card__body,
-.video-card:focus-visible .video-card__body,
-.video-card.is-revealed .video-card__body {
+.video-card:focus-visible .video-card__body {
   transform: translateY(0);
 }
 
