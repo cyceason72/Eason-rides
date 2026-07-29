@@ -67,6 +67,66 @@
   color: var(--color-gold);
 }
 
+/* ---------- Enter 提示 ----------
+   瀏覽器政策：聲音一定要接在使用者手勢之後才會被允許播放，
+   所以開場動畫改成「等一下使用者點擊」才正式開始，而不是頁面一載入就自動跑。
+   樣式維持低調：細圓環＋極輕微的脈動透明度變化，不是搶眼的按鈕。 */
+
+.loader__enter {
+  position: absolute;
+  left: 50%;
+  bottom: 14%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  animation: loaderEnterPulse 2400ms var(--ease-in-out) infinite;
+}
+
+.loader__enter-ring {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-strong);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.loader__enter:hover .loader__enter-ring,
+.loader__enter:focus-visible .loader__enter-ring {
+  border-color: var(--color-gold);
+  transform: scale(1.06);
+}
+
+.loader__enter-label {
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+}
+
+.loader__enter.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--ease-out);
+}
+
+@keyframes loaderEnterPulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader__enter {
+    animation: none;
+    opacity: 0.85;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .loader {
     display: none;
