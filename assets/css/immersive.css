@@ -1,0 +1,65 @@
+/* ============================================================
+   Eason Rides — Immersive Mode Toggle
+   右下角低調小按鈕。預設 OFF：網站保持完全安靜，尊重使用者。
+   開啟後才會啟用 Scroll Whoosh / Camera Shutter / UI Tap 這類互動音效。
+   ============================================================ */
+
+.immersive-toggle {
+  position: fixed;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: var(--z-nav);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-strong);
+  background: rgba(7, 7, 7, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--color-text-secondary);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wide);
+  cursor: pointer;
+  opacity: 0.65;
+  transition: opacity var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+
+.immersive-toggle:hover,
+.immersive-toggle:focus-visible {
+  opacity: 1;
+  border-color: var(--color-border-strong);
+}
+
+.immersive-toggle__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  transition: background var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.immersive-toggle.is-on {
+  opacity: 1;
+  color: var(--color-text);
+  border-color: var(--color-gold-dim);
+}
+
+.immersive-toggle.is-on .immersive-toggle__dot {
+  background: var(--color-gold);
+  box-shadow: 0 0 6px rgba(198, 166, 100, 0.7);
+}
+
+@media (max-width: 640px) {
+  .immersive-toggle__label {
+    display: none; /* 手機版只留一個小圓點，避免佔用太多畫面空間 */
+  }
+
+  .immersive-toggle {
+    padding: 0.55rem;
+  }
+}
