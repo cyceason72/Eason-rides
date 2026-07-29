@@ -98,7 +98,7 @@ collections:
                 required: false
 
   - name: "videos"
-    label: "攝影紀錄 Videos"
+    label: "影片紀錄 Videos"
     files:
       - name: "videos"
         label: "影片列表"
@@ -109,17 +109,19 @@ collections:
             widget: "list"
             summary: "{{fields.title}}"
             fields:
-              - { label: "縮圖", name: "thumbnail", widget: "image" }
-              - label: "影片檔案（選填：上傳這個之後，畫面會自動變成可以點擊/長按互動的 Reel 樣式；不上傳就維持縮圖連到外部平台的樣式）"
+              - label: "🎬 影片檔案（直接上傳 mp4，不是連結；上傳後網站會直接播放這支影片）"
                 name: "videoSrc"
                 widget: "file"
+                media_folder: "/assets/videos"
+                public_folder: "/assets/videos"
                 required: false
                 default: ""
+              - { label: "縮圖（影片播放前顯示的封面圖）", name: "thumbnail", widget: "image" }
               - { label: "標題", name: "title", widget: "string" }
               - { label: "日期", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
               - { label: "長度（例如 08:24）", name: "duration", widget: "string" }
-              - { label: "平台", name: "platform", widget: "select", options: ["YouTube", "Reels"], default: "YouTube" }
-              - { label: "原始平台連結網址（選填）", name: "url", widget: "string", required: false, default: "" }
+              - { label: "平台（僅顯示用的標籤文字）", name: "platform", widget: "select", options: ["YouTube", "Reels"], default: "Reels" }
+              - { label: "原始平台連結網址（選填，不需要就留空）", name: "url", widget: "string", required: false, default: "" }
 
   - name: "goals"
     label: "下一段旅程 The Road Ahead"
