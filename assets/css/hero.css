@@ -1,73 +1,29 @@
 /* ============================================================
-   Eason Rides — 01 Hero (v2)
-   全螢幕沉浸式版面：滿版影像／影片背景＋緩慢呼吸感運鏡＋
-   文字疊加在畫面左下三分之一，電影海報式構圖。
+   Eason Rides — 01 Hero
+   左：品牌文字＋CTA　右：滿版車輛影像　下：捲動提示
    ============================================================ */
 
 .hero {
   position: relative;
   min-height: 100vh;
-  min-height: 100svh; /* 手機瀏覽器網址列收合時也能維持正確全螢幕高度 */
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: stretch;
   background: var(--color-bg);
-}
-
-/* ---------- 背景媒體層 ----------
-   img 或未來的 video 都用同一套處理方式：絕對定位撐滿、cover。
-   .hero__media 本身做緩慢的呼吸感縮放（Ken Burns），
-   讓靜態照片也有電影運鏡的感覺，不是死板的一張圖。 */
-
-.hero__media {
-  position: absolute;
-  inset: 0;
   overflow: hidden;
-  background: var(--color-bg-secondary);
 }
-
-.hero__image,
-.hero__media video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 38%;
-  animation: heroBreathe 26s var(--ease-in-out) infinite alternate;
-}
-
-@keyframes heroBreathe {
-  from { transform: scale(1); }
-  to { transform: scale(1.09); }
-}
-
-/* Scrim：由下往上、由左往右的漸層，確保疊在上面的文字在任何照片上都清楚易讀，
-   同時讓畫面下緣自然沉入背景色，呼應「電影黑邊」的觀感。 */
-.hero__scrim {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(0deg, var(--color-bg) 0%, rgba(7, 7, 7, 0.75) 22%, rgba(7, 7, 7, 0.15) 52%, transparent 68%),
-    linear-gradient(100deg, rgba(7, 7, 7, 0.85) 0%, rgba(7, 7, 7, 0.35) 38%, transparent 62%);
-  pointer-events: none;
-}
-
-/* ---------- 內容層 ---------- */
 
 .hero__content {
-  position: relative;
-  z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-3);
-  width: 100%;
-  max-width: 720px;
-  padding: 0 var(--container-padding) clamp(var(--space-7), 14vh, var(--space-9));
+  justify-content: center;
+  gap: var(--space-4);
+  padding: calc(var(--nav-height) + var(--space-5)) var(--container-padding) var(--space-6);
 }
 
-/* ---------- Signature element: 轉速線 ---------- */
+/* ---------- Signature element: 轉速線 ----------
+   一條由左至右描繪的細線，呼應儀表板轉速指針掃過的瞬間。
+   只在首次進場播放一次，之後保持靜止，不干擾閱讀。 */
 
 .hero__mark {
   display: flex;
@@ -97,7 +53,6 @@
   letter-spacing: var(--tracking-tight);
   font-weight: 600;
   max-width: 14ch;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35); /* 極輕微陰影，只為了在明亮照片上維持可讀性，非裝飾用 */
 }
 
 .hero__tagline {
@@ -115,83 +70,36 @@
 }
 
 .hero__actions {
-  margin-top: var(--space-3);
+  margin-top: var(--space-2);
 }
 
-/* ---------- CTA：不用制式按鈕，改成「圓環箭頭 + 文字」的複合式互動元件 ----------
-   靈感來自儀表板指針／煞車碟盤的圓形語彙，比純色矩形按鈕更有機械感。 */
-
-.hero__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-3);
-  color: var(--color-text);
-}
-
-.hero__cta-ring {
+.hero__visual {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 1px solid var(--color-gold-dim);
-  transition: border-color var(--duration-fast) var(--ease-out),
-              background var(--duration-fast) var(--ease-out),
-              transform var(--duration-fast) var(--ease-out);
+  overflow: hidden;
+  background: var(--color-bg-secondary);
 }
 
-.hero__cta-ring svg {
-  width: 18px;
-  height: 18px;
-  transform: rotate(90deg); /* 箭頭預設向下（往頁面下方探索），視覺上更直覺 */
-  transition: transform var(--duration-fast) var(--ease-out);
+.hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
-.hero__cta-label {
-  font-size: var(--fs-small);
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  position: relative;
-  padding-bottom: 2px;
-}
-
-.hero__cta-label::after {
+.hero__visual::before {
+  /* 影像左緣到內容區的漸層銜接，避免生硬切線 */
   content: "";
   position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--color-text);
-  transform: scaleX(0.3);
-  transform-origin: left;
-  opacity: 0.4;
-  transition: transform var(--duration-fast) var(--ease-out),
-              opacity var(--duration-fast) var(--ease-out);
-}
-
-.hero__cta:hover .hero__cta-ring,
-.hero__cta:focus-visible .hero__cta-ring {
-  border-color: var(--color-accent);
-  background: var(--color-accent);
-  transform: scale(1.06);
-}
-
-.hero__cta:hover .hero__cta-ring svg,
-.hero__cta:focus-visible .hero__cta-ring svg {
-  transform: rotate(90deg) translateX(2px);
-}
-
-.hero__cta:hover .hero__cta-label::after,
-.hero__cta:focus-visible .hero__cta-label::after {
-  transform: scaleX(1);
-  opacity: 1;
+  inset: 0;
+  background: linear-gradient(90deg, var(--color-bg) 0%, transparent 12%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* ---------- Sequenced reveal ----------
-   進場動畫依 Logo → Title → Subtitle → Slogan → CTA 順序播放，
+   進場動畫依 Logo → Title → Subtitle → Button → Motorcycle 順序播放，
    由 JS 在 loader 隱藏後對 .hero 加上 .hero--revealed 觸發。 */
 
 .hero__mark-line,
@@ -205,11 +113,11 @@
               transform var(--duration-slow) var(--ease-out);
 }
 
-.hero__media {
+.hero__visual {
   opacity: 0;
-  transform: scale(1.05);
-  transition: opacity 1200ms var(--ease-out),
-              transform 1600ms var(--ease-out);
+  transform: scale(1.08);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform 1400ms var(--ease-out);
 }
 
 .hero--revealed .hero__mark-line {
@@ -242,10 +150,10 @@
   transition-delay: 680ms;
 }
 
-.hero--revealed .hero__media {
+.hero--revealed .hero__visual {
   opacity: 1;
   transform: scale(1);
-  transition-delay: 0ms;
+  transition-delay: 380ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -254,15 +162,10 @@
   .hero__tagline,
   .hero__slogan,
   .hero__actions,
-  .hero__media {
+  .hero__visual {
     opacity: 1;
     transform: none;
     transition: none;
-  }
-
-  .hero__image,
-  .hero__media video {
-    animation: none;
   }
 }
 
@@ -271,8 +174,7 @@
 .hero__scroll {
   position: absolute;
   left: var(--container-padding);
-  bottom: var(--space-3);
-  z-index: 2;
+  bottom: var(--space-4);
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -280,11 +182,12 @@
   font-size: var(--fs-caption);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
+  z-index: 2;
 }
 
 .hero__scroll-line {
   width: 1px;
-  height: 32px;
+  height: 40px;
   background: var(--color-border-strong);
   position: relative;
   overflow: hidden;
@@ -314,30 +217,31 @@
   }
 }
 
-/* ---------- Responsive ----------
-   手機版不是「桌面版縮小」：文字改置中偏下，CTA 圓環縮小，
-   Scrim 加重（手機螢幕小、對比要更明確才夠好讀）。 */
+/* ---------- Responsive ---------- */
 
 @media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 55vh;
+  }
+
   .hero__content {
-    max-width: 100%;
-    padding-bottom: clamp(var(--space-6), 12vh, var(--space-8));
+    padding-top: calc(var(--nav-height) + var(--space-4));
+    padding-bottom: var(--space-4);
   }
 
   .hero__title {
     max-width: 100%;
   }
+
+  .hero__visual::before {
+    background: linear-gradient(180deg, var(--color-bg) 0%, transparent 10%);
+  }
 }
 
-@media (max-width: 640px) {
-  .hero__scrim {
-    background:
-      linear-gradient(0deg, var(--color-bg) 0%, rgba(7, 7, 7, 0.85) 30%, rgba(7, 7, 7, 0.3) 58%, transparent 72%);
-  }
-
-  .hero__cta-ring {
-    width: 48px;
-    height: 48px;
+@media (max-width: 480px) {
+  .hero {
+    grid-template-rows: auto 45vh;
   }
 
   .hero__scroll {
