@@ -183,11 +183,45 @@ const SITE_CONTENT = {
   /* ---------------- 08 Future Goals ----------------
      icon 可放 emoji，也可以直接留一個字母當佔位。
      progress 是 0~100 的完成度。 */
+  /* ---------------- 08 The Road Ahead ----------------
+     這裡的內容只是「離線預覽用的預設值」，實際顯示內容會優先讀取
+     content/goals.json（由後台「下一段旅程」分類管理，可以自由調整每個目標的 progress）。
+     progress：0~100，代表 Progress Line 要填滿多少。
+     achievedLabel：完成之後填年份字串（例如 '2027'），卡片底部會低調顯示「Achieved · 2027」，
+                    留空字串 '' 就不會顯示，也不會有打勾圖示。 */
   goals: [
-    { icon: '🗾', title: 'Japan Riding', description: '騎上日本的山道與海岸公路。', progress: 15 },
-    { icon: '🏁', title: 'Track Day', description: '第一次下賽道，練基本 Line。', progress: 30 },
-    { icon: '🏍️', title: 'New Bike', description: '物色下一台長途旅行取向的車。', progress: 5 },
-    { icon: '🧭', title: 'Touring', description: '完成一趟三天以上的環島或長途旅行。', progress: 45 },
+    {
+      icon: '🏁',
+      titleEn: 'Track Day',
+      titleZh: '大鵬灣國際賽道',
+      desc: '第一次正式踏上賽道，挑戰自己的極限。',
+      progress: 20,
+      achievedLabel: '',
+    },
+    {
+      icon: '🇯🇵',
+      titleEn: 'Japan Ride',
+      titleZh: '日本騎車旅行',
+      desc: '騎著夢想中的車，探索日本最美的道路與風景。',
+      progress: 10,
+      achievedLabel: '',
+    },
+    {
+      icon: '🏍',
+      titleEn: 'Dream Bike',
+      titleZh: 'BMW S1000RR',
+      desc: '努力一步步靠近自己的下一台夢想車。',
+      progress: 15,
+      achievedLabel: '',
+    },
+    {
+      icon: '🗺',
+      titleEn: 'Taiwan Loop',
+      titleZh: '環島旅行',
+      desc: '用兩個輪子，重新認識這座島嶼。',
+      progress: 35,
+      achievedLabel: '',
+    },
   ],
 
   /* ---------------- 09 Contact ----------------
