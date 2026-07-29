@@ -363,15 +363,17 @@ function initJournalSearch() {
   });
 }
 
-/* ---------------- 06 Videos ---------------- */
-
 /* ---------------- 06 Videos ----------------
-   「影片也是作品」：改成電影海報式卡片，桌面 hover 有播放感的互動，
-   手機因為沒有 hover，改成「先點一下顯示資訊，再點播放鍵才跳轉」，
-   不是把桌面那套原封不動搬過去。 */
+   單純影片，不是連結卡。每一支都是真正在頁面上播放的 Reel：
+   捲到畫面內自動靜音播放、點一下暫停/繼續、長按暫停放開繼續。
+   長度不用手動填，讀取影片本身的長度自動顯示。 */
 
-const IS_TOUCH_DEVICE =
-  typeof window.matchMedia === 'function' && window.matchMedia('(hover: none)').matches;
+function formatDuration(totalSeconds) {
+  if (!isFinite(totalSeconds) || totalSeconds < 0) return '';
+  const m = Math.floor(totalSeconds / 60);
+  const s = Math.floor(totalSeconds % 60);
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
 
 function renderVideos() {
   const container = document.querySelector('[data-render="videos"]');
@@ -379,35 +381,27 @@ function renderVideos() {
   container.innerHTML = '';
 
   VIDEOS_ITEMS.forEach((video) => {
-    if (video.videoSrc) {
-      container.appendChild(buildReelCard(video));
-    } else {
-      container.appendChild(buildLinkOutCard(video));
-    }
+    if (video.videoSrc) container.appendChild(buildReelCard(video));
   });
 }
 
 /**
  * buildReelCard
- * 職責：有實際影片檔案（video.videoSrc）時，做成 Reel 那種互動：
- *   - 捲動到畫面內自動靜音播放、循環（跟 IG Reels 預覽一樣）
- *   - 點一下：暫停／繼續
- *   - 長按：按著的時候暫停，放開繼續播放
- *   - 一律靜音自動播（尊重使用者，不會忽然有聲音跑出來；要看完整版可以點右上角連結去原平台）
+ * 職責：捲動到畫面內自動靜音播放、循環；點一下暫停/繼續；長按按著暫停、放開繼續播放。
  */
 function buildReelCard(video) {
   const card = document.createElement('div');
   card.className = 'video-card video-card--reel';
   card.setAttribute('data-reveal', '');
-  card.setAttribute('data-sfx-hover', '');
 
   const player = document.createElement('video');
   player.className = 'video-card__media video-card__player';
   player.src = video.videoSrc;
+  if (video.thumbnail) player.poster = video.thumbnail; // 避免影片還沒開始播放前顯示一片黑
   player.muted = true;
   player.loop = true;
   player.playsInline = true;
-  player.preload = 'metadata';
+  player.preload = 'auto'; // 沒有縮圖時，也能盡快讀到第一幀畫面顯示出來，而不是黑畫面
   card.appendChild(player);
 
   const scrim = document.createElement('span');
@@ -425,31 +419,12 @@ function buildReelCard(video) {
   `;
   card.appendChild(playRing);
 
-  const badge = document.createElement('span');
-  badge.className = 'video-card__badge';
-  badge.textContent = video.platform;
-  card.appendChild(badge);
-
   const duration = document.createElement('span');
   duration.className = 'video-card__duration';
-  duration.textContent = video.duration;
   card.appendChild(duration);
-
-  if (video.url && video.url !== '#') {
-    const outLink = document.createElement('a');
-    outLink.className = 'video-card__outlink';
-    outLink.href = video.url;
-    outLink.target = '_blank';
-    outLink.rel = 'noopener noreferrer';
-    outLink.setAttribute('aria-label', `在 ${video.platform} 開啟完整版`);
-    outLink.innerHTML = `
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    `;
-    outLink.addEventListener('click', (e) => e.stopPropagation());
-    card.appendChild(outLink);
-  }
+  player.addEventListener('loadedmetadata', () => {
+    duration.textContent = formatDuration(player.duration);
+  });
 
   const body = document.createElement('div');
   body.className = 'video-card__body';
@@ -502,8 +477,7 @@ function buildReelCard(video) {
   let wasPlayingBeforePress = false;
   let didLongPress = false;
 
-  const startPress = (event) => {
-    if (event.target.closest('.video-card__outlink')) return;
+  const startPress = () => {
     didLongPress = false;
     pressTimer = window.setTimeout(() => {
       didLongPress = true;
@@ -532,78 +506,6 @@ function buildReelCard(video) {
   card.addEventListener('pointerup', endPress);
   card.addEventListener('pointerleave', endPress);
   card.addEventListener('pointercancel', endPress);
-
-  return card;
-}
-
-/**
- * buildLinkOutCard
- * 職責：還沒有本地影片檔案、只有外部平台連結時的舊行為（縮圖 + 連到外部平台）。
- * 之後補上真正的影片檔案（video.videoSrc），會自動升級成上面的 Reel 互動卡片，不用改資料結構以外的東西。
- */
-function buildLinkOutCard(video) {
-  const card = document.createElement('a');
-  card.className = 'video-card';
-  card.href = video.url || '#';
-  card.target = '_blank';
-  card.rel = 'noopener noreferrer';
-  card.setAttribute('data-reveal', '');
-  card.setAttribute('data-sfx-hover', '');
-  card.setAttribute('aria-label', `${video.title}（在新分頁開啟 ${video.platform}）`);
-
-  const media = createMediaElement({
-    src: video.thumbnail,
-    alt: video.title,
-    label: '待補影片縮圖',
-    className: 'video-card__image',
-  });
-  media.classList.add('video-card__media');
-  card.appendChild(media);
-
-  const scrim = document.createElement('span');
-  scrim.className = 'video-card__scrim';
-  scrim.setAttribute('aria-hidden', 'true');
-  card.appendChild(scrim);
-
-  const playRing = document.createElement('span');
-  playRing.className = 'video-card__play-ring';
-  playRing.setAttribute('aria-hidden', 'true');
-  playRing.innerHTML = `
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" />
-    </svg>
-  `;
-  card.appendChild(playRing);
-
-  const badge = document.createElement('span');
-  badge.className = 'video-card__badge';
-  badge.textContent = video.platform;
-  card.appendChild(badge);
-
-  const duration = document.createElement('span');
-  duration.className = 'video-card__duration';
-  duration.textContent = video.duration;
-  card.appendChild(duration);
-
-  const body = document.createElement('div');
-  body.className = 'video-card__body';
-  body.innerHTML = `
-    <h3 class="video-card__title">${video.title}</h3>
-    <time class="video-card__date" datetime="${video.date}">${video.date}</time>
-  `;
-  card.appendChild(body);
-
-  if (IS_TOUCH_DEVICE) {
-    card.addEventListener('click', (event) => {
-      if (!card.classList.contains('is-revealed')) {
-        event.preventDefault();
-        document.querySelectorAll('.video-card.is-revealed').forEach((el) => {
-          if (el !== card) el.classList.remove('is-revealed');
-        });
-        card.classList.add('is-revealed');
-      }
-    });
-  }
 
   return card;
 }
