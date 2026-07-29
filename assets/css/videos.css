@@ -125,6 +125,55 @@
   display: none; /* 影片長度還沒讀取出來之前，不要顯示空的膠囊 */
 }
 
+.video-card__expand {
+  position: absolute;
+  bottom: var(--space-3);
+  right: var(--space-3);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(7, 7, 7, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--color-text-secondary);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
+}
+
+.video-card:hover .video-card__expand,
+.video-card:focus-visible .video-card__expand,
+.video-card:focus-within .video-card__expand {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.video-card__expand:hover {
+  color: var(--color-text);
+  border-color: var(--color-gold-dim);
+}
+
+.video-card__expand svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (hover: none) {
+  /* 觸控裝置沒有 hover，展開按鈕就一直顯示，不然使用者根本不知道有這個功能 */
+  .video-card__expand {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .video-card__body {
   position: absolute;
   left: var(--space-3);
