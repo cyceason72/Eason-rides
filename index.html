@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- 重新整理／回上一頁時，瀏覽器預設會嘗試還原捲動位置；
-       這裡關掉這個行為，改成一律從最上面開始，跟開場動畫每次都會重播是一致的體驗。
-       要放在最前面、同步執行，才能在瀏覽器還原捲動位置之前生效。 -->
+  <!-- 重新整理／回上一頁時，瀏覽器預設會嘗試還原捲動位置；這裡關掉這個行為，
+       改成一律從最上面開始，跟開場動畫每次都會重播是一致的體驗。
+       在多個時間點都強制執行一次，避免被瀏覽器自己的還原機制在稍後蓋過去。 -->
   <script>
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
+    document.addEventListener('DOMContentLoaded', () => window.scrollTo(0, 0));
+    window.addEventListener('load', () => window.scrollTo(0, 0));
   </script>
   <title>Eason Rides — 記錄每一段騎乘旅程</title>
   <meta name="description" content="Eason Rides，一個關於騎乘、速度與旅程的個人品牌網站。以 Aprilia RS660 為起點，記錄每一次上路的瞬間。" />
@@ -56,7 +58,7 @@
   />
 
   <!-- Styles（順序即層疊順序：reset → tokens → base → 導覽/loader → 各區塊） -->
-  <link rel="stylesheet" href="assets/css/bundle.css?v=20260729d" />
+  <link rel="stylesheet" href="assets/css/bundle.css?v=20260729e" />
 </head>
 <body>
   <a class="skip-link" href="#main">跳至主要內容</a>
@@ -223,7 +225,7 @@
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">Videos</p>
-          <h2>攝影紀錄</h2>
+          <h2>影片紀錄</h2>
         </div>
         <div class="video-grid" data-render="videos"></div>
       </div>
@@ -305,7 +307,7 @@
   <!-- ================= Scripts ================= -->
   <!-- 先載入資料與工具，最後才載入依賴它們的 main.js（一般 script，非 module，file:// 可直接開） -->
   <script src="assets/js/content.js"></script>
-  <script src="assets/js/bundle.js?v=20260729d"></script>
+  <script src="assets/js/bundle.js?v=20260729e"></script>
   <script>
     document.getElementById('footer-year').textContent = new Date().getFullYear();
   </script>
