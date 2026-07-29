@@ -301,7 +301,7 @@ function renderJournal() {
     body.innerHTML = `
       <div class="journal-card__meta">
         <time datetime="${entry.date}">${entry.date}</time>
-        <span class="journal-card__km">${entry.km} km</span>
+        ${entry.km ? `<span class="journal-card__km">${entry.km} km</span>` : ''}
       </div>
       <h3 class="journal-card__location">${entry.location}</h3>
       <p class="journal-card__note">${entry.note}</p>
