@@ -49,22 +49,18 @@ const SITE_CONTENT = {
     },
   ],
 
-  /* ---------------- 04 旅行相簿 Albums ----------------
-     每一趟出門是一個相簿：date（日期）＋ location（地點，可留空）
-     ＋ note（心得，可留空，目前畫面還沒顯示，先留著給之後擴充用）
-     ＋ media（那趟拍的照片／影片陣列）。
+  /* ---------------- 04 Gallery ----------------
+     caption 可留空字串 ''，不會顯示文字。
+     想加多少張照片就加多少筆，Masonry 版面會自動排列。
      ⚠️ 部署後台之後，這裡的內容只是「離線預覽用的預設值」，
      實際顯示內容會優先讀取 content/gallery.json（由後台管理）。 */
-  galleryAlbums: [
-    {
-      date: '2026 · 01 · 01',
-      location: '',
-      note: '',
-      media: [
-        { type: 'image', src: 'assets/images/gallery-01.jpg' },
-        { type: 'image', src: 'assets/images/gallery-02.jpg' },
-      ],
-    },
+  gallery: [
+    { image: 'assets/images/gallery-01.jpg', alt: '', caption: '' },
+    { image: 'assets/images/gallery-02.jpg', alt: '', caption: '' },
+    { image: 'assets/images/gallery-03.jpg', alt: '', caption: '' },
+    { image: 'assets/images/gallery-04.jpg', alt: '', caption: '' },
+    { image: 'assets/images/gallery-05.jpg', alt: '', caption: '' },
+    { image: 'assets/images/gallery-06.jpg', alt: '', caption: '' },
   ],
 
   /* ---------------- 追焦紀錄 Panning ----------------
