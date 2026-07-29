@@ -257,15 +257,13 @@ function renderJournal() {
   }
 
   entries.forEach((entry) => {
-    const card = document.createElement('article');
+    const cover = entry.media && entry.media[0];
+
+    const card = document.createElement('button');
+    card.type = 'button';
     card.className = 'journal-card';
     card.setAttribute('data-reveal', '');
-
-    const cover = entry.media && entry.media[0];
-    const visualBtn = document.createElement('button');
-    visualBtn.type = 'button';
-    visualBtn.className = 'journal-card__visual';
-    visualBtn.setAttribute('aria-label', `開啟 ${entry.location} 的相簿`);
+    card.setAttribute('aria-label', `開啟 ${entry.location} 的相簿`);
 
     const media = createMediaElement({
       src: cover ? cover.src : '',
@@ -274,16 +272,39 @@ function renderJournal() {
       type: cover ? cover.type : 'image',
       controls: false,
     });
-    visualBtn.appendChild(media);
+    media.classList.add('journal-card__media');
+    card.appendChild(media);
+
+    const scrim = document.createElement('span');
+    scrim.className = 'journal-card__scrim';
+    scrim.setAttribute('aria-hidden', 'true');
+    card.appendChild(scrim);
 
     if (entry.media && entry.media.length > 1) {
       const badge = document.createElement('span');
       badge.className = 'journal-card__badge';
       badge.textContent = `共 ${entry.media.length} 個`;
-      visualBtn.appendChild(badge);
+      card.appendChild(badge);
     }
 
-    visualBtn.addEventListener('click', () => {
+    const tagsHTML = (entry.tags || [])
+      .map((tag) => `<span class="tag">${tag}</span>`)
+      .join('');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'journal-card__overlay';
+    overlay.innerHTML = `
+      <div class="journal-card__meta">
+        <time datetime="${entry.date}">${entry.date}</time>
+        ${entry.km ? `<span class="journal-card__km">${entry.km} km</span>` : ''}
+      </div>
+      <h3 class="journal-card__location">${entry.location}</h3>
+      ${entry.note ? `<p class="journal-card__note">${entry.note}</p>` : ''}
+      <div class="journal-card__tags">${tagsHTML}</div>
+    `;
+    card.appendChild(overlay);
+
+    card.addEventListener('click', () => {
       const items = (entry.media || []).map((m) => ({
         type: m.type,
         src: m.src,
@@ -292,24 +313,6 @@ function renderJournal() {
       openLightbox(items, 0, entry.location);
     });
 
-    const tagsHTML = (entry.tags || [])
-      .map((tag) => `<span class="tag">${tag}</span>`)
-      .join('');
-
-    const body = document.createElement('div');
-    body.className = 'journal-card__body';
-    body.innerHTML = `
-      <div class="journal-card__meta">
-        <time datetime="${entry.date}">${entry.date}</time>
-        ${entry.km ? `<span class="journal-card__km">${entry.km} km</span>` : ''}
-      </div>
-      <h3 class="journal-card__location">${entry.location}</h3>
-      <p class="journal-card__note">${entry.note}</p>
-      <div class="journal-card__tags">${tagsHTML}</div>
-    `;
-
-    card.appendChild(visualBtn);
-    card.appendChild(body);
     container.appendChild(card);
   });
 }
@@ -376,73 +379,233 @@ function renderVideos() {
   container.innerHTML = '';
 
   VIDEOS_ITEMS.forEach((video) => {
-    const card = document.createElement('a');
-    card.className = 'video-card';
-    card.href = video.url || '#';
-    card.target = '_blank';
-    card.rel = 'noopener noreferrer';
-    card.setAttribute('data-reveal', '');
-    card.setAttribute('data-sfx-hover', '');
-    card.setAttribute('aria-label', `${video.title}（在新分頁開啟 ${video.platform}）`);
+    if (video.videoSrc) {
+      container.appendChild(buildReelCard(video));
+    } else {
+      container.appendChild(buildLinkOutCard(video));
+    }
+  });
+}
 
-    const media = createMediaElement({
-      src: video.thumbnail,
-      alt: video.title,
-      label: '待補影片縮圖',
-      className: 'video-card__image',
-    });
-    media.classList.add('video-card__media');
-    card.appendChild(media);
+/**
+ * buildReelCard
+ * 職責：有實際影片檔案（video.videoSrc）時，做成 Reel 那種互動：
+ *   - 捲動到畫面內自動靜音播放、循環（跟 IG Reels 預覽一樣）
+ *   - 點一下：暫停／繼續
+ *   - 長按：按著的時候暫停，放開繼續播放
+ *   - 一律靜音自動播（尊重使用者，不會忽然有聲音跑出來；要看完整版可以點右上角連結去原平台）
+ */
+function buildReelCard(video) {
+  const card = document.createElement('div');
+  card.className = 'video-card video-card--reel';
+  card.setAttribute('data-reveal', '');
+  card.setAttribute('data-sfx-hover', '');
 
-    const scrim = document.createElement('span');
-    scrim.className = 'video-card__scrim';
-    scrim.setAttribute('aria-hidden', 'true');
-    card.appendChild(scrim);
+  const player = document.createElement('video');
+  player.className = 'video-card__media video-card__player';
+  player.src = video.videoSrc;
+  player.muted = true;
+  player.loop = true;
+  player.playsInline = true;
+  player.preload = 'metadata';
+  card.appendChild(player);
 
-    const playRing = document.createElement('span');
-    playRing.className = 'video-card__play-ring';
-    playRing.setAttribute('aria-hidden', 'true');
-    playRing.innerHTML = `
+  const scrim = document.createElement('span');
+  scrim.className = 'video-card__scrim';
+  scrim.setAttribute('aria-hidden', 'true');
+  card.appendChild(scrim);
+
+  const playRing = document.createElement('span');
+  playRing.className = 'video-card__play-ring';
+  playRing.setAttribute('aria-hidden', 'true');
+  playRing.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" />
+    </svg>
+  `;
+  card.appendChild(playRing);
+
+  const badge = document.createElement('span');
+  badge.className = 'video-card__badge';
+  badge.textContent = video.platform;
+  card.appendChild(badge);
+
+  const duration = document.createElement('span');
+  duration.className = 'video-card__duration';
+  duration.textContent = video.duration;
+  card.appendChild(duration);
+
+  if (video.url && video.url !== '#') {
+    const outLink = document.createElement('a');
+    outLink.className = 'video-card__outlink';
+    outLink.href = video.url;
+    outLink.target = '_blank';
+    outLink.rel = 'noopener noreferrer';
+    outLink.setAttribute('aria-label', `在 ${video.platform} 開啟完整版`);
+    outLink.innerHTML = `
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" />
+        <path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     `;
-    card.appendChild(playRing);
+    outLink.addEventListener('click', (e) => e.stopPropagation());
+    card.appendChild(outLink);
+  }
 
-    const badge = document.createElement('span');
-    badge.className = 'video-card__badge';
-    badge.textContent = video.platform;
-    card.appendChild(badge);
+  const body = document.createElement('div');
+  body.className = 'video-card__body';
+  body.innerHTML = `
+    <h3 class="video-card__title">${video.title}</h3>
+    <time class="video-card__date" datetime="${video.date}">${video.date}</time>
+  `;
+  card.appendChild(body);
 
-    const duration = document.createElement('span');
-    duration.className = 'video-card__duration';
-    duration.textContent = video.duration;
-    card.appendChild(duration);
+  // 捲動到畫面內才自動播放（靜音、循環），離開畫面就暫停，避免同時十幾支影片一起播放拖效能
+  let userPaused = false;
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !userPaused) {
+            player.play().catch(() => {});
+            card.classList.add('is-playing');
+          } else {
+            player.pause();
+            card.classList.remove('is-playing');
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+    observer.observe(card);
+  }
 
-    const body = document.createElement('div');
-    body.className = 'video-card__body';
-    body.innerHTML = `
-      <h3 class="video-card__title">${video.title}</h3>
-      <time class="video-card__date" datetime="${video.date}">${video.date}</time>
-    `;
-    card.appendChild(body);
-
-    // 手機（沒有 hover）：第一次點擊只顯示資訊/播放鍵，不直接跳轉；
-    // 已經顯示過資訊後再點一次，才真的離開網站前往外部平台。
-    if (IS_TOUCH_DEVICE) {
-      card.addEventListener('click', (event) => {
-        if (!card.classList.contains('is-revealed')) {
-          event.preventDefault();
-          document.querySelectorAll('.video-card.is-revealed').forEach((el) => {
-            if (el !== card) el.classList.remove('is-revealed');
-          });
-          card.classList.add('is-revealed');
-        }
-      });
+  // 點一下：暫停／繼續（長按放開後也會觸發 click，用 flag 擋掉，避免放開瞬間又被切一次）
+  let suppressNextClick = false;
+  card.addEventListener('click', () => {
+    if (suppressNextClick) {
+      suppressNextClick = false;
+      return;
     }
-
-    container.appendChild(card);
+    if (player.paused) {
+      player.play().catch(() => {});
+      userPaused = false;
+      card.classList.add('is-playing');
+    } else {
+      player.pause();
+      userPaused = true;
+      card.classList.remove('is-playing');
+    }
   });
+
+  // 長按：按著的時候暫停，放開繼續播放（跟 Reels 一樣的手勢）
+  let pressTimer = null;
+  let wasPlayingBeforePress = false;
+  let didLongPress = false;
+
+  const startPress = (event) => {
+    if (event.target.closest('.video-card__outlink')) return;
+    didLongPress = false;
+    pressTimer = window.setTimeout(() => {
+      didLongPress = true;
+      wasPlayingBeforePress = !player.paused;
+      if (wasPlayingBeforePress) {
+        player.pause();
+        card.classList.add('is-long-pressed');
+      }
+    }, 180); // 180ms 後才視為長按，避免跟一般點擊搞混
+  };
+
+  const endPress = () => {
+    window.clearTimeout(pressTimer);
+    if (card.classList.contains('is-long-pressed')) {
+      card.classList.remove('is-long-pressed');
+      if (wasPlayingBeforePress) {
+        player.play().catch(() => {});
+      }
+    }
+    if (didLongPress) {
+      suppressNextClick = true; // 這次放開接下來會觸發的 click，要擋掉
+    }
+  };
+
+  card.addEventListener('pointerdown', startPress);
+  card.addEventListener('pointerup', endPress);
+  card.addEventListener('pointerleave', endPress);
+  card.addEventListener('pointercancel', endPress);
+
+  return card;
+}
+
+/**
+ * buildLinkOutCard
+ * 職責：還沒有本地影片檔案、只有外部平台連結時的舊行為（縮圖 + 連到外部平台）。
+ * 之後補上真正的影片檔案（video.videoSrc），會自動升級成上面的 Reel 互動卡片，不用改資料結構以外的東西。
+ */
+function buildLinkOutCard(video) {
+  const card = document.createElement('a');
+  card.className = 'video-card';
+  card.href = video.url || '#';
+  card.target = '_blank';
+  card.rel = 'noopener noreferrer';
+  card.setAttribute('data-reveal', '');
+  card.setAttribute('data-sfx-hover', '');
+  card.setAttribute('aria-label', `${video.title}（在新分頁開啟 ${video.platform}）`);
+
+  const media = createMediaElement({
+    src: video.thumbnail,
+    alt: video.title,
+    label: '待補影片縮圖',
+    className: 'video-card__image',
+  });
+  media.classList.add('video-card__media');
+  card.appendChild(media);
+
+  const scrim = document.createElement('span');
+  scrim.className = 'video-card__scrim';
+  scrim.setAttribute('aria-hidden', 'true');
+  card.appendChild(scrim);
+
+  const playRing = document.createElement('span');
+  playRing.className = 'video-card__play-ring';
+  playRing.setAttribute('aria-hidden', 'true');
+  playRing.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" />
+    </svg>
+  `;
+  card.appendChild(playRing);
+
+  const badge = document.createElement('span');
+  badge.className = 'video-card__badge';
+  badge.textContent = video.platform;
+  card.appendChild(badge);
+
+  const duration = document.createElement('span');
+  duration.className = 'video-card__duration';
+  duration.textContent = video.duration;
+  card.appendChild(duration);
+
+  const body = document.createElement('div');
+  body.className = 'video-card__body';
+  body.innerHTML = `
+    <h3 class="video-card__title">${video.title}</h3>
+    <time class="video-card__date" datetime="${video.date}">${video.date}</time>
+  `;
+  card.appendChild(body);
+
+  if (IS_TOUCH_DEVICE) {
+    card.addEventListener('click', (event) => {
+      if (!card.classList.contains('is-revealed')) {
+        event.preventDefault();
+        document.querySelectorAll('.video-card.is-revealed').forEach((el) => {
+          if (el !== card) el.classList.remove('is-revealed');
+        });
+        card.classList.add('is-revealed');
+      }
+    });
+  }
+
+  return card;
 }
 
 /* ---------------- 08 Future Goals ---------------- */
@@ -456,6 +619,8 @@ function renderGoals() {
   if (!container) return;
   container.innerHTML = '';
 
+  const TICK_COUNT = 24;
+
   GOALS_ITEMS.forEach((goal) => {
     const card = document.createElement('article');
     card.className = 'goal-card';
@@ -465,6 +630,11 @@ function renderGoals() {
       ? `<p class="goal-card__achieved">Achieved · ${goal.achievedLabel}</p>`
       : '';
 
+    const filledTicks = Math.round((goal.progress / 100) * TICK_COUNT);
+    const ticksHTML = Array.from({ length: TICK_COUNT })
+      .map((_, i) => `<span class="goal-card__tick${i < filledTicks ? ' is-filled' : ''}" style="--tick-index: ${i}"></span>`)
+      .join('');
+
     card.innerHTML = `
       <span class="goal-card__icon" aria-hidden="true">${goal.icon}</span>
       <div class="goal-card__body">
@@ -473,9 +643,11 @@ function renderGoals() {
           <h3 class="goal-card__title-zh">${goal.titleZh}</h3>
         </div>
         <p class="goal-card__desc">${goal.desc}</p>
-        <div class="goal-card__progress" role="progressbar" aria-valuenow="${goal.progress}" aria-valuemin="0" aria-valuemax="100" aria-label="${goal.titleZh} 進度">
-          <span class="goal-card__progress-fill" style="--progress: ${goal.progress}%"></span>
-          <span class="goal-card__progress-marker" style="--progress: ${goal.progress}%" aria-hidden="true"></span>
+        <div class="goal-card__progress-row">
+          <div class="goal-card__progress" role="progressbar" aria-valuenow="${goal.progress}" aria-valuemin="0" aria-valuemax="100" aria-label="${goal.titleZh} 進度">
+            ${ticksHTML}
+          </div>
+          <span class="goal-card__progress-value">${goal.progress}%</span>
         </div>
         ${achievedHTML}
       </div>
