@@ -132,6 +132,7 @@ function buildGridItem(items, item, index, emptyLabel) {
   figure.className = 'gallery-item';
   figure.setAttribute('data-reveal', '');
   figure.setAttribute('data-index', String(index));
+  figure.setAttribute('data-sfx-hover', '');
   figure.setAttribute('aria-label', item.caption || `開啟第 ${index + 1} 張照片`);
 
   const media = createNaturalMediaElement({
@@ -380,6 +381,7 @@ function renderVideos() {
     card.target = '_blank';
     card.rel = 'noopener noreferrer';
     card.setAttribute('data-reveal', '');
+    card.setAttribute('data-sfx-hover', '');
     card.setAttribute('aria-label', `${video.title}（在新分頁開啟 ${video.platform}）`);
 
     const media = createMediaElement({
