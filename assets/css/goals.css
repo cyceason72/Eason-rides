@@ -123,63 +123,63 @@
   max-width: 42ch;
 }
 
-/* ---------- Progress Line ----------
-   不是 Loading Bar：非常細（1.5px）、直角不用圓潤的膠囊造型，
-   已完成部分是 Aprilia 紅，其餘是深灰，中間一個小小的位置標記點。 */
+/* ---------- Progress ----------
+   分段刻度式，像儀表板轉速刻度那樣的精密感，不是單調的一條線。
+   已完成的刻度是 Aprilia 紅，其餘是深灰；旁邊搭配一個數字，
+   進場時刻度依序點亮，hover 時再輕輕掃過一次。 */
 
-.goal-card__progress {
-  position: relative;
+.goal-card__progress-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   margin-top: auto;
   padding-top: var(--space-3);
-  height: 1.5px;
+}
+
+.goal-card__progress {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  flex: 1;
+  height: 14px;
+}
+
+.goal-card__tick {
+  flex: 1;
+  height: 60%;
+  min-width: 2px;
+  border-radius: 1px;
   background: var(--color-border-strong);
+  transform-origin: bottom;
+  transition: background 500ms var(--ease-out),
+              height 500ms var(--ease-out),
+              transform 400ms var(--ease-out);
+  transition-delay: calc(var(--tick-index) * 12ms);
 }
 
-.goal-card__progress-fill {
-  display: block;
-  position: absolute;
-  top: var(--space-3);
-  left: 0;
-  height: 1.5px;
-  width: var(--progress, 0%);
+.goal-card__tick.is-filled {
+  height: 100%;
   background: var(--color-accent);
-  background-image: linear-gradient(
-    90deg,
-    var(--color-accent) 0%,
-    rgba(210, 0, 28, 0.7) 50%,
-    var(--color-accent) 100%
-  );
-  background-size: 200% 100%;
-  transition: width 1200ms var(--ease-out);
 }
 
-.goal-card__progress-marker {
-  position: absolute;
-  top: calc(var(--space-3) - 2px);
-  left: var(--progress, 0%);
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  transform: translateX(-50%);
-  transition: left 1200ms var(--ease-out);
+.goal-card:hover .goal-card__tick.is-filled,
+.goal-card:focus-within .goal-card__tick.is-filled {
+  background: var(--color-gold);
+  transition-delay: calc(var(--tick-index) * 18ms);
 }
 
-/* Hover 時 Progress Line 出現非常細微的流動感（漸層位移），不是誇張的跑馬燈 */
-.goal-card:hover .goal-card__progress-fill,
-.goal-card:focus-within .goal-card__progress-fill {
-  animation: goalProgressFlow 2200ms linear infinite;
-}
-
-@keyframes goalProgressFlow {
-  from { background-position: 0% 0; }
-  to { background-position: -200% 0; }
+.goal-card__progress-value {
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+  min-width: 2.6em;
+  text-align: right;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .goal-card:hover .goal-card__progress-fill,
-  .goal-card:focus-within .goal-card__progress-fill {
-    animation: none;
+  .goal-card__tick {
+    transition: none;
   }
 }
 
