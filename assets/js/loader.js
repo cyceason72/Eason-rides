@@ -4,21 +4,23 @@
  * 只在「這次瀏覽期間」的第一次進站播放（sessionStorage），
  * 重新整理或切換內部頁面不會再播一次。
  *
- * 時間軸（對照設計稿）：
+ * 重要：瀏覽器的自動播放政策規定「聲音一定要接在使用者手勢之後」才會被允許播放，
+ * 這不是能被繞過的限制。所以整個時間序列改成「等使用者點擊 Enter 才開始」，
+ * 而不是頁面一載入就自動跑——這樣才能確保聲音真的會響。
+ * 如果使用者遲遲沒有互動（例如用鍵盤瀏覽器焦點還沒移過來），
+ * 8 秒後會自動跳過、直接顯示網站（沒有聲音，但不會卡住使用者）。
+ *
+ * 時間軸（從使用者點擊 Enter 那一刻起算）：
  *   0.0s        全黑，播放電門聲「喀」
  *   0.5s→1.6s   Logo + Slogan 淡入並停留
  *   1.6s        播放發動聲「轟──」，Logo 開始淡出，
  *               Loader 背景開始透明化（＝與 Hero 的 Crossfade），
  *               Hero 內容／Navbar 同時開始淡入
  *   2.2s        Loader 完全透明，可以安全移除
- *   ~2.6-2.8s   Hero 內部序列（Title/Tagline/CTA）與 Navbar 都完成淡入
- *
- * 音效說明：瀏覽器的自動播放政策會擋掉「使用者還沒互動過就出聲音」的音訊，
- * 這不是能被繞過的限制。這裡用 best-effort 播放：擋掉就靜默失敗，
- * 視覺流程完全不受影響，不會因為聲音被擋而卡住或報錯。
  */
 
 const OPENING_SESSION_KEY = 'eason-rides-opening-played';
+const OPENING_FALLBACK_DELAY = 8000; // 沒有互動時的安全逾時
 
 const OPENING_TIMING = {
   logoIn: 500,
@@ -32,7 +34,7 @@ function playOpeningSfx(elementId) {
   const playPromise = el.play();
   if (playPromise && typeof playPromise.catch === 'function') {
     playPromise.catch(() => {
-      /* 瀏覽器自動播放政策擋下，靜默略過，開場動畫的視覺節奏照常進行 */
+      /* 極少數情況下仍可能被擋下，靜默略過，視覺節奏照常進行 */
     });
   }
 }
@@ -41,7 +43,7 @@ function hasOpeningPlayedThisSession() {
   try {
     return sessionStorage.getItem(OPENING_SESSION_KEY) === '1';
   } catch (e) {
-    return false; // 無痕模式等 sessionStorage 被封鎖時，視同「還沒播過」，寧可多播一次也不要出錯
+    return false; // 無痕模式等 sessionStorage 被封鎖時，視同「還沒播過」
   }
 }
 
@@ -56,6 +58,7 @@ function markOpeningPlayed() {
 function initLoader() {
   const loader = document.querySelector('.loader');
   const content = document.querySelector('.loader__content');
+  const enterBtn = document.querySelector('.loader__enter');
   const hero = document.querySelector('.hero');
   const nav = document.querySelector('.nav');
 
@@ -75,29 +78,44 @@ function initLoader() {
     return;
   }
 
-  markOpeningPlayed();
-
   if (!loader || !content) {
     revealSiteChrome();
     return;
   }
 
-  playOpeningSfx('sfx-click'); // t = 0s
+  let started = false;
 
-  window.setTimeout(() => {
-    content.classList.add('is-visible');
-  }, OPENING_TIMING.logoIn);
+  function beginSequence(withSound) {
+    if (started) return;
+    started = true;
+    markOpeningPlayed();
 
-  window.setTimeout(() => {
-    playOpeningSfx('sfx-engine'); // t = 1.6s
-    content.classList.remove('is-visible');
-    content.classList.add('is-hiding');
-    loader.classList.add('is-fading'); // Loader 背景透明化＝與 Hero 的 Crossfade
-    revealSiteChrome(); // Hero／Navbar 同時開始淡入
-  }, OPENING_TIMING.logoHoldUntil);
+    if (enterBtn) enterBtn.classList.add('is-hidden');
 
-  window.setTimeout(() => {
-    loader.classList.add('is-done');
-    loader.addEventListener('transitionend', () => loader.remove(), { once: true });
-  }, OPENING_TIMING.loaderDoneAt);
+    if (withSound) playOpeningSfx('sfx-click'); // t = 0s
+
+    window.setTimeout(() => {
+      content.classList.add('is-visible');
+    }, OPENING_TIMING.logoIn);
+
+    window.setTimeout(() => {
+      if (withSound) playOpeningSfx('sfx-engine'); // t = 1.6s
+      content.classList.remove('is-visible');
+      content.classList.add('is-hiding');
+      loader.classList.add('is-fading'); // Loader 背景透明化＝與 Hero 的 Crossfade
+      revealSiteChrome(); // Hero／Navbar 同時開始淡入
+    }, OPENING_TIMING.logoHoldUntil);
+
+    window.setTimeout(() => {
+      loader.classList.add('is-done');
+      loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+    }, OPENING_TIMING.loaderDoneAt);
+  }
+
+  if (enterBtn) {
+    enterBtn.addEventListener('click', () => beginSequence(true), { once: true });
+  }
+
+  // 沒有互動也不能讓使用者卡住：安全逾時後自動開始（沒有聲音，因為沒有使用者手勢）
+  window.setTimeout(() => beginSequence(false), OPENING_FALLBACK_DELAY);
 }
