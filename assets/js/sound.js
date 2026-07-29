@@ -2,15 +2,12 @@
  * sound.js — 全站 Sound Design 系統
  * 職責：管理 Immersive Mode 開關狀態，並提供統一的音效播放介面。
  *
- * 設計原則（跟設計稿一致）：
- *   - 音效寧可少，也不要多。預設整站完全安靜。
- *   - 只有使用者主動打開右下角「Immersive Mode」，才會啟用所有互動音效。
- *   - 開場動畫的電門聲／發動聲例外：那是使用者點擊 Enter 當下的一次性儀式感，
- *     用「點擊 Enter」本身當作那一刻的聲音同意，邏輯獨立寫在 loader.js。
- *   - 所有音效必須是真實錄音（引擎、快門、風聲、實體按鍵那種），
- *     絕不用合成的科技音效（beep / 電子音效）湊數。
- *     目前只有開場那兩段是真實素材；Scroll Whoosh／Camera Shutter／UI Tap
- *     這三個都還沒有素材，先把掛勾點做好，之後補檔案就會自動生效，不用改邏輯。
+ * 設計原則：
+ *   - 音效寧可少，也不要多。
+ *   - 點擊開場動畫的 Enter 按鈕後，自動開啟全站互動音效（不用再額外開關一次），
+ *     右下角的 Immersive Mode 按鈕保留給想要靜音的人自己關掉。
+ *   - 音效不要求一定是真實錄音，但要有質感：偏機械／空氣的質地，
+ *     避免常見的電子系統音效（beep / 科技感提示音）。
  */
 
 const IMMERSIVE_MODE_KEY = 'eason-rides-immersive-mode';
@@ -54,21 +51,23 @@ function playAmbientSfx(elementId, { volume = 1 } = {}) {
   }
 }
 
+function syncImmersiveToggleUI() {
+  const toggle = document.querySelector('[data-immersive-toggle]');
+  if (!toggle) return;
+  const on = isImmersiveModeOn();
+  toggle.setAttribute('aria-pressed', String(on));
+  toggle.classList.toggle('is-on', on);
+}
+
 function initImmersiveToggle() {
   const toggle = document.querySelector('[data-immersive-toggle]');
   if (!toggle) return;
 
-  const sync = () => {
-    const on = isImmersiveModeOn();
-    toggle.setAttribute('aria-pressed', String(on));
-    toggle.classList.toggle('is-on', on);
-  };
-
-  sync();
+  syncImmersiveToggleUI();
 
   toggle.addEventListener('click', () => {
     setImmersiveMode(!isImmersiveModeOn());
-    sync();
+    syncImmersiveToggleUI();
   });
 }
 
@@ -109,6 +108,6 @@ function initHoverSfxDelegation() {
     if (now - lastPlayedAt < HOVER_COOLDOWN_MS) return;
     lastPlayedAt = now;
 
-    playAmbientSfx('sfx-tap', { volume: 0.22 }); // 音量刻意壓得比點擊還低，只是一個很輕的存在感
+    playAmbientSfx('sfx-hover', { volume: 0.35 }); // 獨立的 hover 專屬音效，跟點擊聲做出區隔
   });
 }
