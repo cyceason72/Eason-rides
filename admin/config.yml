@@ -36,27 +36,20 @@ public_folder: "assets/images"
 
 collections:
   - name: "gallery"
-    label: "旅行相簿 Albums"
+    label: "靜態紀錄 Static"
     files:
       - name: "gallery"
-        label: "相簿列表"
+        label: "靜態紀錄照片列表"
         file: "content/gallery.json"
         fields:
-          - label: "相簿（每一趟出門是一個相簿）"
-            name: "albums"
+          - label: "照片"
+            name: "items"
             widget: "list"
-            summary: "{{fields.date}} — {{fields.location}}"
+            summary: "{{fields.caption}}"
             fields:
-              - { label: "日期", name: "date", widget: "string", hint: "格式範例：2026 · 06 · 08" }
-              - { label: "地點（選填）", name: "location", widget: "string", required: false, default: "" }
-              - { label: "心得（選填）", name: "note", widget: "text", required: false, default: "" }
-              - label: "照片／影片（第一個會當封面）"
-                name: "media"
-                widget: "list"
-                summary: "{{fields.type}}"
-                fields:
-                  - { label: "類型", name: "type", widget: "select", options: ["image", "video"], default: "image" }
-                  - { label: "檔案", name: "src", widget: "file" }
+              - { label: "照片", name: "image", widget: "image" }
+              - { label: "說明文字（選填，滑鼠移上去會顯示）", name: "caption", widget: "string", required: false, default: "" }
+              - { label: "Alt 文字（選填，給無障礙輔助工具用）", name: "alt", widget: "string", required: false, default: "" }
 
   - name: "panning"
     label: "追焦紀錄 Panning"
