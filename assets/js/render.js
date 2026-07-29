@@ -396,13 +396,22 @@ function buildReelCard(video) {
 
   const player = document.createElement('video');
   player.className = 'video-card__media video-card__player';
-  player.src = video.videoSrc;
+  // 懶載入：先不設定 src，避免影片一多（例如 17 支）就在頁面載入當下同時搶頻寬。
+  // 真正的 src 要等下面的 lazyLoadObserver 偵測到「快捲到了」才會設定。
   if (video.thumbnail) player.poster = video.thumbnail; // 避免影片還沒開始播放前顯示一片黑
   player.muted = true;
   player.loop = true;
   player.playsInline = true;
-  player.preload = 'auto';
+  player.preload = 'none';
   card.appendChild(player);
+
+  let videoSrcLoaded = false;
+  function ensureVideoSrcLoaded() {
+    if (videoSrcLoaded) return;
+    videoSrcLoaded = true;
+    player.preload = 'auto';
+    player.src = video.videoSrc;
+  }
 
   // 沒有手動上傳縮圖時，自動抓影片播放到 25% 的畫面當封面（通常比開頭第一幀更有內容，
   // 不會是還沒騎出去、鏡頭還沒對好的那種畫面）。抓到那一幀之後就定格在那，直到真正開始播放。
@@ -462,6 +471,25 @@ function buildReelCard(video) {
   `;
   card.appendChild(body);
 
+  // 懶載入：卡片快要進入畫面（提前 800px）才真的開始下載影片，
+  // 一次 17 支影片也不會同時搶頻寬拖慢首次載入。
+  if ('IntersectionObserver' in window) {
+    const lazyLoadObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            ensureVideoSrcLoaded();
+            lazyLoadObserver.disconnect();
+          }
+        });
+      },
+      { rootMargin: '800px 0px' }
+    );
+    lazyLoadObserver.observe(card);
+  } else {
+    ensureVideoSrcLoaded();
+  }
+
   // 捲動到畫面內才自動播放（靜音、循環），離開畫面就暫停，避免同時十幾支影片一起播放拖效能
   let userPaused = false;
   if ('IntersectionObserver' in window) {
@@ -469,6 +497,7 @@ function buildReelCard(video) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !userPaused) {
+            ensureVideoSrcLoaded();
             player.play().catch(() => {});
             card.classList.add('is-playing');
           } else {
@@ -482,22 +511,17 @@ function buildReelCard(video) {
     observer.observe(card);
   }
 
-  // 點一下：暫停／繼續（長按放開後也會觸發 click，用 flag 擋掉，避免放開瞬間又被切一次）
+  // 點一下：直接全螢幕開啟、有聲音播放（長按放開後也會觸發 click，用 flag 擋掉，避免放開瞬間又被誤觸開啟）
   let suppressNextClick = false;
   card.addEventListener('click', () => {
     if (suppressNextClick) {
       suppressNextClick = false;
       return;
     }
-    if (player.paused) {
-      player.play().catch(() => {});
-      userPaused = false;
-      card.classList.add('is-playing');
-    } else {
-      player.pause();
-      userPaused = true;
-      card.classList.remove('is-playing');
-    }
+    player.pause();
+    card.classList.remove('is-playing');
+    playAmbientSfx('sfx-shutter', { volume: 0.6 });
+    openLightbox([{ type: 'video', src: video.videoSrc, alt: video.title }], 0, video.title);
   });
 
   // 長按：按著的時候暫停，放開繼續播放（跟 Reels 一樣的手勢）
