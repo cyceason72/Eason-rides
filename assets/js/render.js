@@ -401,8 +401,18 @@ function buildReelCard(video) {
   player.muted = true;
   player.loop = true;
   player.playsInline = true;
-  player.preload = 'auto'; // 沒有縮圖時，也能盡快讀到第一幀畫面顯示出來，而不是黑畫面
+  player.preload = 'auto';
   card.appendChild(player);
+
+  // 沒有手動上傳縮圖時，自動抓影片播放到 25% 的畫面當封面（通常比開頭第一幀更有內容，
+  // 不會是還沒騎出去、鏡頭還沒對好的那種畫面）。抓到那一幀之後就定格在那，直到真正開始播放。
+  if (!video.thumbnail) {
+    player.addEventListener('loadedmetadata', () => {
+      if (isFinite(player.duration) && player.duration > 0) {
+        player.currentTime = player.duration * 0.25;
+      }
+    }, { once: true });
+  }
 
   const scrim = document.createElement('span');
   scrim.className = 'video-card__scrim';
@@ -425,6 +435,24 @@ function buildReelCard(video) {
   player.addEventListener('loadedmetadata', () => {
     duration.textContent = formatDuration(player.duration);
   });
+
+  const expandBtn = document.createElement('button');
+  expandBtn.type = 'button';
+  expandBtn.className = 'video-card__expand';
+  expandBtn.setAttribute('aria-label', `全螢幕觀賞：${video.title}`);
+  expandBtn.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M9 4H5a1 1 0 00-1 1v4M15 4h4a1 1 0 011 1v4M9 20H5a1 1 0 01-1-1v-4M15 20h4a1 1 0 001-1v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  `;
+  expandBtn.addEventListener('click', (event) => {
+    event.stopPropagation(); // 不要連帶觸發卡片本身的暫停/繼續
+    player.pause();
+    card.classList.remove('is-playing');
+    playAmbientSfx('sfx-shutter', { volume: 0.6 });
+    openLightbox([{ type: 'video', src: video.videoSrc, alt: video.title }], 0, video.title);
+  });
+  card.appendChild(expandBtn);
 
   const body = document.createElement('div');
   body.className = 'video-card__body';
