@@ -26,6 +26,74 @@
         {
           "type": "image",
           "src": "assets/images/img_0079.jpg"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2025-12-21-a.mp4"
+        },
+        {
+          "type": "video",
+          "src": "assets/videos/journal-2025-12-21-b.mp4"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-01.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-02.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-03.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-04.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-05.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-06.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-07.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-08.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-09.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-10.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-11.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-12.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-13.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-14.jpg"
+        },
+        {
+          "type": "image",
+          "src": "assets/images/journal-2025-12-21-15.jpg"
         }
       ],
       "date": "2025-12-21",
