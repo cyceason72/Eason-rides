@@ -1,6 +1,108 @@
 {
   "items": [
     {
+      "thumbnail": "assets/images/video-2026-01-24-v01.jpg",
+      "videoSrc": "assets/videos/video-2026-01-24-v01.mp4",
+      "title": "第一次的皮衣",
+      "date": "2026-01-24"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-04-26-v02.jpg",
+      "videoSrc": "assets/videos/video-2026-04-26-v02.mp4",
+      "title": "嗨～",
+      "date": "2026-04-26"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-02-21-v03.jpg",
+      "videoSrc": "assets/videos/video-2026-02-21-v03.mp4",
+      "title": "享受過程",
+      "date": "2026-02-21"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-05-03-v04.jpg",
+      "videoSrc": "assets/videos/video-2026-05-03-v04.mp4",
+      "title": "快磨完了....",
+      "date": "2026-05-03"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-06-10-v05.jpg",
+      "videoSrc": "assets/videos/video-2026-06-10-v05.mp4",
+      "title": "👸🏻🎀💅",
+      "date": "2026-06-10"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-01-19-v06.jpg",
+      "videoSrc": "assets/videos/video-2026-01-19-v06.mp4",
+      "title": "出門大聲！",
+      "date": "2026-01-19"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-04-03-v07.jpg",
+      "videoSrc": "assets/videos/video-2026-04-03-v07.mp4",
+      "title": "愛旭海",
+      "date": "2026-04-03"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-06-08-v08.jpg",
+      "videoSrc": "assets/videos/video-2026-06-08-v08.mp4",
+      "title": "栗子🌰",
+      "date": "2026-06-08"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-05-11-v09.jpg",
+      "videoSrc": "assets/videos/video-2026-05-11-v09.mp4",
+      "title": "祐祐",
+      "date": "2026-05-11"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-04-18-v10.jpg",
+      "videoSrc": "assets/videos/video-2026-04-18-v10.mp4",
+      "title": "小琳",
+      "date": "2026-04-18"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-04-17-v11.jpg",
+      "videoSrc": "assets/videos/video-2026-04-17-v11.mp4",
+      "title": "好多人呦",
+      "date": "2026-04-17"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-06-07-v12.jpg",
+      "videoSrc": "assets/videos/video-2026-06-07-v12.mp4",
+      "title": "拿坡里最速外送",
+      "date": "2026-06-07"
+    },
+    {
+      "thumbnail": "assets/images/video-2025-12-21-v13.jpg",
+      "videoSrc": "assets/videos/video-2025-12-21-v13.mp4",
+      "title": "聖誕老人🎅🏻",
+      "date": "2025-12-21"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-06-22-v14.jpg",
+      "videoSrc": "assets/videos/video-2026-06-22-v14.mp4",
+      "title": "台南騎車",
+      "date": "2026-06-22"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-06-29-v15.jpg",
+      "videoSrc": "assets/videos/video-2026-06-29-v15.mp4",
+      "title": "黑白無常",
+      "date": "2026-06-29"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-05-20-v16.jpg",
+      "videoSrc": "assets/videos/video-2026-05-20-v16.mp4",
+      "title": "西濱日落",
+      "date": "2026-05-20"
+    },
+    {
+      "thumbnail": "assets/images/video-2026-02-21-v17.jpg",
+      "videoSrc": "assets/videos/video-2026-02-21-v17.mp4",
+      "title": "看我",
+      "date": "2026-02-21"
+    },
+    {
       "thumbnail": "assets/images/journal-2026-05-03-01.jpg",
       "videoSrc": "assets/videos/journal-2026-05-03-v01.mp4",
       "title": "K1 賽道 Track Day",
