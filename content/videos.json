@@ -1,20 +1,22 @@
 {
   "items": [
     {
-      "thumbnail": "assets/images/video-01.jpg",
-      "title": "陽金公路一日騎",
-      "date": "2026-03-14",
-      "duration": "08:24",
-      "platform": "YouTube",
-      "url": "#"
+      "thumbnail": "assets/images/journal-2026-05-03-01.jpg",
+      "videoSrc": "assets/videos/journal-2026-05-03-v01.mp4",
+      "title": "K1 賽道 Track Day",
+      "date": "2026-05-03",
+      "duration": "00:08",
+      "platform": "Reels",
+      "url": ""
     },
     {
-      "thumbnail": "assets/images/video-02.jpg",
-      "title": "台三線長途紀錄",
-      "date": "2026-01-05",
-      "duration": "00:42",
+      "thumbnail": "assets/images/journal-2026-03-16-01.jpg",
+      "videoSrc": "assets/videos/journal-2026-03-16-v01.mp4",
+      "title": "武嶺瘋",
+      "date": "2026-03-16",
+      "duration": "00:10",
       "platform": "Reels",
-      "url": "#"
+      "url": ""
     }
   ]
 }
