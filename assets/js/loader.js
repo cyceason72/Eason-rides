@@ -1,31 +1,31 @@
 /**
  * loader.js — Opening Sequence
- * 職責：黑畫面 → Logo 淡入淡出 → 與 Hero/Navbar Crossfade，全程約 2.6 秒。
- * 只在「這次瀏覽期間」的第一次進站播放（sessionStorage），
- * 重新整理或切換內部頁面不會再播一次。
+ * 職責：黑畫面 → Logo（儀表通電感）淡入淡出 → 與 Hero/Navbar Crossfade，全程約 2.6 秒。
+ * 每次進站（含重新整理）都會播放，不做「只播一次」的記憶。
  *
  * 重要：瀏覽器的自動播放政策規定「聲音一定要接在使用者手勢之後」才會被允許播放，
  * 這不是能被繞過的限制。所以整個時間序列改成「等使用者點擊 Enter 才開始」，
  * 而不是頁面一載入就自動跑——這樣才能確保聲音真的會響。
- * 如果使用者遲遲沒有互動（例如用鍵盤瀏覽器焦點還沒移過來），
- * 8 秒後會自動跳過、直接顯示網站（沒有聲音，但不會卡住使用者）。
+ * 如果使用者遲遲沒有互動，8 秒後會自動跳過、直接顯示網站（沒有聲音，但不會卡住使用者）。
  *
  * 時間軸（從使用者點擊 Enter 那一刻起算）：
  *   0.0s        全黑，播放電門聲「喀」
- *   0.5s→1.6s   Logo + Slogan 淡入並停留
+ *   0.5s→1.6s   Logo + Slogan 淡入並停留（含指針掃描線 + 背光暈開的儀表通電感）
  *   1.6s        播放發動聲「轟──」，Logo 開始淡出，
  *               Loader 背景開始透明化（＝與 Hero 的 Crossfade），
- *               Hero 內容／Navbar 同時開始淡入
+ *               Hero 內容／Navbar 同時開始淡入，Hero 照片有一個輕微悸動
+ *   2.0s→3.2s   排氣聲用指數曲線平順淡出（不是硬切）
  *   2.2s        Loader 完全透明，可以安全移除
  */
 
-const OPENING_SESSION_KEY = 'eason-rides-opening-played';
 const OPENING_FALLBACK_DELAY = 8000; // 沒有互動時的安全逾時
 
 const OPENING_TIMING = {
   logoIn: 500,
   logoHoldUntil: 1600,
   loaderDoneAt: 2200,
+  audioFadeStart: 2000,
+  audioFadeDuration: 1200,
 };
 
 function playOpeningSfx(elementId) {
@@ -42,8 +42,9 @@ function playOpeningSfx(elementId) {
 
 /**
  * fadeOutAudio
- * 職責：讓聲音跟著開場動畫一起「收尾」，而不是動畫都結束了聲音還孤零零地繼續播。
- * 用 rAF 把音量從目前值線性降到 0，結束後暫停並重置播放位置。
+ * 職責：讓排氣聲平順地「漸漸消失」，不是硬切。
+ * 人耳對音量的感受是接近對數（指數）曲線，用線性淡出聽起來反而像「先快速變小聲、
+ * 後面又拖著尾巴」，所以這裡用 (1-progress)^2 的曲線讓衰減更符合聽覺直覺。
  */
 function fadeOutAudio(elementId, durationMs) {
   const el = document.getElementById(elementId);
@@ -54,7 +55,8 @@ function fadeOutAudio(elementId, durationMs) {
 
   function step(now) {
     const progress = Math.min((now - startTime) / durationMs, 1);
-    el.volume = Math.max(0, startVolume * (1 - progress));
+    const eased = Math.pow(1 - progress, 2);
+    el.volume = Math.max(0, startVolume * eased);
     if (progress < 1) {
       requestAnimationFrame(step);
     } else {
@@ -65,22 +67,6 @@ function fadeOutAudio(elementId, durationMs) {
   }
 
   requestAnimationFrame(step);
-}
-
-function hasOpeningPlayedThisSession() {
-  try {
-    return sessionStorage.getItem(OPENING_SESSION_KEY) === '1';
-  } catch (e) {
-    return false; // 無痕模式等 sessionStorage 被封鎖時，視同「還沒播過」
-  }
-}
-
-function markOpeningPlayed() {
-  try {
-    sessionStorage.setItem(OPENING_SESSION_KEY, '1');
-  } catch (e) {
-    /* 忽略；不影響動畫本身 */
-  }
 }
 
 function initLoader() {
@@ -99,8 +85,8 @@ function initLoader() {
     if (nav) nav.classList.add('is-revealed');
   };
 
-  // 已經在這次瀏覽播過，或使用者偏好減少動態效果：直接跳到最終畫面，不重播開場。
-  if (prefersReducedMotion || hasOpeningPlayedThisSession()) {
+  // 使用者偏好減少動態效果：直接跳到最終畫面，不播開場（尊重無障礙設定，這個不受「每次都播」影響）。
+  if (prefersReducedMotion) {
     if (loader) loader.remove();
     revealSiteChrome();
     return;
@@ -116,7 +102,6 @@ function initLoader() {
   function beginSequence(withSound) {
     if (started) return;
     started = true;
-    markOpeningPlayed();
 
     if (enterBtn) enterBtn.classList.add('is-hidden');
 
@@ -140,8 +125,11 @@ function initLoader() {
     window.setTimeout(() => {
       loader.classList.add('is-done');
       loader.addEventListener('transitionend', () => loader.remove(), { once: true });
-      if (withSound) fadeOutAudio('sfx-engine', 450); // 動畫收尾，聲音也跟著淡出，不會孤零零地繼續播
     }, OPENING_TIMING.loaderDoneAt);
+
+    window.setTimeout(() => {
+      if (withSound) fadeOutAudio('sfx-engine', OPENING_TIMING.audioFadeDuration);
+    }, OPENING_TIMING.audioFadeStart);
   }
 
   if (enterBtn) {
