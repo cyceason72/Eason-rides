@@ -18,7 +18,7 @@ const SITE_CONTENT = {
   /* ---------------- 02 About ----------------
      photo 留空字串 '' 或路徑錯誤時，會自動顯示灰底佔位樣式。 */
   about: {
-    photo: 'assets/images/about.JPG',
+    photo: 'assets/images/about.webp',
     name: 'Eason',
     location: 'Taiwan',
     intro:
@@ -37,7 +37,7 @@ const SITE_CONTENT = {
   bikes: [
     {
       name: 'Aprilia RS660',
-      image: 'assets/images/bike.JPG',
+      image: 'assets/images/bike.webp',
       alt: 'Aprilia RS660 側面照',
       specs: [
         { label: 'Model', value: 'Aprilia RS660' },
