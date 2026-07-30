@@ -144,7 +144,19 @@
       </div>
 
       <div class="hero__visual">
-        <img class="hero__image" src="assets/images/hero-bike.jpeg" alt="Eason 騎乘 Aprilia RS660 過彎" loading="eager" fetchpriority="high" />
+        <video
+          class="hero__image"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          poster="assets/images/hero-bike.jpeg"
+          aria-label="Eason 騎車出遊片段——出門大聲！"
+        >
+          <source src="assets/videos/video-2026-01-19-v06.mp4" type="video/mp4" />
+          <img class="hero__image" src="assets/images/hero-bike.jpeg" alt="Eason 騎乘 Aprilia RS660 過彎" loading="eager" fetchpriority="high" />
+        </video>
       </div>
 
       <a class="hero__scroll" href="#about" aria-label="往下捲動至 About">
@@ -312,5 +324,8 @@
   <script>
     document.getElementById('footer-year').textContent = new Date().getFullYear();
   </script>
+  <!-- Vercel Analytics：要到 Vercel 專案設定 → Analytics 開啟功能才會真的開始記錄，
+       這裡先把追蹤腳本接好，開關留給你自己決定要不要打開。 -->
+  <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

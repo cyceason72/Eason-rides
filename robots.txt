@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eason-rides.vercel.app/sitemap.xml
