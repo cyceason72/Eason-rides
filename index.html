@@ -34,6 +34,9 @@
 
   <!-- Favicon -->
   <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#070707" />
 
   <!-- 提早開始下載 Hero 主視覺（LCP 元素），改善首屏載入速度 -->
   <link rel="preload" as="image" href="assets/images/hero-bike.webp" />
@@ -45,7 +48,7 @@
     "@type": "Person",
     "name": "Eason",
     "url": "https://eason-rides.vercel.app/",
-    "sameAs": []
+    "sameAs": ["https://www.instagram.com/chiiiuu2_"]
   }
   </script>
 
@@ -58,7 +61,7 @@
   />
 
   <!-- Styles（順序即層疊順序：reset → tokens → base → 導覽/loader → 各區塊） -->
-  <link rel="stylesheet" href="assets/css/bundle.css?v=20260730b" />
+  <link rel="stylesheet" href="assets/css/bundle.css?v=20260730c" />
 </head>
 <body>
   <a class="skip-link" href="#main">跳至主要內容</a>
@@ -302,6 +305,23 @@
       </div>
     </div>
   </footer>
+
+  <!-- ================= 常駐 IG 追蹤按鈕 ================= -->
+  <a
+    class="ig-float"
+    href="https://www.instagram.com/chiiiuu2_"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="在 Instagram 上追蹤 @chiiiuu2_"
+    data-sfx-tap
+  >
+    <svg class="ig-float__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4" />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+    </svg>
+    <span class="ig-float__label">@chiiiuu2_</span>
+  </a>
 
   <!-- ================= Immersive Mode 開關 ================= -->
   <button

@@ -63,3 +63,59 @@
     padding: 0.55rem;
   }
 }
+
+/* ============================================================
+   常駐 IG 追蹤按鈕——左下角，跟右下角 Immersive Mode 對稱。
+   這顆刻意常駐、刻意用品牌紅當 hover 色，因為這是全站最重要的轉換入口：
+   不管訪客從哪裡進站（Google 搜尋、朋友分享連結、IG bio 連結繞一圈回來），
+   都不用往下滑找 About 才看得到追蹤入口。
+   ============================================================ */
+
+.ig-float {
+  position: fixed;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  z-index: var(--z-nav);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-strong);
+  background: rgba(7, 7, 7, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--color-text-secondary);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tracking-wide);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.ig-float:hover,
+.ig-float:focus-visible {
+  opacity: 1;
+  color: var(--color-text);
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.ig-float__icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .ig-float {
+    padding: 0.5rem 0.7rem;
+  }
+
+  .ig-float__label {
+    display: none; /* 手機版留圖示就好，跟 immersive-toggle 手機版的收斂邏輯一致 */
+  }
+}
