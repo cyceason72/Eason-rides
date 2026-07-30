@@ -114,10 +114,28 @@ function initActiveSectionSpy() {
 function initAnchorScroll() {
   const nav = document.querySelector('.nav');
 
-  const scrollToTarget = (target) => {
+  const measureTop = (target) => {
     const navHeight = nav ? nav.getBoundingClientRect().height : 0;
-    const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 12;
-    window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+    return target.getBoundingClientRect().top + window.scrollY - navHeight - 12;
+  };
+
+  let correctionTimer = null;
+
+  const scrollToTarget = (target) => {
+    window.scrollTo({ top: Math.max(measureTop(target), 0), behavior: 'smooth' });
+
+    // 保險機制：萬一捲動動畫進行的途中，畫面上方（前面的區塊）因為某些非同步內容
+    // 還沒完全穩定而造成高度變動，動畫捲到的位置就會跟原本算的對不上，
+    // 結果停在鄰近的另一個區塊。這裡在動畫大致結束後重新量一次，位置對不上
+    // 就直接補正過去，不管是什麼原因造成的偏移都能修正回來。
+    if (correctionTimer) window.clearTimeout(correctionTimer);
+    const correct = () => {
+      const top = measureTop(target);
+      if (Math.abs(window.scrollY - top) > 6) {
+        window.scrollTo({ top: Math.max(top, 0), behavior: 'auto' });
+      }
+    };
+    correctionTimer = window.setTimeout(correct, 700);
   };
 
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
@@ -128,7 +146,13 @@ function initAnchorScroll() {
       const target = document.getElementById(id);
       if (!target) return; // 找不到目標就交還給瀏覽器預設行為
       event.preventDefault();
-      scrollToTarget(target);
+      // 用兩層 requestAnimationFrame 確保點擊當下若有任何排隊中的版面異動
+      // （例如手機選單正要收合）都先跑完，再量測正確位置。
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          scrollToTarget(target);
+        });
+      });
       history.pushState(null, '', `#${id}`);
     });
   });

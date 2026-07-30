@@ -58,6 +58,7 @@ p {
 .section {
   padding-block: var(--space-8);
   position: relative;
+  scroll-margin-top: 88px; /* 保底防呆：跟浮動導覽列高度差不多，避免區塊頂端被擋住 */
 }
 
 .section-head {
