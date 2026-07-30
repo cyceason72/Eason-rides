@@ -387,6 +387,7 @@ function formatDuration(totalSeconds) {
 }
 
 let REELS = []; // { video, card, player, ensureLoaded }
+let currentlyPlayingPlayer = null; // 同一時間只讓一支影片在播，手機才不會因為同時解碼太多支而當機
 
 function renderVideos() {
   const container = document.querySelector('[data-render="videos"]');
@@ -395,6 +396,7 @@ function renderVideos() {
   container.innerHTML = '';
   if (moreSlot) moreSlot.innerHTML = '';
   REELS = [];
+  currentlyPlayingPlayer = null;
 
   const items = VIDEOS_ITEMS.filter((v) => v.videoSrc);
   const total = items.length;
@@ -469,6 +471,20 @@ function buildReelCard(video) {
     player.src = video.videoSrc;
   }
 
+  // 捲得夠遠、夠久沒看到這支影片時，把它「卸載」釋放記憶體／解碼資源。
+  // 手機一次同時有十幾支影片都保留著緩衝資料，容易吃光資源造成當機，
+  // 只留「附近看得到的」保持已載入狀態就好，其餘的之後捲回來再重新載入即可。
+  function unloadVideoSrc() {
+    if (!videoSrcLoaded) return;
+    if (reelsEl && reelsEl.classList.contains('is-open')) return; // 全螢幕播放中，先不要動它
+    videoSrcLoaded = false;
+    player.pause();
+    player.removeAttribute('src');
+    player.load();
+    player.preload = 'none';
+    card.classList.remove('is-playing');
+  }
+
   const reelIndex = REELS.length;
   REELS.push({ video, card, player, ensureLoaded: ensureVideoSrcLoaded });
 
@@ -530,8 +546,9 @@ function buildReelCard(video) {
   `;
   card.appendChild(body);
 
-  // 懶載入：卡片快要捲進畫面（提前約 600px）才真的開始下載影片，
-  // 一次十幾支影片也不會同時搶頻寬拖慢首次載入。
+  // 懶載入：卡片快要捲進畫面（提前約 200px）才真的開始下載影片。
+  // 這個距離刻意抓比較短——手機螢幕本身沒多高，抓太遠（例如原本的 600px）
+  // 快速滑動時會一次觸發好幾支影片同時搶著下載/解碼，就是手機容易當機的主因。
   if ('IntersectionObserver' in window) {
     const lazyLoadObserver = new IntersectionObserver(
       (entries) => {
@@ -542,26 +559,40 @@ function buildReelCard(video) {
           }
         });
       },
-      { rootMargin: '600px 0px' }
+      { rootMargin: '200px 0px' }
     );
     lazyLoadObserver.observe(card);
   } else {
     ensureVideoSrcLoaded();
   }
 
-  // 捲動到畫面內才自動播放（靜音、循環），離開畫面就暫停，避免同時十幾支影片一起播放拖效能
+  // 捲動到畫面內才自動播放（靜音、循環），離開畫面就暫停。
+  // 同時限制「全站只有一支在播」，離開畫面夠久就直接卸載釋放資源——
+  // 手機沒辦法像桌機一樣同時撐著十幾支影片的解碼器，這樣才不會越滑越卡最後當機。
   let userPaused = false;
+  let unloadTimer = null;
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !userPaused) {
+            if (unloadTimer) {
+              clearTimeout(unloadTimer);
+              unloadTimer = null;
+            }
+            if (currentlyPlayingPlayer && currentlyPlayingPlayer !== player) {
+              currentlyPlayingPlayer.pause();
+            }
+            currentlyPlayingPlayer = player;
             ensureVideoSrcLoaded();
             player.play().catch(() => {});
             card.classList.add('is-playing');
           } else {
             player.pause();
             card.classList.remove('is-playing');
+            if (currentlyPlayingPlayer === player) currentlyPlayingPlayer = null;
+            if (unloadTimer) clearTimeout(unloadTimer);
+            unloadTimer = window.setTimeout(unloadVideoSrc, 4000);
           }
         });
       },
@@ -726,6 +757,10 @@ function renderReelsStage() {
 
 function openVideoReels(index) {
   ensureReelsViewer();
+  if (currentlyPlayingPlayer) {
+    currentlyPlayingPlayer.pause();
+    currentlyPlayingPlayer = null;
+  }
   reelsIndex = index;
   renderReelsStage();
   reelsEl.classList.add('is-open');
