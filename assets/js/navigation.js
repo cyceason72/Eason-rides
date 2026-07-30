@@ -94,8 +94,49 @@ function initActiveSectionSpy() {
   sectionToLink.forEach((_, section) => observer.observe(section));
 }
 
+/**
+ * initAnchorScroll
+ * 職責：讓站內的錨點連結（導覽列／頁尾／Hero 按鈕...等 href="#xxx"）
+ *       改用 JS 主動計算位置再捲動，而不是交給瀏覽器原生錨點跳轉。
+ *
+ * 為什麼要這樣做——修的是「點『影片紀錄』卻跳到『Ride Journal』」這個 bug：
+ * 影片紀錄／相簿等內容都是 JS 非同步渲染出來的（要先讀完 CMS 資料才會把卡片畫出來），
+ * 如果使用者在資料還沒渲染完、頁面還沒有「長到最終高度」的當下就點了導覽列，
+ * 瀏覽器原生錨點行為是「點的當下馬上算目標位置」，這時候 #videos 的位置
+ * 會比最終位置低很多，捲動就會定位不足、停在上一個區塊（Journal）附近。
+ * 這裡改成點擊當下才用 getBoundingClientRect 重新量測，
+ * 這支函式是在 initRender() 完成之後才呼叫（見 main.js），
+ * 所以量到的一定是資料都渲染完、版面穩定之後的正確位置。
+ *
+ * 順便一起解決：原本沒有扣掉固定導覽列的高度，捲過去之後區塊最上面一截
+ * 會被浮動導覽列擋住，這裡也一併扣掉。
+ */
+function initAnchorScroll() {
+  const nav = document.querySelector('.nav');
+
+  const scrollToTarget = (target) => {
+    const navHeight = nav ? nav.getBoundingClientRect().height : 0;
+    const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 12;
+    window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+  };
+
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    const id = link.getAttribute('href').slice(1);
+    if (!id) return; // 空的 "#"（例如純裝飾用連結）不處理
+
+    link.addEventListener('click', (event) => {
+      const target = document.getElementById(id);
+      if (!target) return; // 找不到目標就交還給瀏覽器預設行為
+      event.preventDefault();
+      scrollToTarget(target);
+      history.pushState(null, '', `#${id}`);
+    });
+  });
+}
+
 function initNavigation() {
   initNavScrollState();
   initMobileNavToggle();
   initActiveSectionSpy();
+  initAnchorScroll();
 }

@@ -70,9 +70,9 @@ function createMediaElement({ src, alt, label, className = '', type = 'image', c
  * 這是純前端功能：這個網站是靜態網站（沒有後端資料庫），
  * 所以「按過」這件事只會記在按讚那個人自己的瀏覽器裡（localStorage），
  * 不是真的跨裝置、跨訪客加總的全站數字。
- * 畫面上的基礎數字是用照片／影片網址算出來的固定值（同一張照片每次都一樣），
- * 讓畫面看起來有「已經有人按過」的感覺；自己按下去會在那個基礎上 +1，
- * 下次自己回來看還是會記得「我按過」。
+ * 畫面上的基礎數字是用照片／影片網址算出來的固定值（同一張照片每次都一樣，
+ * 落在 1 萬 ~ 9.9 萬之間），讓畫面看起來有人氣；自己按下去會 +1（一次性，
+ * 按過就不能再取消或重複按），下次自己回來看還是會記得「我按過」。
  * ============================================================ */
 
 const LIKES_STORAGE_KEY = 'eason-rides-likes-v1';
@@ -97,11 +97,15 @@ function isLikedByMe(key) {
   return !!getLikesStore()[key];
 }
 
-function toggleLikedByMe(key) {
+/**
+ * likeItem — 一次性按讚。已經按過的話回傳 false（不會重複 +1、也不能取消）。
+ */
+function likeItem(key) {
   const store = getLikesStore();
-  store[key] = !store[key];
+  if (store[key]) return false;
+  store[key] = true;
   setLikesStore(store);
-  return store[key];
+  return true;
 }
 
 function baseLikeCount(key) {
@@ -109,11 +113,19 @@ function baseLikeCount(key) {
   for (let i = 0; i < key.length; i += 1) {
     hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
   }
-  return 3 + (hash % 35); // 每張固定落在 3~37 之間，不會每次重整就跳來跳去
+  return 10000 + (hash % 89000); // 每張固定落在 1 萬 ~ 9.9 萬之間，不會每次重整就跳來跳去
 }
 
 function likeCountFor(key) {
   return baseLikeCount(key) + (isLikedByMe(key) ? 1 : 0);
+}
+
+function formatLikeCount(n) {
+  if (n >= 10000) {
+    const wan = (n / 10000).toFixed(1).replace(/\.0$/, '');
+    return `${wan}萬`;
+  }
+  return String(n);
 }
 
 /**
@@ -136,22 +148,22 @@ function buildLikeButton(key, extraClass = '') {
   const syncUI = () => {
     const liked = isLikedByMe(key);
     btn.classList.toggle('is-liked', liked);
+    btn.disabled = liked; // 按過就鎖住，不能再按第二次
     btn.setAttribute('aria-pressed', String(liked));
-    btn.setAttribute('aria-label', liked ? '取消按讚' : '按讚');
-    btn.querySelector('.like-btn__count').textContent = String(likeCountFor(key));
+    btn.setAttribute('aria-label', liked ? '已經按過讚' : '按讚');
+    btn.querySelector('.like-btn__count').textContent = formatLikeCount(likeCountFor(key));
   };
   syncUI();
 
   btn.addEventListener('click', (event) => {
     event.stopPropagation(); // 不要連帶觸發卡片本身「開啟」的行為
     event.preventDefault();
-    toggleLikedByMe(key);
+    const didLike = likeItem(key);
+    if (!didLike) return; // 已經按過了，不做任何事
     syncUI();
-    if (btn.classList.contains('is-liked')) {
-      btn.classList.add('like-btn--pulse');
-      window.setTimeout(() => btn.classList.remove('like-btn--pulse'), 260);
-      if (typeof playAmbientSfx === 'function') playAmbientSfx('sfx-tap', { volume: 0.4 });
-    }
+    btn.classList.add('like-btn--pulse');
+    window.setTimeout(() => btn.classList.remove('like-btn--pulse'), 260);
+    if (typeof playAmbientSfx === 'function') playAmbientSfx('sfx-tap', { volume: 0.4 });
   });
 
   return btn;
