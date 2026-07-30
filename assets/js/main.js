@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initScrollReveal();     // animation.js（要在 render 完成、DOM 都存在之後才監看）
   initSubtleParallax();   // animation.js：Ride Statistics 的輕微視差
   initBackToTop();        // footer.js
+  initHeroVideoReplay();  // loader.js：Hero 影片播完回照片、hover/點擊重新播放
   initImmersiveToggle();  // sound.js：右下角 Immersive Mode 開關
   initTapSfxDelegation(); // sound.js：按鈕的柔和 UI Tap 音效
   initLoader();           // loader.js（放最後，確保上面內容都已就緒再開始進場動畫）

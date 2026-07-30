@@ -69,6 +69,67 @@ function activateHeroVideo(withSound) {
   }
 }
 
+/**
+ * initHeroVideoReplay
+ * 職責：開場那次自動播放（activateHeroVideo）只是「第一次」而已，
+ * 影片播完（沒有 loop）就會自動切回照片；之後訪客想再看一次，
+ * 靠這裡接的互動來重新觸發——桌機用滑鼠移入播放／移出取消，
+ * 手機沒有 hover，改用點一下播放、播放中再點一下就提前停止回到照片。
+ *
+ * 跟 activateHeroVideo 共用同一顆 <video>，兩邊都只是「觸發播放」的入口，
+ * 播完回到照片的邏輯統一寫在這裡的 ended 事件，不管是哪個入口播的都適用。
+ */
+function initHeroVideoReplay() {
+  const visual = document.querySelector('.hero__visual');
+  const video = document.querySelector('.hero__video');
+  if (!visual || !video) return;
+
+  const revertToPhoto = () => {
+    visual.classList.remove('is-video-active');
+    video.pause();
+  };
+
+  video.addEventListener('ended', revertToPhoto);
+
+  const playWithSound = () => {
+    visual.classList.add('is-video-active');
+    try {
+      video.currentTime = 0;
+    } catch (e) {
+      /* 影片可能還沒 ready，忽略即可，play() 還是會排隊播放 */
+    }
+    video.muted = false;
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {
+        // 瀏覽器擋掉帶聲音的播放（例如手機還沒點過 Enter，
+        // 或桌機瀏覽器對 hover 觸發的播放比較嚴格），退回靜音播放，
+        // 至少畫面還是會動，不會整個沒反應。
+        video.muted = true;
+        video.play().catch(() => {});
+      });
+    }
+  };
+
+  // hover: hover 代表真的有滑鼠可以「移入/移出」；沒有的話（手機、平板觸控）改用點擊互動
+  const isHoverCapable =
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (isHoverCapable) {
+    visual.addEventListener('mouseenter', playWithSound);
+    visual.addEventListener('mouseleave', revertToPhoto);
+  } else {
+    visual.addEventListener('click', () => {
+      if (visual.classList.contains('is-video-active')) {
+        revertToPhoto();
+      } else {
+        playWithSound();
+      }
+    });
+  }
+}
+
 function playOpeningSfx(elementId) {
   const el = document.getElementById(elementId);
   if (!el) return;
