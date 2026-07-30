@@ -88,6 +88,25 @@
   object-position: center;
 }
 
+.hero__photo,
+.hero__video {
+  transition: opacity 900ms var(--ease-out);
+}
+
+.hero__video {
+  opacity: 0;
+}
+
+/* loader.js 在對的時間點幫 .hero__visual 加上這個 class，
+   照片淡出、影片淡入，銜接起來是一次交叉溶接，不是硬切。 */
+.hero__visual.is-video-active .hero__video {
+  opacity: 1;
+}
+
+.hero__visual.is-video-active .hero__photo {
+  opacity: 0;
+}
+
 /* 發動聲響起那一刻，畫面給一個非常輕微的悸動感（不是彈跳，是儀表指針那種瞬間反應），
    聲音跟畫面才會感覺是同一件事，而不是聲音獨立飄在那。由 loader.js 在對的時間點加上這個 class。 */
 .hero__visual.is-igniting .hero__image {

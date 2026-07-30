@@ -16,6 +16,9 @@
  *               Hero 內容／Navbar 同時開始淡入，Hero 照片有一個輕微悸動
  *   2.0s→3.2s   排氣聲用指數曲線平順淡出（不是硬切）
  *   2.2s        Loader 完全透明，可以安全移除
+ *   4.0s        Hero 從照片切成影片（先讓使用者看幾秒照片，不是一開場就是動的），
+ *               有點 Enter（withSound）的話影片會嘗試帶聲音播放；
+ *               8 秒沒互動走安全逾時的情況（withSound=false）則是靜音播放。
  */
 
 const OPENING_FALLBACK_DELAY = 8000; // 沒有互動時的安全逾時
@@ -26,7 +29,45 @@ const OPENING_TIMING = {
   loaderDoneAt: 2200,
   audioFadeStart: 2000,
   audioFadeDuration: 1200,
+  heroVideoAt: 4000,
 };
+
+/**
+ * activateHeroVideo
+ * 職責：把 Hero 從靜態照片切成影片播放。
+ * withSound 為 true（使用者剛點過 Enter，等於剛給過一次使用者手勢）時，
+ * 嘗試帶聲音播放；瀏覽器政策還是有可能擋下帶聲音的自動播放，
+ * 擋下的話就靜默退回靜音播放，至少畫面還是會動，不會整個播放失敗卡住。
+ */
+function activateHeroVideo(withSound) {
+  const visual = document.querySelector('.hero__visual');
+  const video = document.querySelector('.hero__video');
+  if (!visual || !video) return;
+
+  let triggered = false;
+  const startPlayback = () => {
+    if (triggered) return;
+    triggered = true;
+    visual.classList.add('is-video-active');
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {
+        if (!video.muted) {
+          video.muted = true;
+          video.play().catch(() => {});
+        }
+      });
+    }
+  };
+
+  video.muted = !withSound;
+  if (video.readyState >= 2) {
+    startPlayback();
+  } else {
+    video.addEventListener('canplay', startPlayback, { once: true });
+    window.setTimeout(startPlayback, 1500); // 保險：影片遲遲沒 ready（網路慢）也不要卡住
+  }
+}
 
 function playOpeningSfx(elementId) {
   const el = document.getElementById(elementId);
@@ -134,6 +175,10 @@ function initLoader() {
     window.setTimeout(() => {
       if (withSound) fadeOutAudio('sfx-engine', OPENING_TIMING.audioFadeDuration);
     }, OPENING_TIMING.audioFadeStart);
+
+    window.setTimeout(() => {
+      activateHeroVideo(withSound);
+    }, OPENING_TIMING.heroVideoAt);
   }
 
   if (enterBtn) {
