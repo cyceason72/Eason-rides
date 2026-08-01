@@ -149,8 +149,8 @@
   .nav__links {
     position: fixed;
     inset: 0;
-    z-index: 90;
-    background: var(--color-bg);
+    z-index: 999; /* 開啟時要蓋過所有東西（含 Lightbox/Reels viewer 的 200、Loader 的 300），不能被任何頁面內容蓋過去 */
+    background-color: #070707; /* 保底寫死純色，不透過變數，避免變數解析異常時變透明 */
     flex-direction: column;
     justify-content: center;
     gap: var(--space-5);

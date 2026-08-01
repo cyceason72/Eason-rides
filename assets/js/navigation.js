@@ -31,6 +31,8 @@ function initMobileNavToggle() {
   };
 
   const openMenu = () => {
+    const nav = document.querySelector('.nav');
+    if (nav) nav.classList.add('is-revealed'); // 保險：確保 nav（連帶選單面板）一定是完全不透明的
     toggle.setAttribute('aria-expanded', 'true');
     links.classList.add('is-open');
     document.body.style.overflow = 'hidden';
