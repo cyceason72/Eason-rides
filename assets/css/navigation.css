@@ -166,3 +166,69 @@
     font-size: var(--fs-h3);
   }
 }
+
+/* ============================================================
+   手機底部常駐分頁標籤（App 風格）
+   ------------------------------------------------------------
+   保留原本單頁故事、一路往下滑的體驗，但額外提供「不用捲一大串」
+   的快速跳轉入口——這是手機專屬的（桌機有滑鼠，直接用上面的 nav 更順手）。
+   ============================================================ */
+
+.tab-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .tab-bar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 150; /* 比一般頁面內容高，但要低於 Lightbox/Reels viewer(200)，全螢幕看圖看影片時不能被它擋到 */
+    background-color: rgba(7, 7, 7, 0.9);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--color-border);
+    padding-bottom: env(safe-area-inset-bottom, 0px); /* iPhone 底部安全區域，避免被 Home Indicator 擋到 */
+  }
+
+  .tab-bar__link {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding-block: 0.55rem 0.45rem;
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .tab-bar__icon {
+    width: 21px;
+    height: 21px;
+  }
+
+  .tab-bar__label {
+    font-size: 0.65rem;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .tab-bar__link.is-active {
+    color: var(--color-gold);
+  }
+
+  /* 底部分頁列出現後，右下角 Immersive Mode / 左下角 IG 這兩顆浮動按鈕要往上讓開，
+     不然手機版會疊在分頁列上面。 */
+  .immersive-toggle,
+  .ig-float {
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px) + var(--space-2));
+  }
+
+  /* 分頁列蓋在最下面，頁面本身要留出對應的空間，footer 內容才不會被擋住 */
+  body {
+    padding-bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+  }
+}

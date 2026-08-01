@@ -61,7 +61,7 @@
   />
 
   <!-- Styles（順序即層疊順序：reset → tokens → base → 導覽/loader → 各區塊） -->
-  <link rel="stylesheet" href="assets/css/bundle.css?v=20260730d" />
+  <link rel="stylesheet" href="assets/css/bundle.css?v=20260730e" />
 </head>
 <body>
   <a class="skip-link" href="#main">跳至主要內容</a>
@@ -306,6 +306,44 @@
     </div>
   </footer>
 
+  <!-- ================= 手機底部常駐分頁標籤（快速跳轉，不用捲一大串） ================= -->
+  <nav class="tab-bar" aria-label="快速導覽">
+    <a class="tab-bar__link" href="#top">
+      <svg class="tab-bar__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+      </svg>
+      <span class="tab-bar__label">Home</span>
+    </a>
+    <a class="tab-bar__link" href="#journal">
+      <svg class="tab-bar__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6.5 3.5h11a1 1 0 011 1V21l-6.5-3-6.5 3V4.5a1 1 0 011-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+      </svg>
+      <span class="tab-bar__label">Journal</span>
+    </a>
+    <a class="tab-bar__link" href="#videos">
+      <svg class="tab-bar__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="2.5" y="5.5" width="19" height="13" rx="3" stroke="currentColor" stroke-width="1.5" />
+        <path d="M10 9l5 3-5 3V9z" fill="currentColor" />
+      </svg>
+      <span class="tab-bar__label">Videos</span>
+    </a>
+    <a class="tab-bar__link" href="#gallery">
+      <svg class="tab-bar__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.5" />
+        <circle cx="8.5" cy="9.5" r="1.6" stroke="currentColor" stroke-width="1.3" />
+        <path d="M4 17l5-5 3.5 3.5L16.5 11 20 14.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+      </svg>
+      <span class="tab-bar__label">Gallery</span>
+    </a>
+    <a class="tab-bar__link" href="#contact">
+      <svg class="tab-bar__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="2.5" y="5" width="19" height="14" rx="2.5" stroke="currentColor" stroke-width="1.5" />
+        <path d="M3.5 6.5L12 13l8.5-6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+      <span class="tab-bar__label">Contact</span>
+    </a>
+  </nav>
+
   <!-- ================= 常駐 IG 追蹤按鈕 ================= -->
   <a
     class="ig-float"
@@ -338,7 +376,7 @@
   <!-- ================= Scripts ================= -->
   <!-- 先載入資料與工具，最後才載入依賴它們的 main.js（一般 script，非 module，file:// 可直接開） -->
   <script src="assets/js/content.js"></script>
-  <script src="assets/js/bundle.js?v=20260730d"></script>
+  <script src="assets/js/bundle.js?v=20260730e"></script>
   <script>
     document.getElementById('footer-year').textContent = new Date().getFullYear();
   </script>

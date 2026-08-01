@@ -68,19 +68,24 @@ function initMobileNavToggle() {
  *       不管每個區塊實際高度差多少都能穩定判斷「目前在看哪一段」。
  */
 function initActiveSectionSpy() {
-  const links = Array.from(document.querySelectorAll('.nav__link[href^="#"]'));
+  const links = Array.from(document.querySelectorAll('.nav__link[href^="#"], .tab-bar__link[href^="#"]'));
   if (!links.length || !('IntersectionObserver' in window)) return;
 
-  const sectionToLink = new Map();
+  // 一個區塊現在可能對應多組連結（桌機頂部 nav + 手機底部分頁），
+  // 所以是 section -> 連結陣列，不是單一連結。
+  const sectionToLinks = new Map();
   links.forEach((link) => {
     const id = link.getAttribute('href').slice(1);
     const section = document.getElementById(id);
-    if (section) sectionToLink.set(section, link);
+    if (!section) return;
+    if (!sectionToLinks.has(section)) sectionToLinks.set(section, []);
+    sectionToLinks.get(section).push(link);
   });
-  if (!sectionToLink.size) return;
+  if (!sectionToLinks.size) return;
 
-  const setActive = (activeLink) => {
-    links.forEach((link) => link.classList.toggle('is-active', link === activeLink));
+  const setActive = (activeLinks) => {
+    const activeSet = new Set(activeLinks || []);
+    links.forEach((link) => link.classList.toggle('is-active', activeSet.has(link)));
   };
 
   const observer = new IntersectionObserver(
@@ -88,12 +93,12 @@ function initActiveSectionSpy() {
       const visible = entries.filter((entry) => entry.isIntersecting);
       if (!visible.length) return;
       const top = visible.reduce((a, b) => (a.intersectionRatio > b.intersectionRatio ? a : b));
-      setActive(sectionToLink.get(top.target));
+      setActive(sectionToLinks.get(top.target));
     },
     { rootMargin: '-45% 0px -50% 0px', threshold: [0, 0.01, 0.25, 0.5, 0.75, 1] }
   );
 
-  sectionToLink.forEach((_, section) => observer.observe(section));
+  sectionToLinks.forEach((_, section) => observer.observe(section));
 }
 
 /**
