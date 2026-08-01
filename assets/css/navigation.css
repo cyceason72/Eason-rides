@@ -117,7 +117,8 @@
   flex-direction: column;
   gap: 5px;
   width: 28px;
-  z-index: var(--z-nav);
+  z-index: 1000; /* 一定要比 .nav__links.is-open 的 999 更高，不然選單打開後這顆按鈕（含 X 圖示）會被自己開出來的面板蓋住，變成看起來沒有關閉/返回的方式 */
+  position: relative; /* 沒有這行 z-index 不會生效（在 flex 容器裡沒有 position 的話 z-index 是無效的） */
 }
 
 .nav__toggle span {

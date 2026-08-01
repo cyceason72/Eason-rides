@@ -26,6 +26,7 @@ function initMobileNavToggle() {
 
   const closeMenu = () => {
     toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', '開啟選單');
     links.classList.remove('is-open');
     document.body.style.overflow = '';
   };
@@ -34,6 +35,7 @@ function initMobileNavToggle() {
     const nav = document.querySelector('.nav');
     if (nav) nav.classList.add('is-revealed'); // 保險：確保 nav（連帶選單面板）一定是完全不透明的
     toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', '關閉選單');
     links.classList.add('is-open');
     document.body.style.overflow = 'hidden';
   };
